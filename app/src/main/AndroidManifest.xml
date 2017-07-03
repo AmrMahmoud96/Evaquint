@@ -32,6 +32,12 @@
         <activity
             android:name=".EventLocator"
             android:label="@string/title_activity_event_locator">
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
