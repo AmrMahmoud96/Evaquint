@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/content_frame"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        app:layout_marginTopPercent="3%"
+        app:layout_marginLeftPercent="4%"
+        app:layout_marginRightPercent="4%"
+        android:layout_height="match_parent">
+
+    </LinearLayout>
+</android.support.percent.PercentRelativeLayout>

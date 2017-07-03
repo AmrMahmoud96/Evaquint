@@ -31,9 +31,7 @@
 
         <activity
             android:name=".EventLocator"
-            android:label="@string/title_activity_event_locator">
-
-        </activity>
+            android:label="@string/title_activity_event_locator" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
@@ -44,6 +42,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".modules.EventCard" />
+        <activity android:name=".modules.FittedView"></activity>
     </application>
 
 </manifest>
