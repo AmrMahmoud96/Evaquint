@@ -7,4 +7,16 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+
+    <!--EVENT Details Attribute Headers-->
+    <string name="location">Location</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="host">Host</string>
+    <string name="rating">Rating</string>
+    <string name="attendants">Attendants</string>
+    <string name="details">Description</string>
+    <string name="photos">Photos</string>
+
 </resources>
