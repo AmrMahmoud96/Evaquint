@@ -7,12 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.evaquint.evaquint.R;
 
 public class FittedView extends PercentRelativeLayout {
     // internal components
-    private LinearLayout contentFrame;
+    private PercentRelativeLayout contentFrame;
 
     public FittedView(Context context) {
         this(context, null);
@@ -25,7 +26,7 @@ public class FittedView extends PercentRelativeLayout {
     public FittedView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         LayoutInflater.from(context).inflate(R.layout.fitted_panel, this);
-        contentFrame = (LinearLayout) findViewById(R.id.content_frame);
+        contentFrame = (PercentRelativeLayout) findViewById(R.id.content_frame);
     }
 
 
