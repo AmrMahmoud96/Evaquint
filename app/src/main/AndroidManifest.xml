@@ -35,7 +35,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".EventLocator"
+            android:name=".Fragments.EventLocatorFrag"
             android:label="@string/title_activity_event_locator" />
         <activity
             android:name=".MainActivity"
@@ -52,11 +52,6 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".FullscreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

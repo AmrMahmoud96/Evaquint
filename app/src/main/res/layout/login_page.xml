@@ -6,7 +6,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/sym_def_app_icon"
+        android:src="@drawable/ic_adjust_black_24dp"
         android:layout_marginTop="82dp"
         android:id="@+id/imageView3"
         android:layout_below="@+id/textInputLayout"
