@@ -39,7 +39,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback {
         this.a=getActivity();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
+//                .findFragmentById(R.id.map);s
 //        mapFragment.getMapAsync(this);
         return this.v;
     }

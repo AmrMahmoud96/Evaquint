@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if(item.isChecked()) item.setChecked(false);
-        else item.setChecked(true);
+//        if(item.isChecked()) item.setChecked(false);
+//        else item.setChecked(true);
 
 
         //Closing this.drawer on item click
@@ -129,10 +129,9 @@ public class MainActivity extends AppCompatActivity
             fragment = new EventLocatorFrag();
             fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
             fragmentTransaction.replace(activeFragment.getId(),fragment);
-            loadFragment(fragmentTransaction);
-//                        fragmentTransaction.commit();
+//            loadFragment(fragmentTransaction);
+            fragmentTransaction.commit();
             activeFragment=fragment;
-            return true;
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
