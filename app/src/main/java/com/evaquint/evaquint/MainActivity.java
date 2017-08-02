@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.evaquint.evaquint.Fragments.EventLocatorFrag;
+import com.evaquint.evaquint.Fragments.FeedFrag;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         this.drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -94,7 +94,12 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.commit();
             activeFragment=fragment;
         } else if (id == R.id.nav_gallery) {
-
+            fragment = new FeedFrag();
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+            fragmentTransaction.replace(activeFragment.getId(),fragment);
+//            loadFragment(fragmentTransaction);
+            fragmentTransaction.commit();
+            activeFragment=fragment;
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_share) {
