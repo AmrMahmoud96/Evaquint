@@ -5,19 +5,29 @@
         <item
             android:id="@+id/nav_event_locator"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="Events" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="Past Events" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="Go Pro" />
+    </group>
+    <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_messages"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Events" />
+        <item
+            android:id="@+id/nav_friends_activities"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Friend Activities" />
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Friends" />
     </group>
 
     <item android:title="Communicate">
@@ -25,11 +35,11 @@
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="Settings" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Help" />
         </menu>
     </item>
 
