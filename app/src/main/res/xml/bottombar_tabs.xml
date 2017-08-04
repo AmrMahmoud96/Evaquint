@@ -5,11 +5,11 @@
         icon="@drawable/ic_adjust_black_24dp"
         title="Nearby" />
     <tab
-        id="@+id/tab_favorites"
+        id="@+id/tab_search"
         icon="@drawable/ic_adjust_black_24dp"
         title="Search" />
     <tab
-        id="@+id/tab_friends"
+        id="@+id/tab_feed"
         icon="@drawable/ic_adjust_black_24dp"
         title="Feed" />
 </tabs>

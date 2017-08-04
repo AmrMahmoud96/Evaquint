@@ -3,6 +3,7 @@ package com.evaquint.evaquint;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
@@ -16,6 +17,8 @@ import android.view.MenuItem;
 
 import com.evaquint.evaquint.Fragments.EventLocatorFrag;
 import com.evaquint.evaquint.Fragments.FeedFrag;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,10 +41,23 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        this.activeFragment = new EventLocatorFrag();
-        fragmentTransaction.add(R.id.content_frame, activeFragment);
-        fragmentTransaction.commit();
+        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(@IdRes int tabId) {
+                if (tabId == R.id.tab_nearby) {
+                    setActiveFragment(new EventLocatorFrag());
+                }
+                else if (tabId == R.id.tab_search) {
+                    setActiveFragment(new FeedFrag());
+                }
+                else if (tabId == R.id.tab_feed) {
+
+                }
+            }
+        });
+
+        setActiveFragment(new EventLocatorFrag());
     }
 
     @Override
@@ -62,16 +78,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -82,24 +94,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        //Closing this.drawer on item click
-        Fragment fragment = null;
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        
         if (id == R.id.nav_event_locator) {
-            fragment = new EventLocatorFrag();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-            fragmentTransaction.replace(activeFragment.getId(),fragment);
-//            loadFragment(fragmentTransaction);
-            fragmentTransaction.commit();
-            activeFragment=fragment;
+            setActiveFragment(new EventLocatorFrag());
         } else if (id == R.id.nav_gallery) {
-            fragment = new FeedFrag();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-            fragmentTransaction.replace(activeFragment.getId(),fragment);
-//            loadFragment(fragmentTransaction);
-            fragmentTransaction.commit();
-            activeFragment=fragment;
+            setActiveFragment(new FeedFrag());
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_share) {
@@ -112,13 +110,16 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void loadFragment(final FragmentTransaction ft){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ft.commit();
-            }
-        }, 200);
+    private void setActiveFragment(Fragment newFrag){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+        if(activeFragment==null)
+            ft.add(R.id.content_frame, newFrag);
+        else
+            ft.replace(activeFragment.getId(), newFrag);
+//            loadFragment(ft);
+        ft.commit();
+        activeFragment=newFrag;
     }
 
 }
