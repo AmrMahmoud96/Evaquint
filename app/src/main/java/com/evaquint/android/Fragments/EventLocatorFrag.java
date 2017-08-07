@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.SupportMapFragment;
 
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback {
 
@@ -33,10 +34,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         this.v=inflater.inflate(R.layout.event_locator_google_maps, container, false);
         this.a=getActivity();
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);s
-//        mapFragment.getMapAsync(this);
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         return this.v;
     }
 
@@ -52,6 +54,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
         LatLng sydney = new LatLng(-33.852, 151.211);
@@ -69,6 +72,10 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback {
             return;
         }
         googleMap.setMyLocationEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        //fixPosition();
+        googleMap.getUiSettings().setTiltGesturesEnabled(false);
+        googleMap.setPadding(0,50,0,50);
     }
 
     private void fixPosition(Fragment mapFrag){
