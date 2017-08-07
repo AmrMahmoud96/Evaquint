@@ -20,8 +20,8 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/login_progress">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true">
         <ImageView
             app:layout_widthPercent="100%"
             app:layout_heightPercent="30%"
@@ -39,8 +39,10 @@
             android:layout_height="wrap_content"
             android:text="@string/action_sign_in"
             android:textStyle="bold"
-            android:layout_below="@+id/password"
-            android:layout_alignEnd="@+id/password" />
+            android:layout_above="@+id/register_button"
+            android:layout_alignEnd="@+id/imageView3"
+            android:layout_marginEnd="37dp"
+            android:layout_marginBottom="26dp" />
 
         <CheckBox
             android:id="@+id/checkBox"
@@ -57,9 +59,9 @@
             android:layout_height="wrap_content"
             android:text="@string/action_register"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_below="@+id/sign_in_button"
-            android:layout_alignStart="@+id/checkBox" />
+            android:layout_above="@+id/google_sign_in"
+            android:layout_alignStart="@+id/imageView3"
+            android:layout_marginBottom="97dp" />
         <com.google.android.gms.common.SignInButton
             android:id="@+id/google_sign_in"
             android:layout_width="wrap_content"
@@ -68,32 +70,7 @@
             android:layout_marginBottom="15dp"
             android:layout_alignStart="@+id/register_button"/>
 
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_password"
-            android:imeActionId="@+id/login"
-            android:imeActionLabel="@string/action_sign_in_short"
-            android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_below="@+id/email"
-            android:layout_toEndOf="@+id/login_progress"
-            app:layout_marginTopPercent="1%" />
 
-        <AutoCompleteTextView
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_email"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_below="@+id/imageView3"
-            android:layout_toEndOf="@+id/login_progress"
-            app:layout_marginTopPercent="5%" />
     </com.evaquint.android.modules.FittedView>
 
 

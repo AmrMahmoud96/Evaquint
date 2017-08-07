@@ -421,6 +421,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // If you don't already have a server session, you can now send this code to your
             // server to authenticate on the backend.
             String authCode = acct.getServerAuthCode();
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
 
             // Hide the sign in buttons, show the sign out button.
 //            findViewById(R.id.sign_in_button).setVisibility(View.INVISIBLE);
