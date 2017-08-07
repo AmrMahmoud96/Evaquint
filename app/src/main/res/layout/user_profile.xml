@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.evaquint.evaquint.modules.FittedView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.evaquint.android.modules.FittedView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:paddingTop="@dimen/text_margin"
     android:layout_height="match_parent">
 
-</com.evaquint.evaquint.modules.FittedView>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView4"
+            android:layout_height="80dp"
+            android:layout_width="80dp"
+            android:src="@android:drawable/sym_def_app_icon"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_marginEnd="122dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+    <!--android:layout_alignParentStart="true"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:adjustViewBounds="false"-->
+</com.evaquint.android.modules.FittedView>

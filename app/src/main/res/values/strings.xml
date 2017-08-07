@@ -8,6 +8,8 @@
 
     <string name="action_settings">Settings</string>
 
+    <!--Profile Values-->
+
 
     <!--EVENT Details Attribute Headers-->
     <string name="location">Location</string>

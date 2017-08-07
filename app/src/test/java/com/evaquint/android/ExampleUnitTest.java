@@ -1,4 +1,4 @@
-package com.evaquint.evaquint;
+package com.evaquint.android;
 
 import org.junit.Test;
 

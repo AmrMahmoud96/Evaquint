@@ -1,4 +1,4 @@
-package com.evaquint.evaquint.Fragments.dummy;
+package com.evaquint.android.Fragments.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

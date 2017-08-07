@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.evaquint.evaquint">
+    package="com.evaquint.android">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -37,7 +37,7 @@
         <!--<activity-->
             <!--android:name=".Fragments.EventLocatorFrag"-->
             <!--android:label="@string/title_activity_event_locator" />-->
-        <activity android:name=".SplashActivity" android:theme="@style/SplashTheme">
+        <activity android:name="com.evaquint.android.SplashActivity" android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,7 +45,7 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.evaquint.android.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"
             >
@@ -53,7 +53,7 @@
         <!--<activity android:name=".modules.EventCard" />-->
         <!--<activity android:name=".modules.FittedView" />-->
         <activity
-            android:name=".LoginActivity"
+            android:name="com.evaquint.android.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar"
             >

@@ -1,4 +1,4 @@
-package com.evaquint.evaquint.Fragments;
+package com.evaquint.android.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.evaquint.evaquint.R;
-import com.evaquint.evaquint.Fragments.dummy.DummyContent;
-import com.evaquint.evaquint.Fragments.dummy.DummyContent.DummyItem;
+import com.evaquint.android.R;
+import com.evaquint.android.Fragments.dummy.DummyContent;
+import com.evaquint.android.Fragments.dummy.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.evaquint.evaquint.modules.EventCard">
+    tools:context="com.evaquint.android.modules.EventCard">
 
     <TextView
         android:id="@+id/event_title"

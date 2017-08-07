@@ -1,4 +1,4 @@
-package com.evaquint.evaquint.Fragments;
+package com.evaquint.android.Fragments;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.evaquint.evaquint.Fragments.FeedFrag.OnListFragmentInteractionListener;
-import com.evaquint.evaquint.Fragments.dummy.DummyContent.DummyItem;
-import com.evaquint.evaquint.R;
+import com.evaquint.android.Fragments.FeedFrag.OnListFragmentInteractionListener;
+import com.evaquint.android.Fragments.dummy.DummyContent.DummyItem;
+import com.evaquint.android.R;
 
 import java.util.List;
 

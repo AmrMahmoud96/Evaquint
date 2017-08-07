@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
-        applicationId "com.evaquint.evaquint"
+        applicationId "com.evaquint.android"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
@@ -25,12 +25,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.google.android.gms:play-services-maps:11.0.2'
+    compile 'com.google.android.gms:play-services-maps:11.+'
+    compile 'com.google.android.gms:play-services-auth:11.+'
     compile 'com.android.support:design:26.+'
     compile 'com.android.support:percent:26.+'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.roughike:bottom-bar:2.3.1'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:recyclerview-v7:26.+'
     testCompile 'junit:junit:4.12'
 }
+apply plugin: 'com.google.gms.google-services'

@@ -1,8 +1,7 @@
-package com.evaquint.evaquint;
+package com.evaquint.android;
 
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -15,8 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.evaquint.evaquint.Fragments.EventLocatorFrag;
-import com.evaquint.evaquint.Fragments.FeedFrag;
+import com.evaquint.android.Fragments.EventLocatorFrag;
+import com.evaquint.android.Fragments.FeedFrag;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 

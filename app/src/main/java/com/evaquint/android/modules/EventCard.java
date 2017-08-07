@@ -1,4 +1,4 @@
-package com.evaquint.evaquint.modules;
+package com.evaquint.android.modules;
 
 import android.content.Context;
 import android.support.percent.PercentRelativeLayout;
@@ -7,26 +7,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
-import com.evaquint.evaquint.R;
+import com.evaquint.android.R;
 
-public class FittedView extends PercentRelativeLayout {
+public class EventCard extends PercentRelativeLayout {
     // internal components
-    private PercentRelativeLayout contentFrame;
+    private LinearLayout contentFrame;
 
-    public FittedView(Context context) {
+    public EventCard(Context context) {
         this(context, null);
     }
 
-    public FittedView(Context context, AttributeSet attrs) {
+    public EventCard(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public FittedView(Context context, AttributeSet attrs, int defStyle) {
+    public EventCard(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         LayoutInflater.from(context).inflate(R.layout.fitted_panel, this);
-        contentFrame = (PercentRelativeLayout) findViewById(R.id.content_frame);
+        contentFrame = (LinearLayout) findViewById(R.id.content_frame);
     }
 
 
@@ -39,4 +38,5 @@ public class FittedView extends PercentRelativeLayout {
         }
 
     }
+
 }
