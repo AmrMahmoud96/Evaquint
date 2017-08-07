@@ -10,33 +10,33 @@ import android.widget.LinearLayout;
 
 import com.evaquint.android.R;
 
-public class HostRating extends PercentRelativeLayout {
-    // internal components
-    private LinearLayout contentFrame;
+/**
+ * Created by henry on 8/7/2017.
+ */
 
-    public HostRating(Context context) {
+public class MaterialButton extends PercentRelativeLayout{
+    public MaterialButton(Context context) {
         this(context, null);
     }
 
-    public HostRating(Context context, AttributeSet attrs) {
+    public MaterialButton(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public HostRating(Context context, AttributeSet attrs, int defStyle) {
+    public MaterialButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         LayoutInflater.from(context).inflate(R.layout.fitted_panel, this);
-        contentFrame = (LinearLayout) findViewById(R.id.content_frame);
+//        contentFrame = (LinearLayout) findViewById(R.id.content_frame);
     }
 
 
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params){
-        if(contentFrame == null){
-            super.addView(child, index, params);
-        }else{
-            contentFrame.addView(child, index, params);
-        }
+//        if(contentFrame == null){
+//            super.addView(child, index, params);
+//        }else{
+//            contentFrame.addView(child, index, params);
+//        }
 
     }
-
 }

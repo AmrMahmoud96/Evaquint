@@ -20,8 +20,8 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/login_progress">
         <ImageView
             app:layout_widthPercent="100%"
             app:layout_heightPercent="30%"
@@ -33,42 +33,23 @@
             android:layout_alignStart="@+id/email" />
 
         <Button
-            android:id="@+id/sign_in_button"
-            style="?android:textAppearanceSmall"
-            app:layout_widthPercent="30%"
-            android:layout_height="wrap_content"
-            android:text="@string/action_sign_in"
-            android:textStyle="bold"
-            android:layout_above="@+id/register_button"
-            android:layout_alignEnd="@+id/imageView3"
-            android:layout_marginEnd="37dp"
-            android:layout_marginBottom="26dp" />
-
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Show Password"
-            android:layout_alignBottom="@+id/sign_in_button"
-            android:layout_below="@+id/password"
-            android:layout_alignStart="@+id/password" />
-
-        <Button
-            android:id="@+id/register_button"
+            android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/action_register"
-            android:textStyle="bold"
-            android:layout_above="@+id/google_sign_in"
-            android:layout_alignStart="@+id/imageView3"
-            android:layout_marginBottom="97dp" />
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/google_sign_in"
-            android:layout_width="wrap_content"
+            android:layout_alignStart="@+id/button2"
+            android:layout_below="@+id/button2"
+            android:text="Continue With Facebook"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="15dp"
-            android:layout_alignStart="@+id/register_button"/>
+            android:layout_marginTop="30dp"
+            android:text="Continue With Facebook"
+            android:textStyle="bold"
+            android:layout_below="@+id/imageView3"
+            android:layout_alignStart="@+id/imageView3" />
 
 
     </com.evaquint.android.modules.FittedView>
