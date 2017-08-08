@@ -40,7 +40,7 @@
             android:textStyle="bold"
             android:textAlignment="center"
             app:layout_marginBottomPercent="5%"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="51dp"
             android:id="@+id/textView6"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
@@ -114,8 +114,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="@string/terms_and_conditions"
-            app:layout_marginBottomPercent="7%"
+            app:layout_marginBottomPercent="4%"
             android:id="@+id/terms_and_conditions" />
+
+        <FrameLayout
+            android:paddingTop="56dp"
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 
     </android.support.percent.PercentRelativeLayout>
