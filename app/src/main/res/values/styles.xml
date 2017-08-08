@@ -26,11 +26,24 @@
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/background</item>
+    </style>
+
+    <style name="SocialButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="layout_heightPercent">11%</item>
+        <item name="layout_marginTopPercent">1%</item>
+        <item name="layout_marginLeftPercent">5%</item>
+        <item name="layout_marginRightPercent">5%</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_alignParentStart">true</item>
     </style>
 
 </resources>

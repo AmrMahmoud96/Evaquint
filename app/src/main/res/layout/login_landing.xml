@@ -16,43 +16,110 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <com.evaquint.android.modules.FittedView
+    <android.support.percent.PercentRelativeLayout
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/login_progress">
-        <ImageView
-            app:layout_widthPercent="100%"
-            app:layout_heightPercent="30%"
-            android:src="@drawable/logo"
-            android:id="@+id/imageView3"
-            android:layout_centerInParent="true"
-            app:layout_marginTopPercent="1%"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/email" />
+        android:layout_alignParentStart="true">
+        <!--<ImageView-->
+            <!--app:layout_widthPercent="30%"-->
+            <!--app:layout_heightPercent="20%"-->
+            <!--android:src="@mipmap/ic_launcher"-->
+            <!--android:id="@+id/imageView3"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_alignParentStart="true" />-->
 
-        <Button
-            android:id="@+id/button3"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/button2"
-            android:layout_below="@+id/button2"
-            android:text="Continue With Facebook"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="Continue With Facebook"
+            android:text="@string/app_name"
+            android:textColor="@color/dark_blue"
+            android:textSize="40dp"
+            android:fontFamily="casual"
             android:textStyle="bold"
-            android:layout_below="@+id/imageView3"
-            android:layout_alignStart="@+id/imageView3" />
+            android:textAlignment="center"
+            app:layout_marginBottomPercent="5%"
+            android:layout_marginTop="40dp"
+            android:id="@+id/textView6"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/slogan"
+            android:textColor="@color/dark_blue"
+            app:layout_marginLeftPercent="5%"
+            android:textStyle="italic"
+            android:textSize="15dp"
+            android:textAlignment="textStart"
+            android:fontFamily="monospace"
+            app:layout_marginBottomPercent="5%"
+            android:id="@+id/textView5"
+            android:layout_below="@+id/textView6"
+            android:layout_alignParentEnd="true" />
+
+        <in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus
+            android:id="@+id/login_google"
+            style="@style/SocialButton"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Continue With Google"
+            android:layout_below="@+id/textView5"/>
+
+        <in.championswimmer.libsocialbuttons.buttons.BtnFacebook
+            android:id="@+id/login_facebook"
+            style="@style/SocialButton"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_alignStart="@+id/login_google"
+            android:layout_below="@+id/login_google"
+            android:text="Continue With Facebook"/>
+
+        <TextView
+            android:id="@+id/more_options_btn"
+            app:layout_marginLeftPercent="8%"
+            app:layout_marginTopPercent="2%"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/login_facebook"
+            android:text="More Options" />
+
+        <TextView
+            android:id="@+id/to_login"
+            app:layout_marginLeftPercent="8%"
+            app:layout_marginTopPercent="2%"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/login_facebook"
+            android:layout_toEndOf="@id/more_options_btn"
+            android:text="Log In" />
+
+        <TextView
+            android:id="@+id/to_register"
+            app:layout_marginLeftPercent="6%"
+            app:layout_marginTopPercent="2%"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/login_facebook"
+            android:layout_toEndOf="@id/to_login"
+            android:text="Sign Up With Email" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/terms_and_conditions"
+            app:layout_marginBottomPercent="7%"
+            android:id="@+id/terms_and_conditions" />
 
 
-    </com.evaquint.android.modules.FittedView>
+    </android.support.percent.PercentRelativeLayout>
+
 
 
 

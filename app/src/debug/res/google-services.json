@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "489269650347",
+    "project_id": "evaquint-1500236108312"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489269650347:android:d8094c26fcb3fbb5",
+        "android_client_info": {
+          "package_name": "com.evaquint.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489269650347-1rl5j1j4slo6eph5hpeuqi6g99h2i4b4.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "489269650347-fpvakareeide4280mr9qnh8vck1krckg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evaquint.android",
+            "certificate_hash": "33420c803d2eb6542a969f481b3498d1b2b305c9"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuuCm-m6FTjbNDRmnvFlgNcApkEPiy6_o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

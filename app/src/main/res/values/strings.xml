@@ -35,6 +35,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="terms_and_conditions">By tapping Continue, Register, or Logging in, you agree to
+        the Evaquint Terms of Service and Privacy Policy
+    </string>
+    <string name="slogan">Play Hard Get Hard \nCarpe Diem.</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
