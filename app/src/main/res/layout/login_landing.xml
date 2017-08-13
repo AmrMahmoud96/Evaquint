@@ -63,6 +63,7 @@
         <in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus
             android:id="@+id/login_google"
             style="@style/SocialButton"
+            app:layout_marginTopPercent="16%"
             android:textSize="16sp"
             android:textStyle="bold"
             android:text="Continue With Google"

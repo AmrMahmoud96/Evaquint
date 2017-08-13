@@ -1,4 +1,4 @@
-package com.evaquint.android.values;
+package com.evaquint.android.utils;
 
 /**
  * Created by henry on 8/6/2017.

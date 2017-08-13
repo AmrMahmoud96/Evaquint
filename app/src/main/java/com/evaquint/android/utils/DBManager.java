@@ -1,23 +1,24 @@
-package com.evaquint.android.values;
+package com.evaquint.android.utils;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by henry on 8/6/2017.
  */
 
 public class DBManager extends SQLiteOpenHelper {
-        public static final String DATABASE_NAME = "Evaquint.db";
+        public static final String DATABASE_NAME = "test";
         public static final String CONTACTS_TABLE_NAME = "contacts";
         public static final String CONTACTS_COLUMN_ID = "id";
         public static final String CONTACTS_COLUMN_NAME = "name";
@@ -36,16 +37,13 @@ public class DBManager extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         this.db=db;
-        this.db.execSQL(
-                "create table contacts " +
-                        "(id integer primary key, name text,phone text,email text, street text,place text)"
-        );
+        createTable("user_test");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
-        db.execSQL("DROP TABLE IF EXISTS contacts");
+        db.execSQL("DROP TABLE IF EXISTS user-test");
         onCreate(db);
     }
 
@@ -55,26 +53,27 @@ public class DBManager extends SQLiteOpenHelper {
             case "User": {
                 sqlReq +="(" +
                         "user_id INTEGER PRIMARY KEY, " +
-                        "given_name VARCHAR" +
-                        "family_name VARCHAR" +
-                        "email VARCHAR" +
-                        "phone INTEGER" +
+                        "given_name VARCHAR，" +
+                        "family_name VARCHAR，" +
+                        "email VARCHAR UNIQUE，" +
+                        "phone INTEGER UNIQUE" +
                         ");";
                 break;
             }
             case "Contacts": {
                 sqlReq +="(" +
                         "user_id INTEGER PRIMARY KEY, " +
-                        "given_name VARCHAR" +
-                        "family_name VARCHAR" +
-                        "email VARCHAR" +
-                        "phone INTEGER" +
+                        "given_name VARCHAR，" +
+                        "family_name VARCHAR，" +
+                        "email VARCHAR UNIQUE，" +
+                        "phone INTEGER UNIQUE" +
                         ");";
                 break;
             }
             default:
                 return;
         }
+//        this.getWritableDatabase().execSQL(sqlReq);
         db.execSQL(sqlReq);
     }
     public boolean insertUser(String tableName, GoogleSignInAccount acct) {
@@ -82,18 +81,18 @@ public class DBManager extends SQLiteOpenHelper {
         switch(tableName){
             case "User": {
                 sqlReq +=" (" +
-                        "user_id INTEGER PRIMARY KEY, " +
-                        "given_name VARCHAR" +
-                        "family_name VARCHAR" +
-                        "email VARCHAR" +
-                        "phone INTEGER" +
+                        "user_id VARCHAR PRIMARY KEY, " +
+                        "given_name VARCHAR，" +
+                        "family_name VARCHAR，" +
+                        "email VARCHAR UNIQUE，" +
+                        "phone VARCHAR UNIQUE" +
                         ")";
                 sqlReq +=" VALUES (" +
-                        "++, " +
-                        "given_name VARCHAR" +
-                        "family_name VARCHAR" +
-                        "email VARCHAR" +
-                        "phone INTEGER" +
+                        "41244124" + ", " +
+                        acct.getGivenName() + ", " +
+                        acct.getFamilyName() + ", " +
+                        acct.getEmail() + ", " +
+                        "787608" +
                         ");";
                 break;
             }
@@ -114,22 +113,45 @@ public class DBManager extends SQLiteOpenHelper {
         return true;
     }
 
-    public void retrieveData(SQLiteDatabase db, String tableName) {
+    public String [] retrieveData(String tableName) {
         Cursor c = db.rawQuery("SELECT * FROM " + tableName, null);
 
-        int Column1 = c.getColumnIndex("Field1");
-        int Column2 = c.getColumnIndex("Field2");
+        int Column1 = c.getColumnIndex("user_id");
+        int Column2 = c.getColumnIndex("given_name");
+        int Column3 = c.getColumnIndex("family_name");
+        int Column4 = c.getColumnIndex("email");
+        int Column5 = c.getColumnIndex("phone");
 
         // Check if our result was valid.
         c.moveToFirst();
-        String data = "";
+        String [] data=null;
+        int i = 0;
         if (c != null) {
             // Loop through all Results
             do {
-                String Name = c.getString(Column1);
-                int Age = c.getInt(Column2);
-                data = data + Name + "/" + Age + "\n";
+                data[i++] = c.getString(Column1);
             } while (c.moveToNext());
+        }
+        return data;
+    }
+
+    private int getCount(String name) {
+        Cursor c = null;
+        try {
+            String query = "select count(*) from TableName where name = ?";
+            c = db.rawQuery(query, new String[] {name});
+            if (c.moveToFirst()) {
+                return c.getInt(0);
+            }
+            return 0;
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
         }
     }
 
