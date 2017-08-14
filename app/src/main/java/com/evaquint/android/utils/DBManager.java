@@ -31,13 +31,15 @@ public class DBManager extends SQLiteOpenHelper {
 
     public DBManager(Context context) {
         super(context, DATABASE_NAME , null, 1);
+        this.db=getWritableDatabase();
+        createTable("User");
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         this.db=db;
-        createTable("user_test");
+        createTable("User");
     }
 
     @Override
@@ -48,24 +50,25 @@ public class DBManager extends SQLiteOpenHelper {
     }
 
     public void createTable(String tableName) {
+        db.execSQL("DROP TABLE IF EXISTS User");
         String sqlReq = "CREATE TABLE IF NOT EXISTS "+ tableName+" ";
         switch(tableName){
             case "User": {
                 sqlReq +="(" +
-                        "user_id INTEGER PRIMARY KEY, " +
-                        "given_name VARCHAR，" +
-                        "family_name VARCHAR，" +
-                        "email VARCHAR UNIQUE，" +
-                        "phone INTEGER UNIQUE" +
+                        "user_id TEXT PRIMARY KEY, " +
+                        "given_name TEXT, " +
+                        "family_name TEXT, " +
+                        "email TEXT UNIQUE, " +
+                        "phone TEXT UNIQUE" +
                         ");";
                 break;
             }
             case "Contacts": {
                 sqlReq +="(" +
                         "user_id INTEGER PRIMARY KEY, " +
-                        "given_name VARCHAR，" +
-                        "family_name VARCHAR，" +
-                        "email VARCHAR UNIQUE，" +
+                        "given_name TEXT, " +
+                        "family_name TEXT, " +
+                        "email TEXT UNIQUE, " +
                         "phone INTEGER UNIQUE" +
                         ");";
                 break;
@@ -77,31 +80,31 @@ public class DBManager extends SQLiteOpenHelper {
         db.execSQL(sqlReq);
     }
     public boolean insertUser(String tableName, GoogleSignInAccount acct) {
-        String sqlReq = "INSERT INTO "+ tableName+" ";
+        String sqlReq = "INSERT OR REPLACE INTO "+ tableName+" ";
         switch(tableName){
             case "User": {
-                sqlReq +=" (" +
-                        "user_id VARCHAR PRIMARY KEY, " +
-                        "given_name VARCHAR，" +
-                        "family_name VARCHAR，" +
-                        "email VARCHAR UNIQUE，" +
-                        "phone VARCHAR UNIQUE" +
+                sqlReq +="(" +
+                        "user_id, " +
+                        "given_name, " +
+                        "family_name, " +
+                        "email, " +
+                        "phone" +
                         ")";
-                sqlReq +=" VALUES (" +
-                        "41244124" + ", " +
-                        acct.getGivenName() + ", " +
-                        acct.getFamilyName() + ", " +
-                        acct.getEmail() + ", " +
-                        "787608" +
+                sqlReq +=" VALUES (\'" +
+                        "41244124" + "\', \'" +
+                        acct.getGivenName() + "\', \'" +
+                        acct.getFamilyName() + "\', \'" +
+                        acct.getEmail() + "\', \'" +
+                        "787608\'" +
                         ");";
                 break;
             }
             case "Contacts": {
                 sqlReq +=" (" +
                         "user_id INTEGER PRIMARY KEY, " +
-                        "given_name VARCHAR" +
-                        "family_name VARCHAR" +
-                        "email VARCHAR" +
+                        "given_name TEXT" +
+                        "family_name TEXT" +
+                        "email TEXT" +
                         "phone INTEGER" +
                         ");";
                 break;
@@ -115,21 +118,25 @@ public class DBManager extends SQLiteOpenHelper {
 
     public String [] retrieveData(String tableName) {
         Cursor c = db.rawQuery("SELECT * FROM " + tableName, null);
-
-        int Column1 = c.getColumnIndex("user_id");
-        int Column2 = c.getColumnIndex("given_name");
-        int Column3 = c.getColumnIndex("family_name");
-        int Column4 = c.getColumnIndex("email");
-        int Column5 = c.getColumnIndex("phone");
+        String [] columnHeaders= {"user_id","given_name","family_name","email","phone"};
+        int [] columns = new int[columnHeaders.length];
+        int i =0;
+        for (String col : columnHeaders){
+            columns[i++]= c.getColumnIndex(col);
+        }
 
         // Check if our result was valid.
         c.moveToFirst();
-        String [] data=null;
-        int i = 0;
+        String [] data=new String[10];
+
         if (c != null) {
             // Loop through all Results
             do {
-                data[i++] = c.getString(Column1);
+                i = 0;
+                for (int col : columns) {
+                    data[i++] = c.getString(col);
+                }
+
             } while (c.moveToNext());
         }
         return data;
