@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus;
 
+import static com.evaquint.android.utils.DBValues.USER_TABLE;
 import static com.evaquint.android.utils.IntentValues.*;
 
 /**
@@ -183,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
             Uri personPhoto = acct.getPhotoUrl();
             DBManager test = new DBManager(this);
 //            SQLiteDatabase kekz = test.getWritableDatabase();
-            test.insertUser("User", acct);
+            test.insertUser(USER_TABLE, acct);
             String temp[] = test.retrieveData("User");
 
         }

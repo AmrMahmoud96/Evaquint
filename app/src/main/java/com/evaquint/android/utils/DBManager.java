@@ -12,9 +12,11 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.evaquint.android.utils.DBValues.CONTACTS_TABLE;
+import static com.evaquint.android.utils.DBValues.USER_TABLE;
 
 /**
- * Created by henry on 8/6/2017.
+ * Created by henry on 8/6/2017.-
  */
 
 public class DBManager extends SQLiteOpenHelper {
@@ -32,14 +34,14 @@ public class DBManager extends SQLiteOpenHelper {
     public DBManager(Context context) {
         super(context, DATABASE_NAME , null, 1);
         this.db=getWritableDatabase();
-        createTable("User");
+        createTable(USER_TABLE);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         this.db=db;
-        createTable("User");
+        createTable(USER_TABLE);
     }
 
     @Override
@@ -49,11 +51,11 @@ public class DBManager extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createTable(String tableName) {
+    public void createTable(int tableName) {
         db.execSQL("DROP TABLE IF EXISTS User");
-        String sqlReq = "CREATE TABLE IF NOT EXISTS "+ tableName+" ";
+        String sqlReq = "CREATE TABLE IF NOT EXISTS "+ DBValues.getString(tableName)+" ";
         switch(tableName){
-            case "User": {
+            case USER_TABLE: {
                 sqlReq +="(" +
                         "user_id TEXT PRIMARY KEY, " +
                         "given_name TEXT, " +
@@ -63,7 +65,7 @@ public class DBManager extends SQLiteOpenHelper {
                         ");";
                 break;
             }
-            case "Contacts": {
+            case CONTACTS_TABLE: {
                 sqlReq +="(" +
                         "user_id INTEGER PRIMARY KEY, " +
                         "given_name TEXT, " +
@@ -79,10 +81,10 @@ public class DBManager extends SQLiteOpenHelper {
 //        this.getWritableDatabase().execSQL(sqlReq);
         db.execSQL(sqlReq);
     }
-    public boolean insertUser(String tableName, GoogleSignInAccount acct) {
+    public boolean insertUser(int tableName, GoogleSignInAccount acct) {
         String sqlReq = "INSERT OR REPLACE INTO "+ tableName+" ";
         switch(tableName){
-            case "User": {
+            case USER_TABLE: {
                 sqlReq +="(" +
                         "user_id, " +
                         "given_name, " +
@@ -99,7 +101,7 @@ public class DBManager extends SQLiteOpenHelper {
                         ");";
                 break;
             }
-            case "Contacts": {
+            case CONTACTS_TABLE: {
                 sqlReq +=" (" +
                         "user_id INTEGER PRIMARY KEY, " +
                         "given_name TEXT" +
