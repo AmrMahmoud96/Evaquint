@@ -73,18 +73,18 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback {
         }
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        //fixPosition();
+        fixPosition();
         googleMap.getUiSettings().setTiltGesturesEnabled(false);
         googleMap.setPadding(0,50,0,50);
     }
 
-    private void fixPosition(Fragment mapFrag){
-        View locationButton = ((View) mapFrag.getView().findViewById(1).getParent()).findViewById(2);
+    private void fixPosition(){
+        View locationButton = ((View) this.getView().findViewById(1).getParent()).findViewById(2);
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
         // position on right bottom
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
         rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        rlp.setMargins(0, 0, 30, 30);
+        rlp.setMargins(0, 0, 200, 200);
     }
 
 }

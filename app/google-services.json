@@ -1,33 +1,39 @@
 {
   "project_info": {
-    "project_number": "489269650347",
-    "project_id": "evaquint-1500236108312"
+    "project_number": "858910372747",
+    "firebase_url": "https://evacunt.firebaseio.com",
+    "project_id": "evacunt",
+    "storage_bucket": "evacunt.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:489269650347:android:d8094c26fcb3fbb5",
+        "mobilesdk_app_id": "1:858910372747:android:d8094c26fcb3fbb5",
         "android_client_info": {
           "package_name": "com.evaquint.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "489269650347-1rl5j1j4slo6eph5hpeuqi6g99h2i4b4.apps.googleusercontent.com",
+          "client_id": "858910372747-bh9jt5kud3dvcebk5ng23082ec2itnf5.apps.googleusercontent.com",
           "client_type": 3
         },
         {
-          "client_id": "489269650347-fpvakareeide4280mr9qnh8vck1krckg.apps.googleusercontent.com",
+          "client_id": "858910372747-h3sso037slcmiqj37tjb0hhl1745k725.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "858910372747-9qjsu6t0hgchn2b0h7iqukl2nif1j10a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.evaquint.android",
-            "certificate_hash": "33420c803d2eb6542a969f481b3498d1b2b305c9"
+            "certificate_hash": "d89b2ac5f9fd6ffd8abdfc18ca402c37b4ba9921"
           }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCuuCm-m6FTjbNDRmnvFlgNcApkEPiy6_o"
+          "current_key": "AIzaSyCNsjUqD555E_3AXKE7PQpCKfmPchdEqYw"
         }
       ],
       "services": {
@@ -35,11 +41,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "858910372747-bh9jt5kud3dvcebk5ng23082ec2itnf5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

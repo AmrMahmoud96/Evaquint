@@ -51,9 +51,9 @@ public class DBManager extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createTable(int tableName) {
+    public void createTable(DBValues tableName) {
         db.execSQL("DROP TABLE IF EXISTS User");
-        String sqlReq = "CREATE TABLE IF NOT EXISTS "+ DBValues.getString(tableName)+" ";
+        String sqlReq = "CREATE TABLE IF NOT EXISTS "+ tableName.getName()+" ";
         switch(tableName){
             case USER_TABLE: {
                 sqlReq +="(" +
@@ -81,8 +81,8 @@ public class DBManager extends SQLiteOpenHelper {
 //        this.getWritableDatabase().execSQL(sqlReq);
         db.execSQL(sqlReq);
     }
-    public boolean insertUser(int tableName, GoogleSignInAccount acct) {
-        String sqlReq = "INSERT OR REPLACE INTO "+ tableName+" ";
+    public boolean insertUser(DBValues tableName, GoogleSignInAccount acct) {
+        String sqlReq = "INSERT OR REPLACE INTO "+ tableName.getName()+" ";
         switch(tableName){
             case USER_TABLE: {
                 sqlReq +="(" +
@@ -118,8 +118,8 @@ public class DBManager extends SQLiteOpenHelper {
         return true;
     }
 
-    public String [] retrieveData(String tableName) {
-        Cursor c = db.rawQuery("SELECT * FROM " + tableName, null);
+    public String [] retrieveData(DBValues tableName) {
+        Cursor c = db.rawQuery("SELECT * FROM " + tableName.getName(), null);
         String [] columnHeaders= {"user_id","given_name","family_name","email","phone"};
         int [] columns = new int[columnHeaders.length];
         int i =0;
