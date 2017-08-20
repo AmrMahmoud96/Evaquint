@@ -31,7 +31,7 @@ public class DBManager {
         this.mDatabase = database.getReference(ref);
     }
 
-    public void writeToDB(String targ,  Object item){
+    public void writeToDB(String targ, Object item){
         mDatabase.child(targ).setValue(item);
     }
 
