@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "858910372747-3ic59dvskm6cgo99641d094imbgji3vm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evaquint.android",
+            "certificate_hash": "33420c803d2eb6542a969f481b3498d1b2b305c9"
+          }
+        },
+        {
           "client_id": "858910372747-bh9jt5kud3dvcebk5ng23082ec2itnf5.apps.googleusercontent.com",
           "client_type": 3
         },

@@ -19,7 +19,7 @@ import static com.evaquint.android.utils.DBValues.USER_TABLE;
  * Created by henry on 8/6/2017.-
  */
 
-public class DBManager extends SQLiteOpenHelper {
+public class CacheManager extends SQLiteOpenHelper {
         public static final String DATABASE_NAME = "test";
         public static final String CONTACTS_TABLE_NAME = "contacts";
         public static final String CONTACTS_COLUMN_ID = "id";
@@ -31,7 +31,7 @@ public class DBManager extends SQLiteOpenHelper {
         private HashMap hp;
         SQLiteDatabase db=null;
 
-    public DBManager(Context context) {
+    public CacheManager(Context context) {
         super(context, DATABASE_NAME , null, 1);
         this.db=getWritableDatabase();
         createTable(USER_TABLE);

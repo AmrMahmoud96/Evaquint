@@ -3,7 +3,6 @@ package com.evaquint.android;
 
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +18,9 @@ import android.widget.TextView;
 
 
 import com.evaquint.android.Fragments.Login.SignInFrag;
-import com.evaquint.android.utils.DBManager;
+import com.evaquint.android.firebase.DBManager;
+import com.evaquint.android.firebase.dataStructures.UserDB;
+import com.evaquint.android.utils.CacheManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -183,11 +184,14 @@ public class LoginActivity extends AppCompatActivity {
             String personEmail = acct.getEmail();
             String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
-            DBManager test = new DBManager(this);
-//            SQLiteDatabase kekz = test.getWritableDatabase();
-            test.insertUser(USER_TABLE, acct);
-            String temp[] = test.retrieveData(USER_TABLE);
-
+//            CacheManager test = new CacheManager(this);
+////            SQLiteDatabase kekz = test.getWritableDatabase();
+//            test.insertUser(USER_TABLE, acct);
+//            String temp[] = test.retrieveData(USER_TABLE);
+            DBManager test =new DBManager("user");
+            test.readFromDB("user");
+            test.writeToDB("4124test",new UserDB("4124test", personGivenName, personFamilyName, personEmail,"6476731234"));
+            test.writeToDB("herro4124", new UserDB("herro4124", personGivenName, personFamilyName, personEmail,"4476730214"));
         }
     }
 
