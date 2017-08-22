@@ -16,12 +16,6 @@ public class UserDB {
     public String phone;
     public String displayName;
 
-
-
-    public UserDB() {
-        // Default constructor required for calls to DataSnapshot.getValue(UserDB.class)
-    }
-
     public UserDB(List<String> provider, String displayName, String email, String phone) {
         this.provider = provider;
         this.displayName = displayName;

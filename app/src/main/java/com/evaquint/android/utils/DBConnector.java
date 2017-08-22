@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase;
+package com.evaquint.android.utils;
 
 import android.util.Log;
 
@@ -26,13 +26,13 @@ public class DBConnector {
         this.mDatabase = database.getReference();
     }
 
-    public DBConnector(String ref){
+    public DBConnector(String table){
         this.database = FirebaseDatabase.getInstance();
-        this.mDatabase = database.getReference(ref);
+        this.mDatabase = database.getReference(table);
     }
 
-    public void writeToDB(String targ, Object item){
-        mDatabase.child(targ).setValue(item);
+    public void writeToDB(String path, Object item){
+        mDatabase.child(path).setValue(item);
     }
 
     public String readFromDB(String targ){
