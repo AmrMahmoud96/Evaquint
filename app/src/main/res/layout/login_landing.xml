@@ -78,6 +78,7 @@
             android:layout_below="@+id/login_google"
             android:text="Continue With Facebook"/>
 
+
         <TextView
             android:id="@+id/more_options_btn"
             app:layout_marginLeftPercent="8%"

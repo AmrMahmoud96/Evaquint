@@ -16,17 +16,17 @@ import static android.content.ContentValues.TAG;
  * Created by henry on 8/19/2017.
  */
 
-public class DBManager {
+public class DBConnector {
 
     FirebaseDatabase database;
     DatabaseReference mDatabase;
 
-    public DBManager (){
+    public DBConnector(){
         this.database = FirebaseDatabase.getInstance();
         this.mDatabase = database.getReference();
     }
 
-    public DBManager (String ref){
+    public DBConnector(String ref){
         this.database = FirebaseDatabase.getInstance();
         this.mDatabase = database.getReference(ref);
     }

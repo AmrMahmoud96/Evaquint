@@ -46,7 +46,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 
     /**
      * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
+     * TODO: remove after connecting to activity real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
@@ -105,7 +105,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 //        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
 //            return true;
 //        }
-//        if (a.checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+//        if (activity.checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
 //            return true;
 //        }
 //        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
@@ -124,7 +124,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 //    }
 
 //    /**
-//     * Callback received when a permissions request has been completed.
+//     * Callback received when activity permissions request has been completed.
 //     */
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -157,14 +157,14 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
+        // Check for activity valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
 
-        // Check for a valid email address.
+        // Check for activity valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
@@ -180,7 +180,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
+            // Show activity progress spinner, and kick off activity background task to
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
@@ -248,7 +248,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
                 .CONTENT_ITEM_TYPE},
 
                 // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
+                // activity primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
@@ -305,7 +305,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            // TODO: attempt authentication against activity network service.
 
             try {
                 // Simulate network access.

@@ -51,7 +51,7 @@ public class DummyContent {
     }
 
     /**
-     * A dummy item representing a piece of content.
+     * A dummy item representing activity piece of content.
      */
     public static class DummyItem {
         public final String id;
