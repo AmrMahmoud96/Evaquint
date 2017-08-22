@@ -1,21 +1,29 @@
 {
   "project_info": {
-    "project_number": "858910372747",
-    "firebase_url": "https://evacunt.firebaseio.com",
-    "project_id": "evacunt",
-    "storage_bucket": "evacunt.appspot.com"
+    "project_number": "333306138719",
+    "firebase_url": "https://evaquint-db85c.firebaseio.com",
+    "project_id": "evaquint-db85c",
+    "storage_bucket": "evaquint-db85c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:858910372747:android:d8094c26fcb3fbb5",
+        "mobilesdk_app_id": "1:333306138719:android:d8094c26fcb3fbb5",
         "android_client_info": {
           "package_name": "com.evaquint.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "858910372747-3ic59dvskm6cgo99641d094imbgji3vm.apps.googleusercontent.com",
+          "client_id": "333306138719-png77ml4j571mhmunj38ggf8c1tqhh15.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evaquint.android",
+            "certificate_hash": "d89b2ac5f9fd6ffd8abdfc18ca402c37b4ba9921"
+          }
+        },
+        {
+          "client_id": "333306138719-rmc55tbsetll8getj6e5khumg6502eiq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.evaquint.android",
@@ -23,25 +31,21 @@
           }
         },
         {
-          "client_id": "858910372747-bh9jt5kud3dvcebk5ng23082ec2itnf5.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "858910372747-h3sso037slcmiqj37tjb0hhl1745k725.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "858910372747-9qjsu6t0hgchn2b0h7iqukl2nif1j10a.apps.googleusercontent.com",
+          "client_id": "333306138719-og8skjvjp0a76uc0sqh8je74j92ume90.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.evaquint.android",
-            "certificate_hash": "d89b2ac5f9fd6ffd8abdfc18ca402c37b4ba9921"
+            "certificate_hash": "beb8c8f799f4645f90fe790da24811ddfb82924c"
           }
+        },
+        {
+          "client_id": "333306138719-1ba7rsal0fu1ja82mjhpsg9fbh67rd7l.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCNsjUqD555E_3AXKE7PQpCKfmPchdEqYw"
+          "current_key": "AIzaSyARCZeELFgXIqc_yFE1-6QODzxrPQ521Aw"
         }
       ],
       "services": {
@@ -52,7 +56,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "858910372747-bh9jt5kud3dvcebk5ng23082ec2itnf5.apps.googleusercontent.com",
+              "client_id": "333306138719-1ba7rsal0fu1ja82mjhpsg9fbh67rd7l.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

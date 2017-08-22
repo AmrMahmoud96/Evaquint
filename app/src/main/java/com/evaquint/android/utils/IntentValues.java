@@ -5,5 +5,6 @@ package com.evaquint.android.utils;
  */
 
 public class IntentValues {
-    public static final int RC_SIGN_IN = 0101;
+    public static final int GOOGLE_SIGN_IN = 0101;
+    public static final int FACEBOOK_SIGN_IN = 0102;
 }
