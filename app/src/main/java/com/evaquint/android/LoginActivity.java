@@ -19,15 +19,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-import com.evaquint.android.firebase.DBManager;
-import com.evaquint.android.firebase.dataStructures.UserDB;
+import com.evaquint.android.firebase.DBConnector;
+import com.evaquint.android.firebase.dataStructures.FirebaseUser;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -39,7 +38,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
@@ -136,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        com.google.firebase.auth.FirebaseUser currentUser = mAuth.getCurrentUser();
 //        updateUI(currentUser);
     }
 
@@ -238,15 +236,6 @@ public class LoginActivity extends AppCompatActivity {
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
             firebaseAuthWithGoogle(acct);
-            // If you don't already have a server session, you can now send this code to your
-            // server to authenticate on the backend.
-            String authCode = acct.getServerAuthCode();
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
-            String personId = acct.getId();
-            Uri personPhoto = acct.getPhotoUrl();
 //            CacheManager test = new CacheManager(this);
 ////            SQLiteDatabase kekz = test.getWritableDatabase();
 //            test.insertUser(USER_TABLE, acct);
@@ -255,16 +244,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void updateFirebase(FirebaseUser fUser, GoogleSignInAccount acct){
-        DBManager test =new DBManager("user");
+    private void updateFirebase(com.google.firebase.auth.FirebaseUser fUser){
+        DBConnector test =new DBConnector("user");
         test.readFromDB("user");
-        test.writeToDB(fUser.getUid(), new UserDB(fUser.getProviders(), acct.getGivenName(),
-                acct.getFamilyName(), fUser.getEmail(), "6476731234"));
-        test.writeToDB("4124", new UserDB(fUser.getProviders(), acct.getGivenName(),
-                acct.getFamilyName(), fUser.getEmail(), "6476731234"));
+        test.writeToDB(fUser.getUid(), new FirebaseUser(fUser.getProviders(),
+                fUser.getDisplayName(), fUser.getEmail(), "6476731234"));
     }
 
-    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -275,8 +262,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateFirebase(user, acct);
+                            com.google.firebase.auth.FirebaseUser user = mAuth.getCurrentUser();
+                            updateFirebase(user);
+                            startApp();
 //                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -302,7 +290,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            com.google.firebase.auth.FirebaseUser user = mAuth.getCurrentUser();
+                            updateFirebase(user);
+                            startApp();
 //                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

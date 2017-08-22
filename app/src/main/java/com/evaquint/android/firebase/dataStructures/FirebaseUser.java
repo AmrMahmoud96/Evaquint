@@ -9,24 +9,22 @@ import java.util.List;
  */
 
 @IgnoreExtraProperties
-public class UserDB {
+public class FirebaseUser {
     public List<String> provider;
     public List<String> friend;
     public String email;
     public String phone;
-    public String givenName;
-    public String familyName;
+    public String displayName;
 
 
 
-    public UserDB() {
-        // Default constructor required for calls to DataSnapshot.getValue(UserDB.class)
+    public FirebaseUser() {
+        // Default constructor required for calls to DataSnapshot.getValue(FirebaseUser.class)
     }
 
-    public UserDB(List<String> provider, String givenName, String familyName, String email, String phone) {
+    public FirebaseUser(List<String> provider, String displayName, String email, String phone) {
         this.provider = provider;
-        this.givenName = givenName;
-        this.familyName = familyName;
+        this.displayName = displayName;
         this.email = email;
         this.phone = phone;
     }
