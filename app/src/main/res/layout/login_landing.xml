@@ -98,18 +98,18 @@
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/login_facebook"
             android:layout_toEndOf="@id/more_options_btn"
-            android:text="Log In" />
+            android:text="@string/register_or_sign_in" />
 
-        <TextView
-            android:id="@+id/to_register"
-            app:layout_marginLeftPercent="6%"
-            app:layout_marginTopPercent="2%"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/login_facebook"
-            android:layout_toEndOf="@id/to_login"
-            android:text="Sign Up With Email" />
+        <!--<TextView-->
+            <!--android:id="@+id/to_register"-->
+            <!--app:layout_marginLeftPercent="6%"-->
+            <!--app:layout_marginTopPercent="2%"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_below="@+id/login_facebook"-->
+            <!--android:layout_toEndOf="@id/to_login"-->
+            <!--android:text="Sign Up With Email" />-->
 
         <TextView
             android:layout_width="match_parent"

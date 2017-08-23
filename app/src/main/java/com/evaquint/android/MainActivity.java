@@ -1,6 +1,7 @@
 package com.evaquint.android;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 
 import com.evaquint.android.Fragments.EventLocatorFrag;
 import com.evaquint.android.Fragments.FeedFrag;
+import com.google.firebase.auth.FirebaseAuth;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -99,8 +101,9 @@ public class MainActivity extends AppCompatActivity
             setActiveFragment(new FeedFrag());
         } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, LoginActivity.class));
         }
 
         this.drawer.closeDrawer(GravityCompat.START);

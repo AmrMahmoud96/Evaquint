@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
+import com.evaquint.android.utils.ViewAnimator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
     private View mLoginFormView;
     private View v;
     private Activity a;
+    private ViewAnimator animationManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +72,8 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         super.onCreate(savedInstanceState);
         this.v=inflater.inflate(R.layout.activity_login, container, false);
         this.a=getActivity();
+        this.animationManager= new ViewAnimator(a);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) v.findViewById(R.id.email);
 
@@ -82,6 +86,19 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
                     return true;
                 }
                 return false;
+            }
+        });
+
+        Button loginButton = (Button) v.findViewById(R.id.register_button);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View displayNameInput = v.findViewById(R.id.display_name);
+//                if (displayNameInput.getVisibility()!=View.GONE) {
+                    animationManager.slideDownThenUp(displayNameInput);
+//                } else {
+//                    animationManager.showSlideDown(displayNameInput);
+//                }
             }
         });
 

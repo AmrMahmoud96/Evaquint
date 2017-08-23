@@ -78,7 +78,7 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
     @Override
     public void handleResult(int requestCode, int resultCode, Intent data) {
         GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-        if (!result.isSuccess()) {
+        if (result.isSuccess()) {
             final GoogleSignInAccount acct = result.getSignInAccount();
             Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
             AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);

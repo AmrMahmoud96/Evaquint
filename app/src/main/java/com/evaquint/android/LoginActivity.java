@@ -14,12 +14,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.evaquint.android.Fragments.EventLocatorFrag;
+import com.evaquint.android.Fragments.Login.SignInFrag;
 import com.evaquint.android.firebase.Authenticator.FacebookAuthenticator;
 import com.evaquint.android.firebase.Authenticator.FirebaseAuthenticator;
 import com.evaquint.android.firebase.Authenticator.GoogleAuthenticator;
 import com.facebook.CallbackManager;
+import com.facebook.login.LoginFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,6 +33,7 @@ import in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.evaquint.android.utils.IntentValues.GOOGLE_SIGN_IN;
+import static com.evaquint.android.utils.ViewAnimator.*;
 
 /**
  * A login screen that offers login via email/password.
@@ -60,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login_landing);
 
         mAuth = FirebaseAuth.getInstance();
+
         BtnGoogleplus mGoogleSignInButton = (BtnGoogleplus) findViewById(R.id.login_google);
         mGoogleSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -80,6 +87,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        TextView loginButton = (TextView) findViewById(R.id.to_login);
+        loginButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setActiveFragment(new SignInFrag());
+            }
+        });
     }
 
     @Override

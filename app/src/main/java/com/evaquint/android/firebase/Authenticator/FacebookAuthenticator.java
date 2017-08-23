@@ -84,7 +84,7 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
     @Override
     public void executeAuth() {
         initAuth();
-        executeAuth();
+        startAuth();
     }
 
     @Override
