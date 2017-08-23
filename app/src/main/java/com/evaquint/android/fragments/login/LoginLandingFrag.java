@@ -1,4 +1,4 @@
-package com.evaquint.android.Fragments.Login;
+package com.evaquint.android.fragments.login;
 
 /**
  * Created by henry on 8/22/2017.
@@ -15,9 +15,9 @@ import android.widget.TextView;
 
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
-import com.evaquint.android.firebase.Authenticator.FacebookAuthenticator;
-import com.evaquint.android.firebase.Authenticator.FirebaseAuthenticator;
-import com.evaquint.android.firebase.Authenticator.GoogleAuthenticator;
+import com.evaquint.android.firebase.authenticator.FacebookAuthenticator;
+import com.evaquint.android.firebase.authenticator.FirebaseAuthenticator;
+import com.evaquint.android.firebase.authenticator.GoogleAuthenticator;
 
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,8 +25,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import in.championswimmer.libsocialbuttons.buttons.BtnFacebook;
 import in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus;
 
-import static com.evaquint.android.utils.FragmentHelper.setActiveFragment;
-import static com.evaquint.android.utils.IntentValues.GOOGLE_SIGN_IN;
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
+import static com.evaquint.android.utils.code.IntentValues.GOOGLE_SIGN_IN;
 
 /**
  * Created by henry on 8/22/2017.

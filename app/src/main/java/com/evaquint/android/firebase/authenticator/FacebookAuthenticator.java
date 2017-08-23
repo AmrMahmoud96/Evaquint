@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase.Authenticator;
+package com.evaquint.android.firebase.authenticator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.evaquint.android.LoginActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;

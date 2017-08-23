@@ -2,18 +2,15 @@ package com.evaquint.android.utils;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.evaquint.android.utils.code.DBValues;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
-import java.io.IOException;
 import java.util.HashMap;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.evaquint.android.utils.DBValues.CONTACTS_TABLE;
-import static com.evaquint.android.utils.DBValues.USER_TABLE;
+import static com.evaquint.android.utils.code.DBValues.USER_TABLE;
 
 /**
  * Created by henry on 8/6/2017.-

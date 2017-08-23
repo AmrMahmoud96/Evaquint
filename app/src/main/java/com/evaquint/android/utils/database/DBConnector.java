@@ -1,4 +1,4 @@
-package com.evaquint.android.utils;
+package com.evaquint.android.utils.database;
 
 import android.util.Log;
 

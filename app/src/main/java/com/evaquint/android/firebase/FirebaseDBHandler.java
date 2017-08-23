@@ -1,7 +1,7 @@
 package com.evaquint.android.firebase;
 
 import com.evaquint.android.firebase.dataStructures.UserDB;
-import com.evaquint.android.utils.DBConnector;
+import com.evaquint.android.utils.database.DBConnector;
 import com.google.firebase.auth.FirebaseUser;
 
 /**

@@ -1,4 +1,4 @@
-package com.evaquint.android.Fragments.Login;
+package com.evaquint.android.fragments.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -29,7 +29,7 @@ import android.widget.TextView;
 
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
-import com.evaquint.android.utils.ViewAnimator;
+import com.evaquint.android.utils.view.ViewAnimator;
 
 import java.util.ArrayList;
 import java.util.List;

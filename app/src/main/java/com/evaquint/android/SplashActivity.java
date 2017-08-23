@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.evaquint.android.firebase.Authenticator.FirebaseAuthenticator;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**

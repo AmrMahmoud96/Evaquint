@@ -1,4 +1,4 @@
-package com.evaquint.android.Fragments;
+package com.evaquint.android.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.evaquint.android.R;
-import com.evaquint.android.Fragments.dummy.DummyContent;
-import com.evaquint.android.Fragments.dummy.DummyContent.DummyItem;
+import com.evaquint.android.fragments.dummy.DummyContent;
+import com.evaquint.android.fragments.dummy.DummyContent.DummyItem;
 
 /**
  * A fragment representing activity list of Items.

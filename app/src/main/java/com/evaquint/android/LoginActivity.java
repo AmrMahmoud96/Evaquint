@@ -12,10 +12,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.evaquint.android.Fragments.Login.LoginLandingFrag;
+import com.evaquint.android.fragments.login.LoginLandingFrag;
 
 import static android.Manifest.permission.READ_CONTACTS;
-import static com.evaquint.android.utils.FragmentHelper.setActiveFragment;
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 /**
  * A login screen that offers login via email/password.

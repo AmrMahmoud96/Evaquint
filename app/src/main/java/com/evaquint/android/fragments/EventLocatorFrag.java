@@ -1,4 +1,4 @@
-package com.evaquint.android.Fragments;
+package com.evaquint.android.fragments;
 
 import android.Manifest;
 import android.app.Activity;

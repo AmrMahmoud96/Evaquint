@@ -14,13 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.evaquint.android.Fragments.EventLocatorFrag;
-import com.evaquint.android.Fragments.FeedFrag;
+import com.evaquint.android.fragments.EventLocatorFrag;
+import com.evaquint.android.fragments.FeedFrag;
 import com.google.firebase.auth.FirebaseAuth;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import static com.evaquint.android.utils.FragmentHelper.setActiveFragment;
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

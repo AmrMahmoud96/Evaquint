@@ -1,4 +1,4 @@
-package com.evaquint.android.utils;
+package com.evaquint.android.utils.code;
 
 /**
  * Created by henry on 8/15/2017.

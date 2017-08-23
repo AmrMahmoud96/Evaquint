@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase.Authenticator;
+package com.evaquint.android.firebase.authenticator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,9 +7,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.evaquint.android.LoginActivity;
 import com.evaquint.android.R;
-import com.facebook.CallbackManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -25,7 +23,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import static android.content.ContentValues.TAG;
 import static com.evaquint.android.firebase.FirebaseDBHandler.updateUser;
-import static com.evaquint.android.utils.IntentValues.GOOGLE_SIGN_IN;
+import static com.evaquint.android.utils.code.IntentValues.GOOGLE_SIGN_IN;
 
 /**
  * Created by henry on 8/22/2017.
