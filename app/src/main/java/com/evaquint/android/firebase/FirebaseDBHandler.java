@@ -10,8 +10,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 public final class FirebaseDBHandler {
     public static void updateUser(FirebaseUser fUser) {
-        DBConnector test =new DBConnector("user");
+        DBConnector test = new DBConnector("user");
         test.writeToDB(fUser.getUid(), new UserDB(fUser.getProviders(),
                 fUser.getDisplayName(), fUser.getEmail(), "6476731234"));
+    }
+
+    public static void updateUser(String uid, UserDB user) {
+        DBConnector test =new DBConnector("user");
+        test.writeToDB(uid, user);
     }
 }

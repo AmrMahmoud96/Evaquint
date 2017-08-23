@@ -31,7 +31,6 @@ import static com.evaquint.android.firebase.FirebaseDBHandler.*;
  */
 
 public class FacebookAuthenticator implements FirebaseAuthenticator {
-    private FirebaseUser fUser;
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
     private Activity activity;
@@ -40,7 +39,6 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
 
     public FacebookAuthenticator(){
         this.mAuth = FirebaseAuth.getInstance();
-        this.fUser = mAuth.getCurrentUser();
         this.mCallbackManager = CallbackManager.Factory.create();
     }
 

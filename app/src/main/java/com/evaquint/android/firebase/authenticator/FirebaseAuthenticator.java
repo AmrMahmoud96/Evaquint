@@ -8,10 +8,8 @@ import android.content.Intent;
 
 public interface FirebaseAuthenticator {
 
-    public void initAuth();
-    public void startAuth();
-    public void executeAuth();
-    public void handleResult(int requestCode, int resultCode, Intent data) ;
-    public void updateEmail();
+    void executeAuth();
+    void handleResult(int requestCode, int resultCode, Intent data) ;
+    void updateEmail();
 
 }

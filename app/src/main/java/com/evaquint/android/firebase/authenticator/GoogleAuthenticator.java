@@ -30,7 +30,6 @@ import static com.evaquint.android.utils.code.IntentValues.GOOGLE_SIGN_IN;
  */
 
 public class GoogleAuthenticator implements FirebaseAuthenticator {
-    private FirebaseUser fUser;
     private FirebaseAuth mAuth;
     private Activity activity;
     private Fragment fragment;
@@ -39,7 +38,6 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
 
     public GoogleAuthenticator(){
         this.mAuth = FirebaseAuth.getInstance();
-        this.fUser = mAuth.getCurrentUser();
     }
 
     public GoogleAuthenticator(Activity a, Intent intent){
@@ -53,7 +51,6 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
         this.fragment = f;
     }
 
-    @Override
     public void initAuth() {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -68,7 +65,6 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
                 .build();
     }
 
-    @Override
     public void startAuth() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         if (fragment==null)
