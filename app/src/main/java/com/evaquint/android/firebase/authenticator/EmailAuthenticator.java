@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import static android.content.ContentValues.TAG;
 import static com.evaquint.android.firebase.FirebaseDBHandler.updateUser;
@@ -74,6 +75,15 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser fUser = mAuth.getCurrentUser();
+                            UserProfileChangeRequest updateProfile = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name)
+                                    .build();
+                            fUser.updateProfile(updateProfile).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    activity.startActivity(nextActivity);
+                                }
+                            });
                             updateUser(fUser.getUid(),
                                     new UserDB(fUser.getProviders(),
                                             name,

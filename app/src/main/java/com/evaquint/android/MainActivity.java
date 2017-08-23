@@ -13,10 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.evaquint.android.fragments.EventLocatorFrag;
 import com.evaquint.android.fragments.FeedFrag;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -25,7 +28,8 @@ import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private Fragment activeFragment;
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mAuth = FirebaseAuth.getInstance();
+
         this.drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, this.drawer, /*toolbar, */R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -41,6 +47,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        initNavHeader(navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
@@ -60,6 +67,11 @@ public class MainActivity extends AppCompatActivity
         });
 
         setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
+    }
+
+    private void initNavHeader(NavigationView navigationView){
+        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_name))
+                .setText(mAuth.getCurrentUser().getDisplayName());
     }
 
     @Override
