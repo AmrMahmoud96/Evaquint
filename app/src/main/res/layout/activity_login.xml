@@ -69,10 +69,26 @@
             android:imeActionId="@+id/login"
             android:imeActionLabel="Sign In"
             android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:maxLines="1"
             android:singleLine="true"
             android:layout_below="@+id/display_name"
+            android:layout_toEndOf="@+id/login_progress"
+            app:layout_marginTopPercent="1%" />
+
+        <EditText
+            android:id="@+id/confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_confirm_password"
+            android:imeActionId="@+id/login"
+            android:imeActionLabel="Sign In"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:visibility="gone"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:layout_below="@+id/password"
             android:layout_toEndOf="@+id/login_progress"
             app:layout_marginTopPercent="1%" />
 
@@ -83,7 +99,7 @@
             android:layout_height="wrap_content"
             android:text="@string/action_sign_in"
             android:textStyle="bold"
-            android:layout_below="@+id/password"
+            android:layout_below="@+id/confirm_password"
             android:layout_alignEnd="@+id/password" />
 
         <CheckBox
@@ -92,14 +108,14 @@
             android:layout_height="wrap_content"
             android:text="Show Password"
             android:layout_alignBottom="@+id/sign_in_button"
-            android:layout_below="@+id/password"
+            android:layout_below="@+id/confirm_password"
             android:layout_alignStart="@+id/password" />
 
         <Button
-            android:id="@+id/register_button"
+            android:id="@+id/switch_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/action_register"
+            android:text="@string/action_switch_sign_in"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
             android:layout_below="@+id/sign_in_button"

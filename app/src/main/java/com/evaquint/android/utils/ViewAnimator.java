@@ -17,20 +17,15 @@ public class ViewAnimator {
 
     public ViewAnimator(Activity a)
     {
-        animShow = AnimationUtils.loadAnimation(a, R.anim.slide_up);
-        animShow.setFillAfter(true);
-        animShow.setDuration(500);
-        animHide = AnimationUtils.loadAnimation(a, R.anim.slide_down);
-        animHide.setFillAfter(true);
-        animHide.setDuration(500);
+        animShow = AnimationUtils.loadAnimation(a, R.anim.fade_in);
+        animHide = AnimationUtils.loadAnimation(a, R.anim.fade_out);
     }
 
     public void slideDownThenUp(View view){
         if (view.getVisibility()==View.GONE)
-            view.setVisibility(View.VISIBLE);
+            showSlideDown(view);
         else
-            view.setVisibility(View.GONE);
-        view.startAnimation( animHide );
+            hideSlideUp(view);
     }
 
     public void showSlideDown(View view){

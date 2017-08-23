@@ -65,6 +65,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
     private View v;
     private Activity a;
     private ViewAnimator animationManager;
+    private boolean register = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,20 +90,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             }
         });
 
-        Button loginButton = (Button) v.findViewById(R.id.register_button);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                View displayNameInput = v.findViewById(R.id.display_name);
-//                if (displayNameInput.getVisibility()!=View.GONE) {
-                    animationManager.slideDownThenUp(displayNameInput);
-//                } else {
-//                    animationManager.showSlideDown(displayNameInput);
-//                }
-            }
-        });
-
-        Button mEmailSignInButton = (Button) v.findViewById(R.id.sign_in_button);
+        final Button mEmailSignInButton = (Button) v.findViewById(R.id.sign_in_button);
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +100,30 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 
         mLoginFormView = v.findViewById(R.id.login_form);
         mProgressView = v.findViewById(R.id.login_progress);
+
+        final Button mSwitchButton = (Button) v.findViewById(R.id.switch_button);
+        mSwitchButton.setOnClickListener(new View.OnClickListener() {
+            View displayNameInput = v.findViewById(R.id.display_name);
+            View confirmPasswordInput = v.findViewById(R.id.confirm_password);
+            @Override
+            public void onClick(View view) {
+                String switchButton;
+                String signInButton;
+                if (register) {
+                    switchButton=getString(R.string.action_switch_sign_in);
+                    signInButton=getString(R.string.action_sign_in);
+                } else {
+                    switchButton=getString(R.string.action_switch_register);
+                    signInButton=getString(R.string.action_register);
+                }
+                animationManager.slideDownThenUp(displayNameInput);
+                animationManager.slideDownThenUp(confirmPasswordInput);
+                mSwitchButton.setText(switchButton);
+                mEmailSignInButton.setText(signInButton);
+                        register=!register;
+
+            }
+        });
 
         return this.v;
     }

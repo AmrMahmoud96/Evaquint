@@ -24,10 +24,13 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_display_name">Display Name</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_display_name">Name</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_confirm_password">Confirm Password</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_register">Register</string>
+    <string name="action_switch_sign_in">Don\'t Have an Account?</string>
+    <string name="action_switch_register">Already Have an Account?</string>
     <string name="register_or_sign_in">Log In or Sign Up With Email</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
