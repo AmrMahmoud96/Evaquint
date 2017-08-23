@@ -32,7 +32,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.v=inflater.inflate(R.layout.event_locator_google_maps, container, false);
+        this.v=inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
         this.a=getActivity();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

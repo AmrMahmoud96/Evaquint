@@ -24,7 +24,7 @@ public class HostRating extends PercentRelativeLayout {
 
     public HostRating(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        LayoutInflater.from(context).inflate(R.layout.fitted_panel, this);
+        LayoutInflater.from(context).inflate(R.layout.panel_fitted, this);
         contentFrame = (LinearLayout) findViewById(R.id.content_frame);
     }
 
