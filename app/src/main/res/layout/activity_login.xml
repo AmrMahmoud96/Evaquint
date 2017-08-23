@@ -25,11 +25,11 @@
         android:layout_toEndOf="@+id/login_progress">
         <ImageView
             app:layout_widthPercent="100%"
-            app:layout_heightPercent="30%"
+            app:layout_heightPercent="20%"
             android:src="@drawable/logo"
             android:id="@+id/imageView3"
             android:layout_centerInParent="true"
-            app:layout_marginTopPercent="1%"
+            app:layout_marginTopPercent="4%"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/email" />
 
@@ -43,7 +43,7 @@
             android:singleLine="true"
             android:layout_below="@+id/imageView3"
             android:layout_toEndOf="@+id/login_progress"
-            app:layout_marginTopPercent="10%" />
+            app:layout_marginTopPercent="15%" />
 
         <EditText
             android:id="@+id/display_name"
@@ -53,7 +53,7 @@
             android:imeActionId="@+id/login"
             android:imeActionLabel="Sign In"
             android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:visibility="gone"
             android:maxLines="1"
             android:singleLine="true"
@@ -69,7 +69,7 @@
             android:imeActionId="@+id/login"
             android:imeActionLabel="Sign In"
             android:imeOptions="actionUnspecified"
-            android:inputType="text"
+            android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"
             android:layout_below="@+id/display_name"
