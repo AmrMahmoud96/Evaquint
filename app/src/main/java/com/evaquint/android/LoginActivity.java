@@ -9,31 +9,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.evaquint.android.Fragments.EventLocatorFrag;
-import com.evaquint.android.Fragments.Login.SignInFrag;
-import com.evaquint.android.firebase.Authenticator.FacebookAuthenticator;
-import com.evaquint.android.firebase.Authenticator.FirebaseAuthenticator;
-import com.evaquint.android.firebase.Authenticator.GoogleAuthenticator;
-import com.facebook.CallbackManager;
-import com.facebook.login.LoginFragment;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
-
-import in.championswimmer.libsocialbuttons.buttons.BtnFacebook;
-import in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus;
+import com.evaquint.android.Fragments.Login.LoginLandingFrag;
 
 import static android.Manifest.permission.READ_CONTACTS;
-import static com.evaquint.android.utils.IntentValues.GOOGLE_SIGN_IN;
-import static com.evaquint.android.utils.ViewAnimator.*;
+import static com.evaquint.android.utils.FragmentHelper.setActiveFragment;
 
 /**
  * A login screen that offers login via email/password.
@@ -54,46 +36,15 @@ public class LoginActivity extends AppCompatActivity {
     };
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
-    private Fragment activeFragment = null;
-    private FirebaseAuth mAuth;
-    //Google Sign-In
-    private FirebaseAuthenticator authManager;
+    private View mEmailView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_landing);
+        setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-
-        BtnGoogleplus mGoogleSignInButton = (BtnGoogleplus) findViewById(R.id.login_google);
-        mGoogleSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                authManager = new GoogleAuthenticator(LoginActivity.this,
-                        new Intent(LoginActivity.this, MainActivity.class));
-                authManager.executeAuth();
-            }
-        });
-
-        BtnFacebook mFacebookSignInButton = (BtnFacebook) findViewById(R.id.login_facebook);
-        mFacebookSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                authManager = new FacebookAuthenticator(LoginActivity.this,
-                        new Intent(LoginActivity.this, MainActivity.class));
-                authManager.executeAuth();
-            }
-        });
-
-        TextView loginButton = (TextView) findViewById(R.id.to_login);
-        loginButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setActiveFragment(new SignInFrag());
-            }
-        });
+        Fragment newFrag = new LoginLandingFrag();
+                setActiveFragment(getSupportFragmentManager(), newFrag);
     }
 
     @Override
@@ -101,19 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    private void setActiveFragment(Fragment newFrag){
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-        if(activeFragment==null)
-            ft.add(R.id.content_frame, newFrag);
-        else
-            ft.replace(activeFragment.getId(), newFrag);
-//            loadFragment(ft);
-        ft.commit();
-        activeFragment=newFrag;
-    }
-
-//
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -152,22 +90,9 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Shows the progress UI and hides the login form.
      */
-
-    private void startApp() {
-        Intent myIntent = new Intent(this, MainActivity.class);
-        startActivity(myIntent);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == GOOGLE_SIGN_IN) {
-            authManager.handleResult(requestCode, resultCode, data);
-        } else {
-            authManager.handleResult(requestCode, resultCode, data);
-        }
     }
 
 }

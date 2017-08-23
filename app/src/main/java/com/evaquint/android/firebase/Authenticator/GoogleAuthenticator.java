@@ -3,6 +3,7 @@ package com.evaquint.android.firebase.Authenticator;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
     private FirebaseUser fUser;
     private FirebaseAuth mAuth;
     private Activity activity;
+    private Fragment fragment;
     private Intent nextActivity;
     private GoogleApiClient mGoogleApiClient;
 
@@ -46,6 +48,11 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
         this();
         this.activity = a;
         this.nextActivity=intent;
+    }
+
+    public GoogleAuthenticator(Fragment f, Intent intent){
+        this(f.getActivity(), intent);
+        this.fragment = f;
     }
 
     @Override
@@ -66,7 +73,11 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
     @Override
     public void startAuth() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        activity.startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+        if (fragment==null)
+            activity.startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+        else
+            fragment.startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+
     }
 
     @Override

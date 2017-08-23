@@ -3,6 +3,7 @@ package com.evaquint.android.firebase.Authenticator;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
     private Activity activity;
+    private Fragment fragment;
     private Intent nextActivity;
 
     public FacebookAuthenticator(){
@@ -48,6 +50,12 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
         this.activity = a;
         this.nextActivity = intent;
     }
+
+    public FacebookAuthenticator(Fragment f, Intent intent){
+        this(f.getActivity(), intent);
+        this.fragment = f;
+    }
+
 
     public void initAuth() {
         LoginManager.getInstance().registerCallback(mCallbackManager,
@@ -75,10 +83,16 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
     }
 
     public void startAuth(){
-        LoginManager.getInstance().logInWithReadPermissions(
-                activity,
-                Arrays.asList("email", "public_profile", "user_friends")
-        );
+        if (fragment==null)
+            LoginManager.getInstance().logInWithReadPermissions(
+                    activity,
+                    Arrays.asList("email", "public_profile", "user_friends")
+            );
+        else
+            LoginManager.getInstance().logInWithReadPermissions(
+                    fragment,
+                    Arrays.asList("email", "public_profile", "user_friends")
+            );
     }
 
     @Override

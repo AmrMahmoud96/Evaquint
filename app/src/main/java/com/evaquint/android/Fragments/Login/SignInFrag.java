@@ -71,7 +71,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.v=inflater.inflate(R.layout.activity_login, container, false);
+        this.v=inflater.inflate(R.layout.fragment_sign_in_or_register_email, container, false);
         this.a=getActivity();
         this.animationManager= new ViewAnimator(a);
 

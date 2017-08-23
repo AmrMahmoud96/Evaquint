@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +19,8 @@ import com.evaquint.android.Fragments.FeedFrag;
 import com.google.firebase.auth.FirebaseAuth;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import static com.evaquint.android.utils.FragmentHelper.setActiveFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,10 +48,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_nearby) {
-                    setActiveFragment(new EventLocatorFrag());
+                    setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
                 }
                 else if (tabId == R.id.tab_search) {
-                    setActiveFragment(new FeedFrag());
+                    setActiveFragment(getSupportFragmentManager(), new FeedFrag());
                 }
                 else if (tabId == R.id.tab_feed) {
 
@@ -58,7 +59,15 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        setActiveFragment(new EventLocatorFrag());
+        setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        if (FirebaseAuth.getInstance().getCurrentUser()==null)
+            startActivity(new Intent(this, LoginActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
     }
 
     @Override
@@ -96,30 +105,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_event_locator) {
-            setActiveFragment(new EventLocatorFrag());
+            setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
         } else if (id == R.id.nav_gallery) {
-            setActiveFragment(new FeedFrag());
+            setActiveFragment(getSupportFragmentManager(), new FeedFrag());
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, LoginActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
         }
 
         this.drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void setActiveFragment(Fragment newFrag){
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-        if(activeFragment==null)
-            ft.add(R.id.content_frame, newFrag);
-        else
-            ft.replace(activeFragment.getId(), newFrag);
-//            loadFragment(ft);
-        ft.commit();
-        activeFragment=newFrag;
     }
 
 }

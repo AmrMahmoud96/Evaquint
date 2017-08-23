@@ -1,4 +1,4 @@
-<com.evaquint.android.modules.FittedView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -119,16 +119,10 @@
             app:layout_marginBottomPercent="4%"
             android:id="@+id/terms_and_conditions" />
 
-        <FrameLayout
-            android:paddingTop="56dp"
-            android:id="@+id/content_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
 
     </android.support.percent.PercentRelativeLayout>
 
 
 
 
-</com.evaquint.android.modules.FittedView>
+</android.support.percent.PercentRelativeLayout>
