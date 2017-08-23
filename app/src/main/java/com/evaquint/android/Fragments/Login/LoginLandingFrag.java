@@ -19,6 +19,7 @@ import com.evaquint.android.firebase.Authenticator.FacebookAuthenticator;
 import com.evaquint.android.firebase.Authenticator.FirebaseAuthenticator;
 import com.evaquint.android.firebase.Authenticator.GoogleAuthenticator;
 
+import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
 
 import in.championswimmer.libsocialbuttons.buttons.BtnFacebook;
@@ -84,7 +85,7 @@ public class LoginLandingFrag extends Fragment {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == GOOGLE_SIGN_IN) {
             authManager.handleResult(requestCode, resultCode, data);
-        } else {
+        } else if (FacebookSdk.isInitialized()) {
             authManager.handleResult(requestCode, resultCode, data);
         }
     }

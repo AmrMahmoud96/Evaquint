@@ -64,7 +64,6 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
                     public void onSuccess(LoginResult loginResult) {
                         Log.d(TAG, "facebook:onSuccess:" + loginResult);
                         handleFacebookAccessToken(loginResult.getAccessToken());
-                        activity.startActivity(nextActivity);
                     }
 
                     @Override
@@ -118,7 +117,7 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -126,6 +125,7 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
                             Log.d(TAG, "signInWithCredential:success");
                             com.google.firebase.auth.FirebaseUser user = mAuth.getCurrentUser();
                             updateUser(user);
+                            activity.startActivity(nextActivity);
 //                            updateUI(user);
                         } else {
                             // If sign in fails, display activity message to the user.
