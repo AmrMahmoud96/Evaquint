@@ -4,6 +4,7 @@ package com.evaquint.android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import static android.content.ContentValues.TAG;
 
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
@@ -124,8 +128,23 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+            FirebaseAuth.getInstance().addAuthStateListener(
+                    new FirebaseAuth.AuthStateListener() {
+                        @Override
+                        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            if (user != null) {
+                                // User is signed in
+                                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                            } else {
+                                // User is signed out
+                                Log.d(TAG, "onAuthStateChanged:signed_out");
+                                startActivity(new Intent(MainActivity.this, LoginActivity.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            }
+                            // ...
+                        }
+                    });
         }
 
         this.drawer.closeDrawer(GravityCompat.START);

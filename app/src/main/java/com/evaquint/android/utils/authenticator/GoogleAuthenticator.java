@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase.authenticator;
+package com.evaquint.android.utils.authenticator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.evaquint.android.R;
+import com.evaquint.android.utils.database.DBUserInterface;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -18,11 +19,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import static android.content.ContentValues.TAG;
-import static com.evaquint.android.firebase.FirebaseDBHandler.updateUser;
+import static com.evaquint.android.utils.database.DBUserInterface.addUser;
 import static com.evaquint.android.utils.code.IntentValues.GOOGLE_SIGN_IN;
 
 /**
@@ -95,7 +95,7 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
                                 com.google.firebase.auth.FirebaseUser user = mAuth.getCurrentUser();
-                                updateUser(user);
+                                DBUserInterface.addUser(user);
                                 activity.startActivity(nextActivity);
 //                            updateUI(user);
                             } else {

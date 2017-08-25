@@ -15,9 +15,9 @@ import android.widget.TextView;
 
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
-import com.evaquint.android.firebase.authenticator.FacebookAuthenticator;
-import com.evaquint.android.firebase.authenticator.FirebaseAuthenticator;
-import com.evaquint.android.firebase.authenticator.GoogleAuthenticator;
+import com.evaquint.android.utils.authenticator.FacebookAuthenticator;
+import com.evaquint.android.utils.authenticator.FirebaseAuthenticator;
+import com.evaquint.android.utils.authenticator.GoogleAuthenticator;
 
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;

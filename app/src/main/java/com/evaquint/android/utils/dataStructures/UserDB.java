@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase.dataStructures;
+package com.evaquint.android.utils.dataStructures;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

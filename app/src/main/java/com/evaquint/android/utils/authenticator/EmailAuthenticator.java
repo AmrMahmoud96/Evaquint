@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase.authenticator;
+package com.evaquint.android.utils.authenticator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.evaquint.android.firebase.dataStructures.UserDB;
+import com.evaquint.android.utils.dataStructures.UserDB;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import static android.content.ContentValues.TAG;
-import static com.evaquint.android.firebase.FirebaseDBHandler.updateUser;
+import static com.evaquint.android.utils.database.DBUserInterface.addUser;
 
 /**
  * Created by henry on 8/23/2017.
@@ -84,7 +84,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                                     activity.startActivity(nextActivity);
                                 }
                             });
-                            updateUser(fUser.getUid(),
+                            addUser(fUser.getUid(),
                                     new UserDB(fUser.getProviders(),
                                             name,
                                             email,

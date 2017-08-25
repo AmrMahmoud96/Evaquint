@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase.authenticator;
+package com.evaquint.android.utils.authenticator;
 
 import android.content.Intent;
 

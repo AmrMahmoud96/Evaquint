@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase.authenticator;
+package com.evaquint.android.utils.authenticator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,12 +19,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
-import static com.evaquint.android.firebase.FirebaseDBHandler.*;
+import static com.evaquint.android.utils.database.DBUserInterface.*;
 
 /**
  * Created by henry on 8/22/2017.
@@ -121,7 +120,7 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             com.google.firebase.auth.FirebaseUser user = mAuth.getCurrentUser();
-                            updateUser(user);
+                            addUser(user);
                             activity.startActivity(nextActivity);
 //                            updateUI(user);
                         } else {

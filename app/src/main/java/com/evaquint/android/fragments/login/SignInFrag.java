@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -29,14 +28,11 @@ import android.widget.TextView;
 
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
-import com.evaquint.android.firebase.authenticator.EmailAuthenticator;
-import com.evaquint.android.firebase.authenticator.FirebaseAuthenticator;
+import com.evaquint.android.utils.authenticator.EmailAuthenticator;
 import com.evaquint.android.utils.view.ViewAnimator;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.R.attr.name;
 
 /**
  * Created by henry on 8/8/2017.

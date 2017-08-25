@@ -31,8 +31,13 @@ public class DBConnector {
         this.mDatabase = database.getReference(table);
     }
 
-    public void writeToDB(String path, Object item){
-        mDatabase.child(path).setValue(item);
+    public boolean writeToDB(String path, Object item){
+        try {
+            mDatabase.child(path).setValue(item);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public String readFromDB(String targ){
