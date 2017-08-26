@@ -5,12 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.evaquint.android.utils.code.DBValues;
+import com.evaquint.android.utils.code.DatabaseValues;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.HashMap;
 
-import static com.evaquint.android.utils.code.DBValues.USER_TABLE;
+import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
 /**
  * Created by henry on 8/6/2017.-
@@ -48,7 +48,7 @@ public class CacheManager extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createTable(DBValues tableName) {
+    public void createTable(DatabaseValues tableName) {
         db.execSQL("DROP TABLE IF EXISTS User");
         String sqlReq = "CREATE TABLE IF NOT EXISTS "+ tableName.getName()+" ";
         switch(tableName){
@@ -78,7 +78,7 @@ public class CacheManager extends SQLiteOpenHelper {
 //        this.getWritableDatabase().execSQL(sqlReq);
         db.execSQL(sqlReq);
     }
-    public boolean insertUser(DBValues tableName, GoogleSignInAccount acct) {
+    public boolean insertUser(DatabaseValues tableName, GoogleSignInAccount acct) {
         String sqlReq = "INSERT OR REPLACE INTO "+ tableName.getName()+" ";
         switch(tableName){
             case USER_TABLE: {
@@ -115,7 +115,7 @@ public class CacheManager extends SQLiteOpenHelper {
         return true;
     }
 
-    public String [] retrieveData(DBValues tableName) {
+    public String [] retrieveData(DatabaseValues tableName) {
         Cursor c = db.rawQuery("SELECT * FROM " + tableName.getName(), null);
         String [] columnHeaders= {"user_id","given_name","family_name","email","phone"};
         int [] columns = new int[columnHeaders.length];

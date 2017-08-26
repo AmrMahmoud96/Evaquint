@@ -4,7 +4,7 @@ package com.evaquint.android.utils.code;
  * Created by henry on 8/15/2017.
  */
 
-public enum DBValues {
+public enum DatabaseValues {
     USER_TABLE ("users", 1),
     CONTACTS_TABLE ("contacts", 2),
     EVENTS_TABLE ("events", 3);
@@ -12,7 +12,7 @@ public enum DBValues {
     private final String name;
     private final int code;
 
-    private DBValues(String s, int i) {
+    private DatabaseValues(String s, int i) {
         name = s;
         code = i;
     }
