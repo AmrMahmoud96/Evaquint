@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.evaquint.android.utils.dataStructures.UserDB;
+import com.evaquint.android.utils.database.UserDBHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -15,7 +16,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import static android.content.ContentValues.TAG;
-import static com.evaquint.android.utils.database.DBUserInterface.addUser;
 
 /**
  * Created by henry on 8/23/2017.
@@ -25,10 +25,11 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
     private FirebaseAuth mAuth;
     private Activity activity;
     private Intent nextActivity;
-    private UserDB user;
+    private UserDBHelper userDatabaseHandler;
 
     public EmailAuthenticator(){
         this.mAuth = FirebaseAuth.getInstance();
+        this.userDatabaseHandler=new UserDBHelper();
     }
 
     public EmailAuthenticator(Activity a, Intent intent){
@@ -84,7 +85,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                                     activity.startActivity(nextActivity);
                                 }
                             });
-                            addUser(fUser.getUid(),
+                            userDatabaseHandler.addUser(fUser.getUid(),
                                     new UserDB(fUser.getProviders(),
                                             name,
                                             email,

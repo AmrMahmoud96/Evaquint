@@ -1,12 +1,13 @@
-package com.evaquint.android.utils.database;
+package com.evaquint.android.utils.authenticator;
 
 /**
  * Created by henry on 8/24/2017.
  */
 
-public class UserDatabaseHandler {
+public class UserAuthHelper {
 
     public static boolean updateEmail(){
+
         return true;
     }
 
@@ -25,5 +26,6 @@ public class UserDatabaseHandler {
     public static boolean deleteUser(){
         return true;
     }
+
 
 }

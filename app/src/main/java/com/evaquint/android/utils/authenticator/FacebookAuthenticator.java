@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.evaquint.android.utils.database.UserDBHelper;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -23,7 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
-import static com.evaquint.android.utils.database.DBUserInterface.*;
 
 /**
  * Created by henry on 8/22/2017.
@@ -35,10 +35,12 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
     private Activity activity;
     private Fragment fragment;
     private Intent nextActivity;
+    private UserDBHelper userDBHelper;
 
     public FacebookAuthenticator(){
         this.mAuth = FirebaseAuth.getInstance();
         this.mCallbackManager = CallbackManager.Factory.create();
+        this.userDBHelper = new UserDBHelper();
     }
 
     public FacebookAuthenticator(Activity a, Intent intent){
@@ -120,7 +122,7 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             com.google.firebase.auth.FirebaseUser user = mAuth.getCurrentUser();
-                            addUser(user);
+                            userDBHelper.addUser(user);
                             activity.startActivity(nextActivity);
 //                            updateUI(user);
                         } else {

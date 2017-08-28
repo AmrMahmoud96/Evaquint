@@ -2,6 +2,7 @@ package com.evaquint.android.utils.database;
 
 import android.util.Log;
 
+import com.evaquint.android.utils.code.DatabaseValues;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -9,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -26,9 +28,9 @@ public class DBConnector {
         this.mDatabase = database.getReference();
     }
 
-    public DBConnector(String table){
+    public DBConnector(DatabaseValues value){
         this.database = FirebaseDatabase.getInstance();
-        this.mDatabase = database.getReference(table);
+        this.mDatabase = database.getReference(value.getName());
     }
 
     public boolean writeToDB(String path, Object item){
@@ -40,7 +42,25 @@ public class DBConnector {
         }
     }
 
-    public String readFromDB(String targ){
+    public boolean updateChildrenDB(Map<String, Object> childUpdates){
+        try {
+            mDatabase.updateChildren(childUpdates);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean deleteFromDB(String path, Object item){
+        try {
+            mDatabase.child(path).removeValue();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String setDBListener(String targ){
         // Read from the database
         database.getReference().child(targ).addValueEventListener(new ValueEventListener() {
             @Override
