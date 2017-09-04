@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
     }
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.evaquint.android"
@@ -28,22 +28,25 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.google.android.gms:play-services-maps:11.+'
-    compile 'com.google.android.gms:play-services-auth:11.+'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:percent:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.0.2'
+    compile 'com.google.android.gms:play-services-maps:11.2.0'
+    compile 'com.google.android.gms:play-services-auth:11.2.0'
+    compile 'com.google.android.gms:play-services-places:11.2.0'
+    compile 'com.google.android.gms:play-services:11.2.0'
+    compile 'com.google.android.gms:play-services-location:11.2.0'
+    compile 'com.android.support:design:26.0.2'
+    compile 'com.android.support:percent:26.0.2'
+    compile 'com.android.support:support-v4:26.0.2'
     compile 'com.github.championswimmer:Android-SocialButtons:1.0'
     compile 'com.roughike:bottom-bar:2.3.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.google.firebase:firebase-database:11.0.4'
-    compile 'com.google.firebase:firebase-storage:11.0.4'
-    compile 'com.google.firebase:firebase-crash:11.0.4'
-    compile 'com.google.firebase:firebase-auth:11.0.4'
-    compile 'com.google.firebase:firebase-core:11.0.4'
+    compile 'com.android.support:recyclerview-v7:26.0.2'
+    compile 'com.google.firebase:firebase-database:11.2.0'
+    compile 'com.google.firebase:firebase-storage:11.2.0'
+    compile 'com.google.firebase:firebase-crash:11.2.0'
+    compile 'com.google.firebase:firebase-auth:11.2.0'
+    compile 'com.google.firebase:firebase-core:11.2.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     testCompile 'junit:junit:4.12'
 }

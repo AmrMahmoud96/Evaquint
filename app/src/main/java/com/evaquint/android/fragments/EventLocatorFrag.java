@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.evaquint.android.R;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,6 +35,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
     private GoogleApiClient mGoogleApiClient;
     private View v;
     private Activity a;
+    private GeoDataClient mGeoDataClient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +47,12 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.map);
+
+//        // Construct a GeoDataClient.
+//        mGeoDataClient = Places.getGeoDataClient(this, null);
+//
+//        // Construct a PlaceDetectionClient.
+//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
 
         mapFragment.getMapAsync(this);
 
