@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase.authenticator;
+package com.evaquint.android.utils.authenticator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.evaquint.android.R;
+import com.evaquint.android.utils.database.UserDBHelper;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -18,11 +19,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import static android.content.ContentValues.TAG;
-import static com.evaquint.android.firebase.FirebaseDBHandler.updateUser;
 import static com.evaquint.android.utils.code.IntentValues.GOOGLE_SIGN_IN;
 
 /**
@@ -30,16 +29,17 @@ import static com.evaquint.android.utils.code.IntentValues.GOOGLE_SIGN_IN;
  */
 
 public class GoogleAuthenticator implements FirebaseAuthenticator {
-    private FirebaseUser fUser;
     private FirebaseAuth mAuth;
     private Activity activity;
     private Fragment fragment;
     private Intent nextActivity;
     private GoogleApiClient mGoogleApiClient;
+    private UserDBHelper userDBHelper;
+
 
     public GoogleAuthenticator(){
         this.mAuth = FirebaseAuth.getInstance();
-        this.fUser = mAuth.getCurrentUser();
+        this.userDBHelper = new UserDBHelper();
     }
 
     public GoogleAuthenticator(Activity a, Intent intent){
@@ -53,7 +53,6 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
         this.fragment = f;
     }
 
-    @Override
     public void initAuth() {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -68,7 +67,6 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
                 .build();
     }
 
-    @Override
     public void startAuth() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         if (fragment==null)
@@ -99,7 +97,7 @@ public class GoogleAuthenticator implements FirebaseAuthenticator {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
                                 com.google.firebase.auth.FirebaseUser user = mAuth.getCurrentUser();
-                                updateUser(user);
+                                userDBHelper.addUser(user);
                                 activity.startActivity(nextActivity);
 //                            updateUI(user);
                             } else {

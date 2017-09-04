@@ -1,4 +1,4 @@
-package com.evaquint.android.firebase.authenticator;
+package com.evaquint.android.utils.authenticator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.evaquint.android.utils.database.UserDBHelper;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -19,29 +20,27 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
-import static com.evaquint.android.firebase.FirebaseDBHandler.*;
 
 /**
  * Created by henry on 8/22/2017.
  */
 
 public class FacebookAuthenticator implements FirebaseAuthenticator {
-    private FirebaseUser fUser;
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
     private Activity activity;
     private Fragment fragment;
     private Intent nextActivity;
+    private UserDBHelper userDBHelper;
 
     public FacebookAuthenticator(){
         this.mAuth = FirebaseAuth.getInstance();
-        this.fUser = mAuth.getCurrentUser();
         this.mCallbackManager = CallbackManager.Factory.create();
+        this.userDBHelper = new UserDBHelper();
     }
 
     public FacebookAuthenticator(Activity a, Intent intent){
@@ -123,7 +122,7 @@ public class FacebookAuthenticator implements FirebaseAuthenticator {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             com.google.firebase.auth.FirebaseUser user = mAuth.getCurrentUser();
-                            updateUser(user);
+                            userDBHelper.addUser(user);
                             activity.startActivity(nextActivity);
 //                            updateUI(user);
                         } else {

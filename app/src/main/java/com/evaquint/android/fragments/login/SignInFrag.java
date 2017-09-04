@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -29,6 +28,7 @@ import android.widget.TextView;
 
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
+import com.evaquint.android.utils.authenticator.EmailAuthenticator;
 import com.evaquint.android.utils.view.ViewAnimator;
 
 import java.util.ArrayList;
@@ -55,15 +55,15 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private EditText mPasswordConfirmView;
+    private EditText mNameView;
     private View mProgressView;
     private View mLoginFormView;
-    private View v;
-    private Activity a;
+    private View view;
+    private Activity activity;
     private ViewAnimator animationManager;
     private boolean register = false;
 
@@ -71,14 +71,14 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.v=inflater.inflate(R.layout.fragment_sign_in_or_register_email, container, false);
-        this.a=getActivity();
-        this.animationManager= new ViewAnimator(a);
+        this.view = inflater.inflate(R.layout.fragment_sign_in_or_register_email, container, false);
+        this.activity = getActivity();
+        this.animationManager= new ViewAnimator(activity);
 
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) v.findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) view.findViewById(R.id.email);
 
-        mPasswordView = (EditText) v.findViewById(R.id.password);
+        mPasswordView = (EditText) view.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -90,7 +90,10 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             }
         });
 
-        final Button mEmailSignInButton = (Button) v.findViewById(R.id.sign_in_button);
+        mPasswordConfirmView = (EditText) view.findViewById(R.id.confirm_password);
+        mNameView = (EditText) view.findViewById(R.id.display_name);
+
+        final Button mEmailSignInButton = (Button) view.findViewById(R.id.sign_in_button);
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,13 +101,13 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             }
         });
 
-        mLoginFormView = v.findViewById(R.id.login_form);
-        mProgressView = v.findViewById(R.id.login_progress);
+        mLoginFormView = view.findViewById(R.id.login_form);
+        mProgressView = view.findViewById(R.id.login_progress);
 
-        final Button mSwitchButton = (Button) v.findViewById(R.id.switch_button);
+        final Button mSwitchButton = (Button) view.findViewById(R.id.switch_button);
         mSwitchButton.setOnClickListener(new View.OnClickListener() {
-            View displayNameInput = v.findViewById(R.id.display_name);
-            View confirmPasswordInput = v.findViewById(R.id.confirm_password);
+            View displayNameInput = view.findViewById(R.id.display_name);
+            View confirmPasswordInput = view.findViewById(R.id.confirm_password);
             @Override
             public void onClick(View view) {
                 String switchButton;
@@ -120,50 +123,13 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
                 animationManager.slideDownThenUp(confirmPasswordInput);
                 mSwitchButton.setText(switchButton);
                 mEmailSignInButton.setText(signInButton);
-                        register=!register;
+                register=!register;
 
             }
         });
 
-        return this.v;
+        return this.view;
     }
-
-
-//
-//    private boolean mayRequestContacts() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
-//        }
-//        if (activity.checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
-//    }
-
-//    /**
-//     * Callback received when activity permissions request has been completed.
-//     */
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        if (requestCode == REQUEST_READ_CONTACTS) {
-//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                populateAutoComplete();
-//            }
-//        }
-//    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -171,10 +137,6 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -182,6 +144,8 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String passwordConfirm = mPasswordView.getText().toString();
+        String name = mNameView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -190,6 +154,20 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // If user is in registration mode, check if passwords match
+        if (!doesPasswordsMatch(password, passwordConfirm) && register == true) {
+            mPasswordView.setError(getString(R.string.error_non_matching_passwords));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // If user is in registration mode, check if name is valid
+        if (!isNameValid(name) && register == true) {
+            mPasswordView.setError(getString(R.string.error_invalid_name));
+            focusView = mNameView;
             cancel = true;
         }
 
@@ -212,20 +190,31 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             // Show activity progress spinner, and kick off activity background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
-            startApp();
+            if (register)
+                (new EmailAuthenticator(activity,new Intent(activity, MainActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                        )).createAccount(name, email, password);
+            else
+                (new EmailAuthenticator(activity,new Intent(activity, MainActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                )).signIn(email, password);
         }
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.contains("@") && email.length()>8;
+    }
+
+    private boolean isNameValid(String name) {
+        return name.length()>3;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 4 ;
+    }
+
+    private boolean doesPasswordsMatch(String password, String passwordConfirm) {
+        return password.equals(passwordConfirm);
     }
 
     /**
@@ -266,7 +255,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(a,
+        return new CursorLoader(activity,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
@@ -301,7 +290,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(a,
+                new ArrayAdapter<>(activity,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -317,66 +306,4 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against activity network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                a.finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
-    private void startApp() {
-        Intent myIntent = new Intent(a, MainActivity.class);
-        a.startActivity(myIntent);
-    }
-
 }
