@@ -2,8 +2,12 @@ package com.evaquint.android.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.evaquint.android.R;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,7 +26,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, GoogleMap. OnMapLongClickListener{
+public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
@@ -32,14 +37,16 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.v=inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
-        this.a=getActivity();
+        this.v = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
+        this.a = getActivity();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+
+        initOverlay();
         return this.v;
     }
 
@@ -62,7 +69,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.mMap=googleMap;
+        this.mMap = googleMap;
         // Add activity marker in Sydney, Australia,
         // and move the map's camera to the same location.
         LatLng sydney = new LatLng(-33.852, 151.211);
@@ -80,19 +87,75 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
             return;
         }
         googleMap.setMyLocationEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        fixPosition();
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
         googleMap.getUiSettings().setTiltGesturesEnabled(false);
         googleMap.setOnMapLongClickListener(this);
     }
 
-    private void fixPosition(){
-        View locationButton = ((View) this.getView().findViewById(1).getParent()).findViewById(2);
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-        // position on right bottom
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        rlp.setMargins(0, 0, 200, 200);
+    private void initOverlay() {
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.current_location_button);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Acquire a reference to the system Location Manager
+                LocationManager locationManager =
+                        (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
+
+                //Acquire the user's location
+                if (ActivityCompat.checkSelfPermission(a,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.
+                        checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                Location selfLocation = locationManager
+                        .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+                //Move the map to the user's location
+                LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
+                mMap.moveCamera(update);
+            }
+        });
+
+        View yes = (View) v.findViewById(R.id.overlay_container);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Acquire a reference to the system Location Manager
+                LocationManager locationManager =
+                        (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
+
+                //Acquire the user's location
+                if (ActivityCompat.checkSelfPermission(a,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.
+                        checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                Location selfLocation = locationManager
+                        .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+                //Move the map to the user's location
+                LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
+                mMap.animateCamera(update);
+            }
+        });
     }
+
 
 }
