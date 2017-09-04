@@ -189,7 +189,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         } else {
             // Show activity progress spinner, and kick off activity background task to
             // perform the user login attempt.
-            showProgress(true);
+//            showProgress(true);
             if (register)
                 (new EmailAuthenticator(activity,new Intent(activity, MainActivity.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
@@ -221,7 +221,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.

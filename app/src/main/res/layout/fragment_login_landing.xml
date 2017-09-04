@@ -34,9 +34,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textColor="@color/dark_blue"
+            android:textColor="@color/black"
             android:textSize="40dp"
-            android:fontFamily="casual"
+            android:fontFamily="monospace"
             android:textStyle="bold"
             android:textAlignment="center"
             app:layout_marginBottomPercent="5%"
@@ -45,29 +45,38 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/slogan"
-            android:textColor="@color/dark_blue"
-            app:layout_marginLeftPercent="5%"
-            android:textStyle="italic"
-            android:textSize="15dp"
-            android:textAlignment="textStart"
-            android:fontFamily="monospace"
-            app:layout_marginBottomPercent="5%"
-            android:id="@+id/textView5"
+        <ImageView
+            android:id="@+id/login_landing_placeholder_image"
             android:layout_below="@+id/textView6"
-            android:layout_alignParentEnd="true" />
+            android:src="@drawable/placeholder"
+            android:layout_width="match_parent"
+            app:layout_marginLeftPercent="12%"
+            app:layout_marginRightPercent="12%"
+            />
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/slogan"-->
+            <!--android:textColor="@color/dark_blue"-->
+            <!--app:layout_marginLeftPercent="5%"-->
+            <!--android:textStyle="italic"-->
+            <!--android:textSize="15dp"-->
+            <!--android:textAlignment="textStart"-->
+            <!--android:fontFamily="monospace"-->
+            <!--app:layout_marginBottomPercent="5%"-->
+            <!--android:id="@+id/textView5"-->
+            <!--android:layout_below="@+id/textView6"-->
+            <!--android:layout_alignParentEnd="true" />-->
 
         <in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus
             android:id="@+id/login_google"
             style="@style/SocialButton"
-            app:layout_marginTopPercent="16%"
+            app:layout_marginTopPercent="9%"
             android:textSize="16sp"
             android:textStyle="bold"
             android:text="Continue With Google"
-            android:layout_below="@+id/textView5"/>
+            android:layout_below="@+id/login_landing_placeholder_image"/>
 
         <in.championswimmer.libsocialbuttons.buttons.BtnFacebook
             android:id="@+id/login_facebook"
@@ -80,8 +89,9 @@
 
 
         <TextView
+            style="@style/Text.Small"
             android:id="@+id/more_options_btn"
-            app:layout_marginLeftPercent="8%"
+            app:layout_marginLeftPercent="6%"
             app:layout_marginTopPercent="2%"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,6 +100,7 @@
             android:text="More Options" />
 
         <TextView
+            style="@style/Text.Small"
             android:id="@+id/to_login"
             app:layout_marginLeftPercent="8%"
             app:layout_marginTopPercent="2%"
@@ -98,6 +109,7 @@
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/login_facebook"
             android:layout_toEndOf="@id/more_options_btn"
+            android:textColor="@color/black"
             android:text="@string/register_or_sign_in" />
 
         <!--<TextView-->
@@ -112,11 +124,12 @@
             <!--android:text="Sign Up With Email" />-->
 
         <TextView
+            style="@style/Text.Small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="@string/terms_and_conditions"
-            app:layout_marginBottomPercent="4%"
+            app:layout_marginPercent="2%"
             android:id="@+id/terms_and_conditions" />
 
 

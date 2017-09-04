@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         app:layout_widthPercent="85%"
         android:background="@drawable/box_right_border"
+        android:paddingLeft="10dp"
         />
     <ImageButton
         android:id= "@+id/map_searchbar_calender_button"
@@ -15,7 +16,7 @@
         android:layout_toRightOf="@id/map_searchbar_input"
         app:layout_widthPercent="15%"
         android:background="@color/white"
-        android:src="@drawable/ic_blur_circular_black_24dp"
+        android:src="@drawable/ic_date_range_black_24dp"
         />
 
 </android.support.percent.PercentRelativeLayout>

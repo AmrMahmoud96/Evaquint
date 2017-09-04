@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.evaquint.android.R;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,7 +47,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
 
         mapFragment.getMapAsync(this);
 
-        initOverlay();
         return this.v;
     }
 
@@ -86,13 +86,39 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        googleMap.setMyLocationEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-        googleMap.getUiSettings().setTiltGesturesEnabled(false);
-        googleMap.setOnMapLongClickListener(this);
+
+        initOverlay();
+
     }
 
     private void initOverlay() {
+        if (ActivityCompat.checkSelfPermission(a,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.
+                checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(a, "Permission denied to use location",
+                    Toast.LENGTH_SHORT).show();
+            if (ActivityCompat.shouldShowRequestPermissionRationale(a,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                ActivityCompat.requestPermissions(a,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+                return;
+            } else {
+                ActivityCompat.requestPermissions(a,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+                return;
+            }
+        }
+
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.getUiSettings().setTiltGesturesEnabled(false);
+        mMap.setOnMapLongClickListener(this);
+
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.current_location_button);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -102,19 +128,10 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
                 LocationManager locationManager =
                         (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
 
-                //Acquire the user's location
-                if (ActivityCompat.checkSelfPermission(a,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.
-                        checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.
+                        PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                     return;
-                }
+
                 Location selfLocation = locationManager
                         .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
@@ -133,19 +150,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
                 LocationManager locationManager =
                         (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
 
-                //Acquire the user's location
-                if (ActivityCompat.checkSelfPermission(a,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.
-                        checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.
+                        PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                     return;
-                }
                 Location selfLocation = locationManager
                         .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
@@ -155,6 +162,33 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
                 mMap.animateCamera(update);
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        initOverlay();
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(a, "Permission denied to use location",
+                            Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
 
