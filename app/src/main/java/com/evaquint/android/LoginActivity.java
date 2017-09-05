@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.evaquint.android.fragments.login.LoginLandingFrag;
@@ -86,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
 
     /**
      * Shows the progress UI and hides the login form.

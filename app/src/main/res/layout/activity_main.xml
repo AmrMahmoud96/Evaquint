@@ -12,6 +12,16 @@
         android:layout_width="match_parent"
         android:id="@+id/fragment_frame"
         android:layout_height="match_parent">
+        <ImageButton
+            android:id="@+id/main_activity_menu_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_menu_black_24dp"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_margin="10dp"
+            android:elevation="4dp"
+            />
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"

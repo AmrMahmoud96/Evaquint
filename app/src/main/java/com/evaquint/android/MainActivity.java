@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.evaquint.android.fragments.EventLocatorFrag;
@@ -51,6 +53,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         initNavHeader(navigationView);
         navigationView.setNavigationItemSelectedListener(this);
+
+        ImageButton menuButton = (ImageButton) findViewById(R.id.main_activity_menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener(
+        ) {
+            @Override
+            public void onClick(View view) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {

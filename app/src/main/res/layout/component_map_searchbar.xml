@@ -7,8 +7,9 @@
         android:id= "@+id/map_searchbar_input"
         android:layout_height="match_parent"
         app:layout_widthPercent="85%"
-        android:background="@drawable/box_right_border"
+        android:background="@color/white"
         android:paddingLeft="10dp"
+        android:hint="What Do You Want To Do?"
         />
     <ImageButton
         android:id= "@+id/map_searchbar_calender_button"

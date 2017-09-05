@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:weightSum="1"
     tools:context="com.evaquint.android.LoginActivity">
-
     <!-- Login progress -->
     <ProgressBar
         android:id="@+id/login_progress"

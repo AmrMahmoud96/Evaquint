@@ -80,6 +80,7 @@ public class LoginLandingFrag extends Fragment {
         return this.view;
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);

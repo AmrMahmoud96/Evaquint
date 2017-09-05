@@ -10,16 +10,22 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.evaquint.android.R;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,34 +35,47 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static android.content.ContentValues.TAG;
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
+
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
-    private View v;
+    private View view;
     private Activity a;
-    private GeoDataClient mGeoDataClient;
-
+    private SupportPlaceAutocompleteFragment googlePlacesSearchBarFrag;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.v = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
         this.a = getActivity();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
-                .findFragmentById(R.id.map);
+//        googlePlacesSearchBarFrag = new SupportPlaceAutocompleteFragment();
+//        android.support.v4.app.FragmentManager fm = getFragmentManager();
+//        FragmentTransaction ft = fm.beginTransaction();
+//        ft.add(R.id.map_searchbar_container, googlePlacesSearchBarFrag).commit();
 
-//        // Construct a GeoDataClient.
-//        mGeoDataClient = Places.getGeoDataClient(this, null);
-//
-//        // Construct a PlaceDetectionClient.
-//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
-
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
         mapFragment.getMapAsync(this);
+        getChildFragmentManager()
+                .beginTransaction()
+                .add(R.id.map_container, mapFragment)
+                .commit();
 
-        return this.v;
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+//                .findFragmentById(R.id.map);
+//
+//        mapFragment.getMapAsync(this);
+
+        return this.view;
     }
 
     @Override
@@ -95,6 +114,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+//        view.findViewById(R.id.map_searchbar_container).bringToFront();
 
         initOverlay();
 
@@ -128,7 +148,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.setOnMapLongClickListener(this);
 
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.current_location_button);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,27 +161,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
                         PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                     return;
 
-                Location selfLocation = locationManager
-                        .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
-                //Move the map to the user's location
-                LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
-                mMap.moveCamera(update);
-            }
-        });
-
-        View yes = (View) v.findViewById(R.id.overlay_container);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Acquire a reference to the system Location Manager
-                LocationManager locationManager =
-                        (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
-
-                if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.
-                        PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                    return;
                 Location selfLocation = locationManager
                         .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
@@ -171,7 +170,22 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
                 mMap.animateCamera(update);
             }
         });
+
+//        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//            @Override
+//            public void onPlaceSelected(Place place) {
+//                // TODO: Get info about the selected place.
+//                mMap.animateCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+//            }
+//
+//            @Override
+//            public void onError(Status status) {
+//                // TODO: Handle the error.
+//                Log.i(TAG, "An error occurred: " + status);
+//            }
+//        });
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
