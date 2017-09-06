@@ -22,34 +22,11 @@ import static android.content.ContentValues.TAG;
 public class FragmentHelper {
 
     public static void setActiveFragment(Fragment activeFragment, Fragment newFrag){
-        try {
-            FragmentTransaction ft = activeFragment.getFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out,R.anim.fade_in, R.anim.fade_out);
-            if(activeFragment==null)
-                ft.add(R.id.content_frame, newFrag);
-            else
-                ft.replace(activeFragment.getId(), newFrag).addToBackStack("testTag");
-            ft.commit();
-        } catch (Exception e) {
-            Log.d(TAG, "Fragment Switched Failed With Message: " + e.getMessage());
-            return;
-        }
+            setActiveFragment(activeFragment.getFragmentManager(), newFrag, R.id.content_frame);
     }
 
     public static void setActiveFragment(FragmentManager fragmentManager, Fragment newFrag){
-        try {
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            Fragment activeFragment =  fragmentManager.findFragmentById(R.id.content_frame);
-            ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out,R.anim.fade_in, R.anim.fade_out);
-        if(activeFragment==null)
-            ft.add(R.id.content_frame, newFrag);
-        else
-            ft.replace(activeFragment.getId(), newFrag).addToBackStack("testTag");
-            ft.commit();
-        } catch (Exception e) {
-            Log.d(TAG, "Fragment Switched Failed With Message: " + e.getMessage());
-            return;
-        }
+        setActiveFragment(fragmentManager, newFrag, R.id.content_frame);
     }
 
     public static void setActiveFragment(FragmentManager fragmentManager, Fragment newFrag, int containerID){

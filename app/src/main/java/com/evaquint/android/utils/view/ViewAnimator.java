@@ -1,6 +1,7 @@
 package com.evaquint.android.utils.view;
 
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -20,6 +21,7 @@ public class ViewAnimator {
         animShow = AnimationUtils.loadAnimation(a, R.anim.fade_in);
         animHide = AnimationUtils.loadAnimation(a, R.anim.fade_out);
     }
+
 
     public void slideDownThenUp(View view){
         if (view.getVisibility()==View.GONE)
