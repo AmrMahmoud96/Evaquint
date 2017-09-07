@@ -27,6 +27,10 @@
     <string name="prompt_display_name">Name</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_confirm_password">Confirm Password</string>
+    <string name="label_host_rating">Host \nRating</string>
+    <string name="label_location">Location</string>
+    <string name="label_email">Email</string>
+    <string name="label_phone_number">Phone #</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_register">Register</string>
     <string name="action_switch_sign_in">Don\'t Have an Account?</string>

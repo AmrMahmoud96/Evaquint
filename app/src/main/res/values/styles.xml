@@ -54,5 +54,8 @@
     <style name="Text.Normal">
         <item name="android:textSize">16dp</item>
     </style>
+    <style name="Text.Large">
+        <item name="android:textSize">20dp</item>
+    </style>
 
 </resources>

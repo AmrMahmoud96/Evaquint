@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline"
+        app:layout_constraintRight_toLeftOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:srcCompat="@drawable/googleg_standard_color_18"
+        android:layout_height="0dp"
+        android:layout_width="0dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.041666668"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.03" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline3"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.27083334"/>
+
+    <TextView
+        android:id="@+id/user_profile_name"
+        style="@style/Text.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        />
+
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/Text.Normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_host_rating"
+        android:layout_marginLeft="14dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        android:layout_marginTop="50dp" />
+
+    <RatingBar
+        android:id="@+id/ratingBar4"
+        style="@android:style/Widget.DeviceDefault.Light.RatingBar.Indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="68dp"
+        app:layout_constraintLeft_toRightOf="@+id/textView4"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        style="@style/Text.Normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/location"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintRight_toLeftOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:layout_marginTop="20dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView7"
+        style="@style/Text.Normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_email"
+        app:layout_constraintRight_toLeftOf="@+id/guideline3"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/textView9"
+        style="@style/Text.Normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_phone_number"
+        app:layout_constraintRight_toLeftOf="@+id/guideline3"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginTop="10dp"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline4"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.083333336" />
+
+</android.support.constraint.ConstraintLayout>
