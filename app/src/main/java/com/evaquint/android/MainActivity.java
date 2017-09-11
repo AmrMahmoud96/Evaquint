@@ -15,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.evaquint.android.fragments.UserProfileFrag;
 import com.evaquint.android.fragments.map.EventLocatorFrag;
 import com.evaquint.android.fragments.FeedFrag;
 import com.google.firebase.auth.FirebaseAuth;
@@ -84,6 +86,13 @@ public class MainActivity extends AppCompatActivity
     private void initNavHeader(NavigationView navigationView){
         ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_name))
                 .setText(mAuth.getCurrentUser().getDisplayName());
+        ((ImageView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile_picture))
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setActiveFragment(getSupportFragmentManager(), new UserProfileFrag());
+                    }
+                });
     }
 
     @Override
