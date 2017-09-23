@@ -74,6 +74,29 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
 //                .findFragmentById(R.id.map);
 //
 //        mapFragment.getMapAsync(this);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Acquire a reference to the system Location Manager
+                initOverlay();
+                LocationManager locationManager =
+                        (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
+
+                if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.
+                        PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                    return;
+
+                Location selfLocation = locationManager
+                        .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+                //Move the map to the user's location
+                LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
+                mMap.animateCamera(update);
+            }
+        });
 
         return this.view;
     }
@@ -116,6 +139,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         }
 //        view.findViewById(R.id.map_searchbar_container).bringToFront();
 
+
         initOverlay();
 
     }
@@ -148,28 +172,28 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.setOnMapLongClickListener(this);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Acquire a reference to the system Location Manager
-                LocationManager locationManager =
-                        (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
-
-                if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.
-                        PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                    return;
-
-                Location selfLocation = locationManager
-                        .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
-                //Move the map to the user's location
-                LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
-                mMap.animateCamera(update);
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
+//
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //Acquire a reference to the system Location Manager
+//                LocationManager locationManager =
+//                        (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
+//
+//                if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.
+//                        PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+//                    return;
+//
+//                Location selfLocation = locationManager
+//                        .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+//
+//                //Move the map to the user's location
+//                LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
+//                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
+//                mMap.animateCamera(update);
+//            }
+//        });
 
 //        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 //            @Override
