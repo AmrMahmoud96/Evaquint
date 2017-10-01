@@ -54,7 +54,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <!-- <activity android:name=".modules.EventCard" /> -->
         <!-- <activity android:name=".modules.FittedView" /> -->
         <activity
@@ -83,7 +83,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomepageActivity"></activity>
+        <activity android:name=".HomepageActivity" />
+        <activity android:name=".MapActivity" />
+        <activity android:name=".MessagingActivity"></activity>
     </application>
 
 </manifest>
