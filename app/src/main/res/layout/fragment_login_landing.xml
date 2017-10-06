@@ -46,19 +46,19 @@
             android:layout_alignParentStart="true" />
 
         <TextView
+            android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/slogan"
-            android:textColor="@color/dark_blue"
-            app:layout_marginLeftPercent="5%"
-            android:textStyle="italic"
-            android:textSize="15dp"
-            android:textAlignment="textStart"
-            android:fontFamily="monospace"
-            app:layout_marginBottomPercent="5%"
-            android:id="@+id/textView5"
+            android:layout_alignParentEnd="true"
             android:layout_below="@+id/textView6"
-            android:layout_alignParentEnd="true" />
+            android:fontFamily="monospace"
+            android:text="@string/slogan"
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_blue"
+            android:textSize="15dp"
+            android:textStyle="italic"
+            app:layout_marginBottomPercent="5%"
+            app:layout_marginLeftPercent="5%" />
 
         <in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus
             android:id="@+id/login_google"
@@ -112,12 +112,14 @@
             <!--android:text="Sign Up With Email" />-->
 
         <TextView
+            android:id="@+id/terms_and_conditions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:padding="10dp"
             android:text="@string/terms_and_conditions"
-            app:layout_marginBottomPercent="4%"
-            android:id="@+id/terms_and_conditions" />
+            android:textAlignment="center"
+            app:layout_marginBottomPercent="4%" />
 
 
     </android.support.percent.PercentRelativeLayout>
