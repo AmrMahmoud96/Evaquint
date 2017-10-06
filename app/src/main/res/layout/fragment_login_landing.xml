@@ -35,22 +35,21 @@
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="71dp"
-            android:fontFamily="serif"
+            android:layout_marginBottom="133dp"
+            android:fontFamily="cursive"
             android:text="@string/app_name"
             android:textAlignment="center"
             android:textColor="@color/golden_yellow"
             android:textSize="40dp"
             android:textStyle="bold"
-            app:layout_marginBottomPercent="5%" />
+            android:layout_above="@+id/login_facebook"
+            android:layout_alignParentStart="true" />
 
         <in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus
             android:id="@+id/login_google"
             style="@style/SocialButton"
             android:layout_above="@+id/login_facebook"
-            android:layout_alignStart="@+id/login_facebook"
+            android:layout_alignParentEnd="true"
             android:text="Continue With Google"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -70,11 +69,11 @@
             android:id="@+id/more_options_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="29dp"
+            android:layout_marginBottom="13dp"
             android:text="More Options"
             android:textColor="@android:color/white"
             app:layout_marginLeftPercent="8%"
-            app:layout_marginTopPercent="2%"
+            app:layout_marginTopPercent="1%"
             android:layout_above="@+id/terms_and_conditions"
             android:layout_toStartOf="@+id/to_login" />
 
@@ -107,16 +106,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="13dp"
             android:padding="10dp"
             android:text="@string/terms_and_conditions"
             android:textAlignment="center"
             android:textColor="@android:color/darker_gray"
-            app:layout_marginBottomPercent="4%" />
+            app:layout_marginBottomPercent="2%" />
 
 
     </android.support.percent.PercentRelativeLayout>
 
-
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="350px"
+        android:layout_height="350px"
+        android:layout_marginTop="33dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_below="@+id/login_progress"
+        android:layout_centerHorizontal="true" />
 
 
 </android.support.percent.PercentRelativeLayout>
