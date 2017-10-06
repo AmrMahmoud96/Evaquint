@@ -76,13 +76,13 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         this.animationManager= new ViewAnimator(a);
 
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) v.findViewById(R.id.email);
+        //mEmailView = (AutoCompleteTextView) v.findViewById(R.id.email);
 
         mPasswordView = (EditText) v.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                if (id == EditorInfo.IME_NULL) { //id == R.id.login ||
                     attemptLogin();
                     return true;
                 }
@@ -103,8 +103,8 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 
         final Button mSwitchButton = (Button) v.findViewById(R.id.switch_button);
         mSwitchButton.setOnClickListener(new View.OnClickListener() {
-            View displayNameInput = v.findViewById(R.id.display_name);
-            View confirmPasswordInput = v.findViewById(R.id.confirm_password);
+            //View displayNameInput = v.findViewById(R.id.display_name);
+            //View confirmPasswordInput = v.findViewById(R.id.confirm_password);
             @Override
             public void onClick(View view) {
                 String switchButton;
@@ -116,8 +116,8 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
                     switchButton=getString(R.string.action_switch_register);
                     signInButton=getString(R.string.action_register);
                 }
-                animationManager.slideDownThenUp(displayNameInput);
-                animationManager.slideDownThenUp(confirmPasswordInput);
+                //animationManager.slideDownThenUp(displayNameInput);
+                //animationManager.slideDownThenUp(confirmPasswordInput);
                 mSwitchButton.setText(switchButton);
                 mEmailSignInButton.setText(signInButton);
                         register=!register;
