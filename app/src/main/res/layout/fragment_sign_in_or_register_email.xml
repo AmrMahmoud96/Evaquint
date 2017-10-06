@@ -9,6 +9,7 @@
     tools:context="com.evaquint.android.LoginActivity">
 
     <!-- Login progress -->
+
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -18,113 +19,144 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <com.evaquint.android.modules.FittedView
-        android:id="@+id/login_form"
+    <RelativeLayout
+        android:id="@+id/sign_in_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/login_progress">
-        <ImageView
-            app:layout_widthPercent="100%"
-            app:layout_heightPercent="20%"
-            android:src="@drawable/logo"
-            android:id="@+id/imageView3"
-            android:layout_centerInParent="true"
-            app:layout_marginTopPercent="4%"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/email" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:padding="20dp">
 
-        <AutoCompleteTextView
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_email"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_below="@+id/imageView3"
-            android:layout_toEndOf="@+id/login_progress"
-            app:layout_marginTopPercent="15%" />
-
-        <EditText
-            android:id="@+id/display_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_display_name"
-            android:imeActionId="@+id/login"
-            android:imeActionLabel="Sign In"
-            android:imeOptions="actionUnspecified"
-            android:inputType="text"
-            android:visibility="gone"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_below="@+id/email"
-            android:layout_toEndOf="@+id/login_progress"
-            app:layout_marginTopPercent="1%" />
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_password"
-            android:imeActionId="@+id/login"
-            android:imeActionLabel="Sign In"
-            android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_below="@+id/display_name"
-            android:layout_toEndOf="@+id/login_progress"
-            app:layout_marginTopPercent="1%" />
-
-        <EditText
-            android:id="@+id/confirm_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_confirm_password"
-            android:imeActionId="@+id/login"
-            android:imeActionLabel="Sign In"
-            android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
-            android:visibility="gone"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_below="@+id/password"
-            android:layout_toEndOf="@+id/login_progress"
-            app:layout_marginTopPercent="1%" />
-
-        <Button
-            android:id="@+id/sign_in_button"
-            style="?android:textAppearanceSmall"
-            app:layout_widthPercent="30%"
-            android:layout_height="wrap_content"
-            android:text="@string/action_sign_in"
-            android:textStyle="bold"
-            android:layout_below="@+id/confirm_password"
-            android:layout_alignEnd="@+id/password" />
-
-        <CheckBox
-            android:id="@+id/checkBox"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show Password"
-            android:layout_alignBottom="@+id/sign_in_button"
-            android:layout_below="@+id/confirm_password"
-            android:layout_alignStart="@+id/password" />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/switch_button"
-            android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp"
+                app:srcCompat="@drawable/logo" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Evaquint"
+                android:textAlignment="center"
+                android:textColor="@color/cardview_dark_background"
+                android:textSize="24sp"
+                tools:text="EVAQUINT" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/action_switch_sign_in"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_below="@+id/sign_in_button"
-            android:layout_alignStart="@+id/checkBox" />
+            android:layout_below="@+id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            android:weightSum="1">
 
+            <EditText
+                android:id="@+id/email"
+                style="@android:style/Widget.EditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView7"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="51dp"
+                android:background="@drawable/edit_text_style"
+                android:drawablePadding="2dp"
+                android:ems="15"
+                android:fadingEdgeLength="0dp"
+                android:hint="E-mail"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:shadowColor="@color/bb_tabletRightBorderDark"
+                android:textColor="@android:color/black" />
 
-    </com.evaquint.android.modules.FittedView>
+            <EditText
+                android:id="@+id/password"
+                style="@android:style/Widget.EditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/email"
+                android:layout_below="@+id/email"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edit_text_style"
+                android:drawablePadding="2dp"
+                android:ems="15"
+                android:hint="Password"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:textColor="@android:color/black" />
 
+            <Button
+                android:id="@+id/sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/password"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/password"
+                android:layout_marginTop="20dp"
+                android:background="@color/Grey_2"
+                android:text="Sign In"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/button6"
+                style="@style/Base.V12.Widget.AppCompat.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/sign_in_button"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="0dp"
+                android:layout_weight="0.09"
+                android:background="@android:color/transparent"
+                android:text="Forgot password?"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/switch_button"
+                style="@style/Base.V12.Widget.AppCompat.EditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="6dp"
+                android:layout_toEndOf="@+id/textView8"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:text="Create a new account"
+                android:textAppearance="@android:style/TextAppearance.Material.Small"
+                android:textColor="@color/com_facebook_button_send_background_color" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 
 </android.support.percent.PercentRelativeLayout>
