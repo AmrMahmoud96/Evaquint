@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Evaquint</string>
+    <string name="app_name">EventLite</string>
     <string name="title_activity_event_locator">Evaquint Prototype</string>
     <string name="title_activity_main">MainActivity</string>
 
