@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.evaquint.android.fragments.login.LoginLandingFrag;
@@ -43,6 +42,9 @@ import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        // hide the status bar
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(uiOptions);
 
         Fragment newFrag = new LoginLandingFrag();
                 setActiveFragment(getSupportFragmentManager(), newFrag);

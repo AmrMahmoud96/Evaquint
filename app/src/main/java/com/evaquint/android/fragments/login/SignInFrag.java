@@ -15,16 +15,11 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
@@ -56,7 +51,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private EditText mPasswordConfirmView;
     private EditText mNameView;
@@ -76,9 +71,9 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         this.animationManager= new ViewAnimator(activity);
 
         // Set up the login form.
-//        mEmailView = (AutoCompleteTextView) view.findViewById(R.id.email);
+        mEmailView = view.findViewById(R.id.email);
 
-//        mPasswordView = (EditText) view.findViewById(R.id.password);
+        mPasswordView = (EditText) view.findViewById(R.id.password);
 //        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 //            @Override
 //            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -144,8 +139,8 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-        String passwordConfirm = mPasswordView.getText().toString();
-        String name = mNameView.getText().toString();
+//        String passwordConfirm = mPasswordView.getText().toString();
+//        String name = mNameView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -156,20 +151,20 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             focusView = mPasswordView;
             cancel = true;
         }
-
-        // If user is in registration mode, check if passwords match
-        if (!doesPasswordsMatch(password, passwordConfirm) && register == true) {
-            mPasswordView.setError(getString(R.string.error_non_matching_passwords));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // If user is in registration mode, check if name is valid
-        if (!isNameValid(name) && register == true) {
-            mPasswordView.setError(getString(R.string.error_invalid_name));
-            focusView = mNameView;
-            cancel = true;
-        }
+//
+//        // If user is in registration mode, check if passwords match
+//        if (!doesPasswordsMatch(password, passwordConfirm) && register == true) {
+//            mPasswordView.setError(getString(R.string.error_non_matching_passwords));
+//            focusView = mPasswordView;
+//            cancel = true;
+//        }
+//
+//        // If user is in registration mode, check if name is valid
+//        if (!isNameValid(name) && register == true) {
+//            mPasswordView.setError(getString(R.string.error_invalid_name));
+//            focusView = mNameView;
+//            cancel = true;
+//        }
 
         // Check for activity valid email address.
         if (TextUtils.isEmpty(email)) {
@@ -190,11 +185,11 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             // Show activity progress spinner, and kick off activity background task to
             // perform the user login attempt.
 //            showProgress(true);
-            if (register)
-                (new EmailAuthenticator(activity,new Intent(activity, MainActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                        )).createAccount(name, email, password);
-            else
+//            if (register)
+//                (new EmailAuthenticator(activity,new Intent(activity, MainActivity.class)
+//                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+//                        )).createAccount(name, email, password);
+//            else
                 (new EmailAuthenticator(activity,new Intent(activity, MainActivity.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                 )).signIn(email, password);
@@ -279,22 +274,22 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+//        addEmailsToAutoComplete(emails);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(activity,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
+//
+//    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+//        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+//        ArrayAdapter<String> adapter =
+//                new ArrayAdapter<>(activity,
+//                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+//
+//        mEmailView.setAdapter(adapter);
+//    }
 
 
     private interface ProfileQuery {
