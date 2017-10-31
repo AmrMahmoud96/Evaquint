@@ -197,7 +197,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
     }
 
     private boolean isEmailValid(String email) {
-        return email.contains("@") && email.length()>8;
+        return email.contains("@");
     }
 
     private boolean isNameValid(String name) {
