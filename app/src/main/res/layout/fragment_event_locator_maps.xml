@@ -30,7 +30,7 @@
             android:layout_width="80dp"
             android:src="@drawable/ic_my_location_black_24dp"
             android:scaleType="fitCenter"
-            android:backgroundTint="@color/white"
+            app:backgroundTint="@color/white"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             app:layout_marginBottomPercent="3%"
