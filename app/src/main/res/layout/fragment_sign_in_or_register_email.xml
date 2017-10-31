@@ -99,7 +99,7 @@
                 android:drawablePadding="2dp"
                 android:ems="15"
                 android:hint="Password"
-                android:inputType="textPersonName"
+                android:inputType="textPassword"
                 android:maxLines="1"
                 android:padding="6dp"
                 android:textColor="@android:color/black" />
