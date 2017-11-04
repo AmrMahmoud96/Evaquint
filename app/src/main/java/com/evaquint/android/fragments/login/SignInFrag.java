@@ -29,6 +29,8 @@ import com.evaquint.android.utils.view.ViewAnimator;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
+
 /**
  * Created by henry on 8/8/2017.
  */
@@ -101,8 +103,12 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 
 //        final Button mSwitchButton = (Button) view.findViewById(R.id.switch_button);
 //        mSwitchButton.setOnClickListener(new View.OnClickListener() {
-//            View displayNameInput = view.findViewById(R.id.display_name);
-//            View confirmPasswordInput = view.findViewById(R.id.confirm_password);
+//            @Override
+//            public void onClick(View view) {
+//                setActiveFragment(SignInFrag.this, new SignUpFrag());
+//            }
+//        });
+
 //            @Override
 //            public void onClick(View view) {
 //                String switchButton;
@@ -121,7 +127,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 //                register=!register;
 //
 //            }
-//        });
+     //   });
 
         return this.view;
     }
