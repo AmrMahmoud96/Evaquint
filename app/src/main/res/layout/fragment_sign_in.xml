@@ -150,7 +150,7 @@
                 android:layout_toEndOf="@+id/textView8"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:text="Create a new account"
+                android:text="@string/action_switch_sign_in"
                 android:textAppearance="@android:style/TextAppearance.Material.Small"
                 android:textColor="@color/com_facebook_button_send_background_color" />
 
