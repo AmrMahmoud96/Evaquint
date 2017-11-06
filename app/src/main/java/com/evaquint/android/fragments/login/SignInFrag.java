@@ -29,6 +29,8 @@ import com.evaquint.android.utils.view.ViewAnimator;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
+
 /**
  * Created by henry on 8/8/2017.
  */
@@ -66,7 +68,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.view = inflater.inflate(R.layout.fragment_sign_in_or_register_email, container, false);
+        this.view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         this.activity = getActivity();
         this.animationManager= new ViewAnimator(activity);
 
@@ -98,6 +100,13 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
+        final Button mSwitchButton = (Button) view.findViewById(R.id.switch_button);
+        mSwitchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setActiveFragment(SignInFrag.this, new SignUpFrag());
+            }
+        });
 
 //        final Button mSwitchButton = (Button) view.findViewById(R.id.switch_button);
 //        mSwitchButton.setOnClickListener(new View.OnClickListener() {
