@@ -76,6 +76,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
             @Override
             public void onClick(View view) {
                 startRegister();
+
             }
         });
         // Set up everything else
