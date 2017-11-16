@@ -21,9 +21,13 @@ import android.widget.Toast;
 import com.evaquint.android.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdate;
@@ -45,6 +49,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
     private View view;
     private Activity a;
     private SupportPlaceAutocompleteFragment googlePlacesSearchBarFrag;
+//    private GeoDataClient mGeoDataClient;
+//    private PlaceDetectionClient mPlaceDetectionClient;
+//    private FusedLocationProviderClient mFusedLocationProviderClient;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,7 +63,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         }
         this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
         this.a = getActivity();
-
+//        mGeoDataClient = Places.getGeoDataClient(this,null);
+//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this,null);
+//        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 //        googlePlacesSearchBarFrag = new SupportPlaceAutocompleteFragment();
 //        android.support.v4.app.FragmentManager fm = getFragmentManager();
 //        FragmentTransaction ft = fm.beginTransaction();
@@ -81,20 +90,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
             public void onClick(View view) {
                 //Acquire a reference to the system Location Manager
                 initOverlay();
-                LocationManager locationManager =
-                        (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
-
-                if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.
-                        PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                    return;
-
-                Location selfLocation = locationManager
-                        .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
-                //Move the map to the user's location
-                LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
-                mMap.animateCamera(update);
+                goToCurrentLocation();
             }
         });
 
@@ -124,9 +120,10 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         // Add activity marker in Sydney, Australia,
         // and move the map's camera to the same location.
         LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney"));
+//        googleMap.addMarker(new MarkerOptions().position(sydney)
+//                .title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        goToCurrentLocation();
         if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -142,6 +139,22 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
 
         initOverlay();
 
+    }
+    public void goToCurrentLocation(){
+        LocationManager locationManager =
+                (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.
+                PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            return;
+
+        Location selfLocation = locationManager
+                .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+        //Move the map to the user's location
+        LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
+        mMap.animateCamera(update);
     }
 
     private void initOverlay() {
