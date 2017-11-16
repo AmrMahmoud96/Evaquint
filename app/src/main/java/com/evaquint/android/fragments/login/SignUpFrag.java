@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.fragments.map.EventLocatorFrag;
+import com.evaquint.android.utils.authenticator.EmailAuthenticator;
 import com.evaquint.android.utils.view.ViewAnimator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -90,29 +91,34 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         String email = mEmailField.getText().toString().trim();
         String password = mPasswordField.getText().toString().trim();
 
-        if(!TextUtils.isEmpty(name)&& !TextUtils.isEmpty(email)&& !TextUtils.isEmpty(password)){
+        EmailAuthenticator emailAuthenticator = new EmailAuthenticator(activity,
+                new Intent(activity, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
 
+        emailAuthenticator.createAccount(name, email, password);
 
-            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
-
-                        String user_id = mAuth.getCurrentUser().getUid();
-
-                       DatabaseReference current_user_db = mDataBase.child(user_id);
-
-                        current_user_db.child("name").setValue(name);
-                        current_user_db.child("image").setValue("default");
-                        Intent mainIntent = new Intent(activity, MainActivity.class);
-                       startActivity(mainIntent);
-
-                    }
-
-                }
-            });
-
-        }
+//        if(!TextUtils.isEmpty(name)&& !TextUtils.isEmpty(email)&& !TextUtils.isEmpty(password)){
+//
+//
+//            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                @Override
+//                public void onComplete(@NonNull Task<AuthResult> task) {
+//                    if(task.isSuccessful()){
+//
+//                        String user_id = mAuth.getCurrentUser().getUid();
+//
+//                       DatabaseReference current_user_db = mDataBase.child(user_id);
+//
+//                        current_user_db.child("name").setValue(name);
+//                        current_user_db.child("image").setValue("default");
+//                        Intent mainIntent = new Intent(activity, MainActivity.class);
+//                       startActivity(mainIntent);
+//
+//                    }
+//
+//                }
+//            });
+//
+//        }
     }
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
