@@ -10,31 +10,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
+
     <android.support.percent.PercentRelativeLayout
         android:id="@+id/overlay_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <include
             android:id="@+id/event_maps_searchbar"
             layout="@layout/component_map_searchbar"
             android:layout_width="match_parent"
-            app:layout_heightPercent="10%"
-            app:layout_marginTopPercent="14%"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            app:layout_marginRightPercent="7%"
+            android:layout_marginTop="71dp"
+            app:layout_heightPercent="10%"
             app:layout_marginLeftPercent="7%"
-            />
+            app:layout_marginRightPercent="7%"
+            app:layout_marginTopPercent="5%" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/current_location_button"
-            android:layout_height="80dp"
             android:layout_width="80dp"
-            android:src="@drawable/ic_my_location_black_24dp"
-            android:scaleType="fitCenter"
-            app:backgroundTint="@color/white"
+            android:layout_height="80dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_my_location_black_24dp"
+            app:backgroundTint="@color/white"
             app:layout_marginBottomPercent="3%"
-            app:layout_marginRightPercent="3%"
-            />
+            app:layout_marginRightPercent="3%" />
     </android.support.percent.PercentRelativeLayout>
 </FrameLayout>
