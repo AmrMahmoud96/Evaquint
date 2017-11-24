@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,7 +65,27 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         }
         this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
         this.a = getActivity();
-//        mGeoDataClient = Places.getGeoDataClient(this,null);
+
+
+        //googlesearchbarsetup.
+//       googlePlacesSearchBarFrag = (SupportPlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
+//
+//        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//            @Override
+//            public void onPlaceSelected(Place place) {
+//                Log.i(TAG,"Place: "+place.getName());
+//            }
+//
+//            @Override
+//            public void onError(Status status) {
+//                Log.i(TAG,"error: "+status);
+//            }
+//        });
+
+
+
+
+        //        mGeoDataClient = Places.getGeoDataClient(this,null);
 //        mPlaceDetectionClient = Places.getPlaceDetectionClient(this,null);
 //        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 //        googlePlacesSearchBarFrag = new SupportPlaceAutocompleteFragment();
