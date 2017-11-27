@@ -18,6 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.location.Geocoder;
+import android.location.Address;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import com.evaquint.android.R;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -125,6 +131,20 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
                 .position(point)
                 .title("You are here")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        Geocoder geocoder;
+        List<Address> addresses;
+
+        geocoder = new Geocoder(this.getContext(), Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(point.latitude,point.longitude,1);
+            String address = addresses.get(0).getAddressLine(0);
+            Log.d("Address held","Address: "+addresses.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     /**
