@@ -227,6 +227,19 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.setOnMapLongClickListener(this);
         mMap.getUiSettings().setCompassEnabled(false);
+        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int i) {
+                view.findViewById(R.id.event_maps_searchbar).setVisibility(View.INVISIBLE);
+            }
+        });
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                view.findViewById(R.id.event_maps_searchbar).setVisibility(View.VISIBLE);
+            }
+        });
+
 //        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
 //
 //        fab.setOnClickListener(new View.OnClickListener() {
