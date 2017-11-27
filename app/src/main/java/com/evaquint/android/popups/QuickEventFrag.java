@@ -42,7 +42,7 @@ public class QuickEventFrag extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Get field from view
-        mText = (TextView) view.findViewById(R.id.popup_test);
+        mText = (TextView) view.findViewById(R.id.event_location_field);
         // Fetch arguments from bundle and set title
         String address = getArguments().getString("address");
         mText.setText(address);

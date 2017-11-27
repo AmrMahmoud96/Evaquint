@@ -1,15 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fab_elevation_lollipop"
+    android:orientation="vertical">
+
     <TextView
-        android:id="@+id/popup_test"
+        android:id="@+id/event_location_field"
         android:layout_width="395dp"
         android:layout_height="wrap_content"
-        android:text="keks"
-        android:textSize="35dp"
-        tools:layout_editor_absoluteY="129dp"
-        tools:layout_editor_absoluteX="8dp" />
+        android:layout_margin="@dimen/bb_default_elevation"
+        android:layout_marginTop="24dp"
+        android:text="Location"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@+id/event_title_field"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <EditText
+        android:id="@+id/event_title_field"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/bb_default_elevation"
+        android:layout_marginTop="4dp"
+        android:hint="Event Title"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Switch
+        android:id="@+id/private_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/bb_height"
+        android:layout_margin="@dimen/bb_default_elevation"
+        android:text="Private"
+        app:layout_constraintTop_toBottomOf="@+id/event_time"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <EditText
+        android:id="@+id/event_time"
+        android:layout_width="352dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Time"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_location_field" />
 
 </android.support.constraint.ConstraintLayout>
