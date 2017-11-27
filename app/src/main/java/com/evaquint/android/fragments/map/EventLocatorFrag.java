@@ -226,7 +226,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.setOnMapLongClickListener(this);
-
+        mMap.getUiSettings().setCompassEnabled(false);
 //        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
 //
 //        fab.setOnClickListener(new View.OnClickListener() {
