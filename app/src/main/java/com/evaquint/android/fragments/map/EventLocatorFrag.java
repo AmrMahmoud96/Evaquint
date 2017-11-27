@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.evaquint.android.R;
+import com.evaquint.android.popups.QuickEventFrag;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderApi;
@@ -140,6 +141,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
             addresses = geocoder.getFromLocation(point.latitude,point.longitude,1);
             String address = addresses.get(0).getAddressLine(0);
             Log.d("Address held","Address: "+addresses.toString());
+
+            FragmentManager fm = getFragmentManager();
+            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address);
+            editNameDialogFragment.show(fm, "fragment_popup_quick_event");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
