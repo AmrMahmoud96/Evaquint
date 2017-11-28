@@ -10,16 +10,18 @@ import java.util.List;
 
 @IgnoreExtraProperties
 public class UserDB {
-    public List<String> provider;
-    public List<String> friend;
+    public List<String> friends;
     public String email;
     public String phone;
     public String displayName;
+    public String picture;
+    public List<String> interests;
 
-    public UserDB(List<String> provider, String displayName, String email, String phone) {
-        this.provider = provider;
+    public UserDB(String displayName, String picture,String email, String phone, List<String> interests) {
         this.displayName = displayName;
+        this.picture = picture;
         this.email = email;
         this.phone = phone;
+        this.interests = interests;
     }
 }

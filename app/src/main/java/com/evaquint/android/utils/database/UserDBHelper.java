@@ -6,6 +6,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
 /**
@@ -20,8 +22,7 @@ public class UserDBHelper {
     }
 
     public void addUser(FirebaseUser fUser) {
-        dbConnector.writeToDB(fUser.getUid(), new UserDB(fUser.getProviders(),
-                fUser.getDisplayName(), fUser.getEmail(), "6476731234"));
+        dbConnector.writeToDB(fUser.getUid(), new UserDB(fUser.getDisplayName(),"default", fUser.getEmail(),"6476731234", new ArrayList<String>()));
     }
 
     public void addUser(String uid, UserDB user) {

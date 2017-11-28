@@ -14,6 +14,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
@@ -85,11 +86,9 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                                     activity.startActivity(nextActivity);
                                 }
                             });
+                         //   userDatabaseHandler.addUser(fUser.getUid(),new UserDB());
                             userDatabaseHandler.addUser(fUser.getUid(),
-                                    new UserDB(fUser.getProviders(),
-                                            name,
-                                            email,
-                                            "6476731234"));
+                                    new UserDB(name,"default",email,"6476731234", new ArrayList<String>()));
                             activity.startActivity(nextActivity);
 //                            updateUI(user);
                         } else {
