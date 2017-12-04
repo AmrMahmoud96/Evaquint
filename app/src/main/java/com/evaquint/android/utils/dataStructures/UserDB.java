@@ -13,15 +13,19 @@ public class UserDB {
     public List<String> friends;
     public String email;
     public String phone;
-    public String displayName;
+    public String firstName;
+    public String lastName;
     public String picture;
     public List<String> interests;
+    public String dateCreated;
 
-    public UserDB(String displayName, String picture,String email, String phone, List<String> interests) {
-        this.displayName = displayName;
+    public UserDB(String firstName,String lastName, String picture,String email, String phone, List<String> interests, String dateCreated) {
+        this.firstName =firstName;
+        this.lastName = lastName;
         this.picture = picture;
         this.email = email;
         this.phone = phone;
         this.interests = interests;
+        this.dateCreated = dateCreated;
     }
 }

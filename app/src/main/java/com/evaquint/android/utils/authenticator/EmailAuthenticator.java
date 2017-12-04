@@ -14,7 +14,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
 
@@ -27,10 +30,12 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
     private Activity activity;
     private Intent nextActivity;
     private UserDBHelper userDatabaseHandler;
+    SimpleDateFormat df;
 
     public EmailAuthenticator(){
         this.mAuth = FirebaseAuth.getInstance();
         this.userDatabaseHandler=new UserDBHelper();
+        df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     public EmailAuthenticator(Activity a, Intent intent){
@@ -55,6 +60,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                             activity.startActivity(nextActivity);
 //                            FirebaseUser user = mAuth.getCurrentUser();
 //                            updateUI(user);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -68,12 +74,13 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                 });
     }
 
-    public void createAccount(final String name, final String email, String password){
+    public void createAccount(final String firstName,final String lastName, final String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            String name = firstName +" "+ lastName;
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser fUser = mAuth.getCurrentUser();
@@ -88,7 +95,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                             });
                          //   userDatabaseHandler.addUser(fUser.getUid(),new UserDB());
                             userDatabaseHandler.addUser(fUser.getUid(),
-                                    new UserDB(name,"default",email,"6476731234", new ArrayList<String>()));
+                                    new UserDB(firstName,lastName,"default",email,"6476731234", new ArrayList<String>(),df.format(Calendar.getInstance().getTime())));
                             activity.startActivity(nextActivity);
 //                            updateUI(user);
                         } else {

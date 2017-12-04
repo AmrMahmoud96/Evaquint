@@ -171,7 +171,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
 //        googleMap.addMarker(new MarkerOptions().position(sydney)
 //                .title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        goToCurrentLocation();
+
         if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -184,7 +184,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         }
 //        view.findViewById(R.id.map_searchbar_container).bringToFront();
 
-
+        goToCurrentLocation();
         initOverlay();
 
     }

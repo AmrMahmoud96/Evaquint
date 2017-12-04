@@ -61,7 +61,7 @@
             android:layout_centerHorizontal="true">
 
             <EditText
-                android:id="@+id/nameField"
+                android:id="@+id/firstNameField"
                 style="@android:style/Widget.EditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,7 +73,27 @@
                 android:elevation="0dp"
                 android:ems="15"
                 android:fadingEdgeLength="0dp"
-                android:hint="Name"
+                android:hint="First Name"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:shadowColor="@color/bb_tabletRightBorderDark"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/lastNameField"
+                style="@android:style/Widget.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView7"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="51dp"
+                android:background="@drawable/edit_text_style"
+                android:drawablePadding="2dp"
+                android:elevation="0dp"
+                android:ems="15"
+                android:fadingEdgeLength="0dp"
+                android:hint="Last Name"
                 android:inputType="textPersonName"
                 android:maxLines="1"
                 android:padding="6dp"
@@ -85,7 +105,7 @@
                 style="@android:style/Widget.EditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/nameField"
+                android:layout_below="@+id/firstNameField"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="51dp"
                 android:background="@drawable/edit_text_style"

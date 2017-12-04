@@ -2,30 +2,20 @@ package com.evaquint.android.fragments.login;
 
 import android.app.Activity;
 import android.app.LoaderManager;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
-import com.evaquint.android.fragments.map.EventLocatorFrag;
 import com.evaquint.android.utils.authenticator.EmailAuthenticator;
-import com.evaquint.android.utils.view.ViewAnimator;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.text.Text;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -39,7 +29,8 @@ import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private View view;
     private Activity activity;
-    private EditText mNameField;
+    private EditText mFirstNameField;
+    private EditText mLastNameField;
     private EditText mEmailField;
     private EditText mPasswordField;
 
@@ -60,7 +51,8 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
 
         mDataBase = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        mNameField = (EditText) view.findViewById(R.id.nameField);
+        mFirstNameField = (EditText) view.findViewById(R.id.firstNameField);
+        mLastNameField = (EditText) view.findViewById(R.id.lastNameField);
         mEmailField =(EditText) view.findViewById(R.id.emailField);
         mPasswordField = (EditText) view.findViewById(R.id.passwordField);
        // mProgress = new ProgressBar(activity, null,android.R.attr.progressBarStyleSmall)
@@ -87,14 +79,15 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
     }
 
     public void startRegister(){
-        final String name = mNameField.getText().toString().trim();
+        final String firstName = mFirstNameField.getText().toString().trim();
+        final String lastName = mLastNameField.getText().toString().trim();
         String email = mEmailField.getText().toString().trim();
         String password = mPasswordField.getText().toString().trim();
 
         EmailAuthenticator emailAuthenticator = new EmailAuthenticator(activity,
                 new Intent(activity, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
 
-        emailAuthenticator.createAccount(name, email, password);
+        emailAuthenticator.createAccount(firstName,lastName, email, password);
 
 //        if(!TextUtils.isEmpty(name)&& !TextUtils.isEmpty(email)&& !TextUtils.isEmpty(password)){
 //
