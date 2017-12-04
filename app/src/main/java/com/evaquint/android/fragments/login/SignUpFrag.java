@@ -7,6 +7,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.evaquint.android.utils.authenticator.EmailAuthenticator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
@@ -88,10 +91,39 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         String email = mEmailField.getText().toString().trim();
         String password = mPasswordField.getText().toString().trim();
 
-        EmailAuthenticator emailAuthenticator = new EmailAuthenticator(activity,
-                new Intent(activity, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+        boolean cancel = false;
+        View focusView = null;
+        if(TextUtils.isEmpty(firstName)&&firstName.matches(".*\\d+.*")){
+            mFirstNameField.setError(getString(R.string.error_invalid_name));
+           focusView = mFirstNameField;
+            cancel = true;
+        }
+        if(TextUtils.isEmpty(lastName)&&lastName.matches(".*\\d+.*")){
+            mLastNameField.setError(getString(R.string.error_invalid_name));
+            focusView=mLastNameField;
+            cancel = true;
+        }
+        if (password.length()<8 || !password.matches(".*\\d+.*")) {
+            mPasswordField.setError(getString(R.string.password_requirements));
+            focusView = mPasswordField;
+            cancel = true;
+        }
+        if(TextUtils.isEmpty(email)||!email.contains("@")||!email.contains(".")){
+            mEmailField.setError(getString(R.string.error_invalid_email));
+            focusView=mEmailField;
+            cancel=true;
+        }
 
-        emailAuthenticator.createAccount(firstName,lastName, email, password);
+        if(cancel){
+            focusView.requestFocus();
+        }else{
+            EmailAuthenticator emailAuthenticator = new EmailAuthenticator(activity,
+                    new Intent(activity, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+
+            emailAuthenticator.createAccount(firstName,lastName, email, password);
+
+        }
+
         mProgressBar.setVisibility(View.INVISIBLE);
 //        if(!TextUtils.isEmpty(name)&& !TextUtils.isEmpty(email)&& !TextUtils.isEmpty(password)){
 //
@@ -117,6 +149,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
 //
 //        }
     }
+
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return null;

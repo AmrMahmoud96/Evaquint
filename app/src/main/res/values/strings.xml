@@ -43,6 +43,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="password_requirements">Password needs to be at least 8 characters and contain at least one number.</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>

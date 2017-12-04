@@ -102,13 +102,16 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            //Log.w(TAG,"Message: "+task.getException().getMessage());
-                           // Log.w(TAG, "Class: "+task.getException().getClass());
+                            Log.w(TAG,"Message: "+task.getException().getMessage());
+                            Log.w(TAG, "Class: "+task.getException().getClass());
                           //  Log.w(TAG,"equals: "+);
                             if(task.getException().getClass().equals(FirebaseAuthUserCollisionException.class)){
                                // boolean equals = task.getException().getClass().equals(FirebaseAuthUserCollisionException);
                                Toast.makeText(activity,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                             }
+                          /*  else if(){
+
+                            }*/
                            else{
                                 Toast.makeText(activity, "Sign Up failed.",
                                     Toast.LENGTH_SHORT).show();
