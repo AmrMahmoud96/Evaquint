@@ -2,6 +2,7 @@ package com.evaquint.android.fragments.login;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -64,6 +65,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         mRegisterBtn = (Button) view.findViewById(R.id.registerBtn);
         mProgressBar = (ProgressBar) view.findViewById(R.id.signUpProgressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
+
         final Button mSwitchButton = (Button) view.findViewById(R.id.switch_button);
         mSwitchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +87,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
     }
 
     public void startRegister(){
-        mProgressBar.setVisibility(View.VISIBLE);
+     //   mProgressBar.setVisibility(View.VISIBLE);
         final String firstName = mFirstNameField.getText().toString().trim();
         final String lastName = mLastNameField.getText().toString().trim();
         String email = mEmailField.getText().toString().trim();
@@ -123,8 +125,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
             emailAuthenticator.createAccount(firstName,lastName, email, password);
 
         }
-
-        mProgressBar.setVisibility(View.INVISIBLE);
+      //  mProgressBar.setVisibility(View.INVISIBLE);
 //        if(!TextUtils.isEmpty(name)&& !TextUtils.isEmpty(email)&& !TextUtils.isEmpty(password)){
 //
 //

@@ -7,9 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import java.text.DateFormat;
 
 import com.evaquint.android.R;
 
@@ -26,8 +34,12 @@ public class QuickEventFrag extends DialogFragment {
     private TextView mTimeText;
     private EditText mEventTitle;
     private Switch mPrivateSwitch;
-
+    private ImageView mCalendarBtn;
+    private CheckBox mMultiDaySwitch;
     private Button mCreateEventButton;
+    private Calendar dateSelected;
+    SimpleDateFormat df;
+    private DatePickerDialog datePickerDialog;
 
 
     public QuickEventFrag() {
@@ -61,6 +73,30 @@ public class QuickEventFrag extends DialogFragment {
         // Fetch arguments from bundle and set title
         String address = getArguments().getString("address");
         mLocationText.setText(address);
+        mCalendarBtn = (ImageView) view.findViewById(R.id.calendarBtn);
+        mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
+
+        dateSelected = Calendar.getInstance();
+        df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+        mCalendarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //inflate calendar.
+                Log.w("ContentValues","Calendar Clicked.");
+                Calendar newCalendar = dateSelected;
+                datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        dateSelected.set(year, monthOfYear, dayOfMonth, 0, 0);
+                        mTimeText.setText(df.format(dateSelected.getTime()));
+                    }
+
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+               mTimeText.setText(df.format(dateSelected.getTime()));
+            }
+        });
 
         mCreateEventButton = (Button) view.findViewById(R.id.create_event_btn);
 
@@ -76,8 +112,10 @@ public class QuickEventFrag extends DialogFragment {
         String event_title = mEventTitle.getText().toString().trim();
         String location = mLocationText.getText().toString().trim();
         Boolean event_private = mPrivateSwitch.isChecked();
+        Boolean event_mult_day = mMultiDaySwitch.isChecked();
         Log.d("Title", "Title: "+event_title);
         Log.d("Title", "Title: "+location);
         Log.d("Title", "Title: "+event_private);
+        Log.d("Title", "Title: "+event_mult_day);
     }
 }

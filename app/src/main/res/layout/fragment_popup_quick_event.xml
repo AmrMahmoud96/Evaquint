@@ -9,24 +9,25 @@
 
     <TextView
         android:id="@+id/event_location_field"
-        android:layout_width="395dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/bb_default_elevation"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="8dp"
         android:text="Location"
         android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/event_title_field"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_title_field" />
 
     <EditText
         android:id="@+id/event_title_field"
-        android:layout_width="395dp"
+        android:layout_width="281dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/bb_default_elevation"
-        android:layout_marginTop="4dp"
         android:hint="Event Title"
         android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Switch
         android:id="@+id/private_switch"
@@ -34,22 +35,22 @@
         android:layout_height="@dimen/bb_height"
         android:layout_margin="@dimen/bb_default_elevation"
         android:text="Private"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_time"
         tools:layout_editor_absoluteX="16dp"
         android:layout_marginTop="10dp" />
 
     <TextView
         android:id="@+id/event_time"
-        android:layout_width="352dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="Time"
         android:inputType="date"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_location_field" />
 
     <Button
@@ -61,8 +62,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/private_switch" />
 
-    <RadioButton
-        android:id="@+id/radioButton"
+    <ImageView
+        android:id="@+id/calendarBtn"
+        android:layout_width="39dp"
+        android:layout_height="33dp"
+        app:layout_constraintBottom_toBottomOf="@+id/event_time"
+        app:layout_constraintRight_toRightOf="@+id/event_time"
+        app:layout_constraintTop_toTopOf="@+id/event_time"
+        app:srcCompat="@drawable/ic_date_range_black_24dp" />
+
+    <CheckBox
+        android:id="@+id/multiDaySwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
