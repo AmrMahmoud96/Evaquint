@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
@@ -101,8 +102,17 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(activity, "Authentication failed.",
+                            //Log.w(TAG,"Message: "+task.getException().getMessage());
+                           // Log.w(TAG, "Class: "+task.getException().getClass());
+                          //  Log.w(TAG,"equals: "+);
+                            if(task.getException().getClass().equals(FirebaseAuthUserCollisionException.class)){
+                               // boolean equals = task.getException().getClass().equals(FirebaseAuthUserCollisionException);
+                               Toast.makeText(activity,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                            }
+                           else{
+                                Toast.makeText(activity, "Sign Up failed.",
                                     Toast.LENGTH_SHORT).show();
+                            }
 //                            updateUI(null);
                         }
                         // ...

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.evaquint.android.MainActivity;
 import com.evaquint.android.R;
@@ -33,6 +34,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
     private EditText mLastNameField;
     private EditText mEmailField;
     private EditText mPasswordField;
+    private ProgressBar mProgressBar;
 
     private Button mRegisterBtn;
 
@@ -47,9 +49,9 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         this.view = inflater.inflate(R.layout.fragment_register, container, false);
         this.activity = getActivity();
 
-        mAuth = FirebaseAuth.getInstance();
+     //   mAuth = FirebaseAuth.getInstance();
 
-        mDataBase = FirebaseDatabase.getInstance().getReference().child("Users");
+       // mDataBase = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mFirstNameField = (EditText) view.findViewById(R.id.firstNameField);
         mLastNameField = (EditText) view.findViewById(R.id.lastNameField);
@@ -57,7 +59,8 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         mPasswordField = (EditText) view.findViewById(R.id.passwordField);
        // mProgress = new ProgressBar(activity, null,android.R.attr.progressBarStyleSmall)
         mRegisterBtn = (Button) view.findViewById(R.id.registerBtn);
-
+        mProgressBar = (ProgressBar) view.findViewById(R.id.signUpProgressBar);
+        mProgressBar.setVisibility(View.INVISIBLE);
         final Button mSwitchButton = (Button) view.findViewById(R.id.switch_button);
         mSwitchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +82,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
     }
 
     public void startRegister(){
+        mProgressBar.setVisibility(View.VISIBLE);
         final String firstName = mFirstNameField.getText().toString().trim();
         final String lastName = mLastNameField.getText().toString().trim();
         String email = mEmailField.getText().toString().trim();
@@ -88,7 +92,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
                 new Intent(activity, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
 
         emailAuthenticator.createAccount(firstName,lastName, email, password);
-
+        mProgressBar.setVisibility(View.INVISIBLE);
 //        if(!TextUtils.isEmpty(name)&& !TextUtils.isEmpty(email)&& !TextUtils.isEmpty(password)){
 //
 //

@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView7"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="51dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/edit_text_style"
                 android:drawablePadding="2dp"
                 android:elevation="0dp"
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/firstNameField"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="51dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/edit_text_style"
                 android:drawablePadding="2dp"
                 android:ems="15"
@@ -148,6 +148,16 @@
                 android:text="Register"
                 android:textColor="@android:color/white" />
 
+            <ProgressBar
+                android:id="@+id/signUpProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/progressBar2"
+                android:layout_toStartOf="@+id/linearLayout"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -156,7 +166,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="8dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout3">
 
             <Button
                 android:id="@+id/switch_button"
