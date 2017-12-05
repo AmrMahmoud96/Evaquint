@@ -58,7 +58,11 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
+
+                           // checkIfEmailVerified();
+
                             activity.startActivity(nextActivity);
+
 //                            FirebaseUser user = mAuth.getCurrentUser();
 //                            updateUI(user);
 
@@ -73,6 +77,27 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                         // ...
                     }
                 });
+    }
+    private void checkIfEmailVerified()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user.isEmailVerified())
+        {
+            // user is verified, so you can finish this activity or send user to activity which you want.
+           // finish();
+           // Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
+
+        }
+        else
+        {
+            // email is not verified, so just prompt the message to the user and restart this activity.
+            // NOTE: don't forget to log out the user.
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(activity,"Please verify your email and try again.",Toast.LENGTH_SHORT).show();
+            //restart this activity
+
+        }
     }
 
     public void createAccount(final String firstName,final String lastName, final String email, String password){
@@ -97,6 +122,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                          //   userDatabaseHandler.addUser(fUser.getUid(),new UserDB());
                             userDatabaseHandler.addUser(fUser.getUid(),
                                     new UserDB(firstName,lastName,"default",email,"6476731234", new ArrayList<String>(),df.format(Calendar.getInstance().getTime())));
+                          //  sendVerificationEmail();
                             activity.startActivity(nextActivity);
 //                            updateUI(user);
                         } else {
@@ -119,6 +145,40 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
 //                            updateUI(null);
                         }
                         // ...
+                    }
+                });
+    }
+
+    private void sendVerificationEmail()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // email sent
+
+
+                            // after email is sent just logout the user and finish this activity
+                            FirebaseAuth.getInstance().signOut();
+                            Toast.makeText(activity, "Verification email sent.", Toast.LENGTH_SHORT).show();
+                           // startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                          //  finish();
+                        }
+                        else
+                        {
+                            // email not sent, so display message and restart the activity or do whatever you wish to do
+
+                            //restart this activity
+                            Toast.makeText(activity, "Email not sent.", Toast.LENGTH_SHORT).show();
+//                            overridePendingTransition(0, 0);
+//                            finish();
+//                            overridePendingTransition(0, 0);
+//                            startActivity(getIntent());
+
+                        }
                     }
                 });
     }
