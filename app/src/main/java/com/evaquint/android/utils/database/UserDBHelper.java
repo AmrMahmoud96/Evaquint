@@ -22,7 +22,7 @@ public class UserDBHelper {
 
     public UserDBHelper() {
          dbConnector = new DBConnector(USER_TABLE);
-        df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
     }
 
     public void addUser(FirebaseUser fUser) {

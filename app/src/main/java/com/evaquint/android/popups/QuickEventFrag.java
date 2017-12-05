@@ -77,7 +77,7 @@ public class QuickEventFrag extends DialogFragment {
         mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
 
         dateSelected = Calendar.getInstance();
-        df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
 
 
         mCalendarBtn.setOnClickListener(new View.OnClickListener() {

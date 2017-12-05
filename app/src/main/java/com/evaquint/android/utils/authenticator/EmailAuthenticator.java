@@ -36,7 +36,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
     public EmailAuthenticator(){
         this.mAuth = FirebaseAuth.getInstance();
         this.userDatabaseHandler=new UserDBHelper();
-        df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
     }
 
     public EmailAuthenticator(Activity a, Intent intent){
