@@ -38,6 +38,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
     private EditText mLastNameField;
     private EditText mEmailField;
     private EditText mPasswordField;
+    private EditText mConfirmPasswordField;
     private ProgressBar mProgressBar;
 
     private Button mRegisterBtn;
@@ -61,6 +62,8 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         mLastNameField = (EditText) view.findViewById(R.id.lastNameField);
         mEmailField =(EditText) view.findViewById(R.id.emailField);
         mPasswordField = (EditText) view.findViewById(R.id.passwordField);
+        mConfirmPasswordField = (EditText) view.findViewById(R.id.confirmPasswordField);
+
        // mProgress = new ProgressBar(activity, null,android.R.attr.progressBarStyleSmall)
         mRegisterBtn = (Button) view.findViewById(R.id.registerBtn);
         mProgressBar = (ProgressBar) view.findViewById(R.id.signUpProgressBar);
@@ -92,17 +95,15 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         final String lastName = mLastNameField.getText().toString().trim();
         String email = mEmailField.getText().toString().trim();
         String password = mPasswordField.getText().toString().trim();
+        String confirmPassword= mConfirmPasswordField.getText().toString().trim();
 
         boolean cancel = false;
         View focusView = null;
-        if(TextUtils.isEmpty(firstName)&&firstName.matches(".*\\d+.*")){
-            mFirstNameField.setError(getString(R.string.error_invalid_name));
-           focusView = mFirstNameField;
-            cancel = true;
-        }
-        if(TextUtils.isEmpty(lastName)&&lastName.matches(".*\\d+.*")){
-            mLastNameField.setError(getString(R.string.error_invalid_name));
-            focusView=mLastNameField;
+
+
+        if(!password.equals(confirmPassword)){
+            mConfirmPasswordField.setError("Passwords are not the same.");
+            focusView = mPasswordField;
             cancel = true;
         }
         if (password.length()<8 || !password.matches(".*\\d+.*")) {
@@ -110,11 +111,23 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
             focusView = mPasswordField;
             cancel = true;
         }
+
         if(TextUtils.isEmpty(email)||!email.contains("@")||!email.contains(".")){
             mEmailField.setError(getString(R.string.error_invalid_email));
             focusView=mEmailField;
             cancel=true;
         }
+        if(TextUtils.isEmpty(firstName)||firstName.matches(".*\\d+.*")){
+            mFirstNameField.setError(getString(R.string.error_invalid_name));
+            focusView = mFirstNameField;
+            cancel = true;
+        }
+        if(TextUtils.isEmpty(lastName)||lastName.matches(".*\\d+.*")){
+            mLastNameField.setError(getString(R.string.error_invalid_name));
+            focusView=mLastNameField;
+            cancel = true;
+        }
+
 
         if(cancel){
             focusView.requestFocus();
