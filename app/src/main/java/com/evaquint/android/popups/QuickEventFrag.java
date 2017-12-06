@@ -19,6 +19,7 @@ import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 import java.text.DateFormat;
 
+import com.evaquint.android.MapActivity;
 import com.evaquint.android.R;
 
 import java.sql.Time;
@@ -113,6 +114,7 @@ public class QuickEventFrag extends DialogFragment {
         String location = mLocationText.getText().toString().trim();
         Boolean event_private = mPrivateSwitch.isChecked();
         Boolean event_mult_day = mMultiDaySwitch.isChecked();
+        //MapActivity.setFocusToView(getView().findViewById();
         Log.d("Title", "Title: "+event_title);
         Log.d("Title", "Title: "+location);
         Log.d("Title", "Title: "+event_private);
