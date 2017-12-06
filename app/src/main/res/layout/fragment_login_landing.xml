@@ -32,20 +32,6 @@
         <!--android:layout_alignParentTop="true"-->
         <!--android:layout_alignParentStart="true" />-->
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/login_facebook"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="133dp"
-            android:fontFamily="cursive"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textColor="@color/golden_yellow"
-            android:textSize="40dp"
-            android:textStyle="bold" />
-
         <in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus
             android:id="@+id/login_google"
             style="@style/SocialButton"
@@ -54,7 +40,7 @@
             android:text="Continue With Google"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_marginTopPercent="16%" />
+            app:layout_marginTopPercent="5%" />
 
         <in.championswimmer.libsocialbuttons.buttons.BtnFacebook
             android:id="@+id/login_facebook"
@@ -114,18 +100,32 @@
             android:textAlignment="center"
             android:textColor="@android:color/darker_gray"
             app:layout_marginBottomPercent="2%" />
+        <ImageView
+            android:id="@+id/app_logo"
+            android:layout_width="350px"
+            android:layout_height="350px"
+            android:layout_below="@+id/login_progress"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="33dp"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/login_google"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/app_logo"
+            android:fontFamily="@font/raleway"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:textColor="@color/golden_yellow"
+            android:textSize="36sp" />
 
 
     </android.support.percent.PercentRelativeLayout>
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="350px"
-        android:layout_height="350px"
-        android:layout_marginTop="33dp"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:layout_below="@+id/login_progress"
-        android:layout_centerHorizontal="true" />
+
 
 
 </android.support.percent.PercentRelativeLayout>
