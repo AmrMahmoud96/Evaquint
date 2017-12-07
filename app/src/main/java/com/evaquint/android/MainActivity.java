@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+       /* BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
 
                 }
             }
-        });
+        });*/
 
         setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
     }

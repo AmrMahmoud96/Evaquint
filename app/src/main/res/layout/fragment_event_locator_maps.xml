@@ -22,10 +22,10 @@
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="71dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="26dp"
             app:layout_heightPercent="10%"
-            app:layout_marginLeftPercent="7%"
-            app:layout_marginRightPercent="7%"
+            app:layout_marginRightPercent="5%"
             app:layout_marginTopPercent="5%" />
 
         <android.support.design.widget.FloatingActionButton
