@@ -48,6 +48,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.support.v4.app.Fragment;
+
 import static android.content.ContentValues.TAG;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
@@ -73,9 +75,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
         this.a = getActivity();
 
-
         //googlesearchbarsetup.
-//       googlePlacesSearchBarFrag = (SupportPlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
+        //android.support.v4.app.FragmentManager fm = getFragmentManager();
+//       googlePlacesSearchBarFrag = (SupportPlaceAutocompleteFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.event_maps_searchbar);
 //
 //        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 //            @Override
