@@ -198,11 +198,13 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
 
         Location selfLocation = locationManager
                 .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+if(selfLocation!=null){
+    //Move the map to the user's location
+    LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
+    CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
+    mMap.animateCamera(update);
+}
 
-        //Move the map to the user's location
-        LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
-        mMap.animateCamera(update);
     }
 
     private void initOverlay() {
