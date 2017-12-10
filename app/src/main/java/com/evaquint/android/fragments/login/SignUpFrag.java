@@ -101,13 +101,35 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         View focusView = null;
 
 
-        if(!password.equals(confirmPassword)){
-            mConfirmPasswordField.setError("Passwords are not the same.");
-            focusView = mPasswordField;
-            cancel = true;
-        }
-        if (password.length()<8 || !password.matches(".*\\d+.*")) {
-            mPasswordField.setError(getString(R.string.password_requirements));
+//        if(!password.equals(confirmPassword)){
+//            mConfirmPasswordField.setError("Passwords are not the same.");
+//            focusView = mPasswordField;
+//            cancel = true;
+//        }
+//        if (password.length()<8 || !password.matches(".*\\d+.*")) {
+//            mPasswordField.setError(getString(R.string.password_requirements));
+//            focusView = mPasswordField;
+//            cancel = true;
+//        }
+//        if(TextUtils.isEmpty(email)||!email.contains("@")||!email.contains(".")){
+//            mEmailField.setError(getString(R.string.error_invalid_email));
+//            focusView=mEmailField;
+//            cancel=true;
+//        }
+//        if(TextUtils.isEmpty(firstName)||firstName.matches(".*\\d+.*")){
+//            mFirstNameField.setError(getString(R.string.error_invalid_name));
+//            focusView = mFirstNameField;
+//            cancel = true;
+//        }
+//        if(TextUtils.isEmpty(lastName)||lastName.matches(".*\\d+.*")){
+//            mLastNameField.setError(getString(R.string.error_invalid_name));
+//            focusView=mLastNameField;
+//            cancel = true;
+//        }
+
+
+        if (password.length()<1) {
+            mPasswordField.setError("Password needs to be longer");
             focusView = mPasswordField;
             cancel = true;
         }
@@ -116,16 +138,6 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
             mEmailField.setError(getString(R.string.error_invalid_email));
             focusView=mEmailField;
             cancel=true;
-        }
-        if(TextUtils.isEmpty(firstName)||firstName.matches(".*\\d+.*")){
-            mFirstNameField.setError(getString(R.string.error_invalid_name));
-            focusView = mFirstNameField;
-            cancel = true;
-        }
-        if(TextUtils.isEmpty(lastName)||lastName.matches(".*\\d+.*")){
-            mLastNameField.setError(getString(R.string.error_invalid_name));
-            focusView=mLastNameField;
-            cancel = true;
         }
 
 
