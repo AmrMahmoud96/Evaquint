@@ -36,7 +36,7 @@ public class QuickEventFrag extends DialogFragment {
     private EditText mEventTitle;
     private Switch mPrivateSwitch;
     private ImageView mCalendarBtn;
-    private CheckBox mMultiDaySwitch;
+  //  private CheckBox mMultiDaySwitch;
     private Button mCreateEventButton;
     private Calendar dateSelected;
     SimpleDateFormat df;
@@ -75,7 +75,7 @@ public class QuickEventFrag extends DialogFragment {
         String address = getArguments().getString("address");
         mLocationText.setText(address);
         mCalendarBtn = (ImageView) view.findViewById(R.id.calendarBtn);
-        mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
+     //   mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
 
         dateSelected = Calendar.getInstance();
         df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
@@ -113,11 +113,11 @@ public class QuickEventFrag extends DialogFragment {
         String event_title = mEventTitle.getText().toString().trim();
         String location = mLocationText.getText().toString().trim();
         Boolean event_private = mPrivateSwitch.isChecked();
-        Boolean event_mult_day = mMultiDaySwitch.isChecked();
+       // Boolean event_mult_day = mMultiDaySwitch.isChecked();
         //MapActivity.setFocusToView(getView().findViewById();
         Log.d("Title", "Title: "+event_title);
         Log.d("Title", "Title: "+location);
         Log.d("Title", "Title: "+event_private);
-        Log.d("Title", "Title: "+event_mult_day);
+        //Log.d("Title", "Title: "+event_mult_day);
     }
 }
