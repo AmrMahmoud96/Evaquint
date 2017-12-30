@@ -47,6 +47,7 @@
     </style>
 
     <style name="Text">
+        <item name="android:fontFamily">@font/raleway</item>
     </style>
     <style name="Text.Small">
         <item name="android:textSize">14dp</item>

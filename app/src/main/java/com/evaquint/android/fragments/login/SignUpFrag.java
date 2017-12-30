@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -40,11 +41,10 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
     private EditText mPasswordField;
     private EditText mConfirmPasswordField;
     private ProgressBar mProgressBar;
+    private int progressStatus = 0;
+    private Handler handler = new Handler();
 
     private Button mRegisterBtn;
-
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDataBase;
 
    // private ProgressBar mProgress;
     @Override
@@ -69,6 +69,28 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         mProgressBar = (ProgressBar) view.findViewById(R.id.signUpProgressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
 
+//        // Start long running operation in a background thread
+//        new Thread(new Runnable() {
+//            public void run() {
+//                while (progressStatus < 100) {
+//                    progressStatus += 1;
+//                    // Update the progress bar and display the
+//                    //current value in the text view
+//                    handler.post(new Runnable() {
+//                        public void run() {
+//                            mProgressBar.setProgress(progressStatus);
+//                        }
+//                    });
+//                    try {
+//                        // Sleep for 200 milliseconds.
+//                        Thread.sleep(200);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }).start();
+
         final Button mSwitchButton = (Button) view.findViewById(R.id.switch_button);
         mSwitchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +112,6 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
     }
 
     public void startRegister(){
-     //   mProgressBar.setVisibility(View.VISIBLE);
         final String firstName = mFirstNameField.getText().toString().trim();
         final String lastName = mLastNameField.getText().toString().trim();
         String email = mEmailField.getText().toString().trim();
@@ -144,13 +165,28 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
         if(cancel){
             focusView.requestFocus();
         }else{
+            handler.post(new Runnable() {
+                public void run() {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    SignUpFrag.this.getView().setAlpha( (float) 0.5 );
+                }
+            });
+
             EmailAuthenticator emailAuthenticator = new EmailAuthenticator(activity,
                     new Intent(activity, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
 
             emailAuthenticator.createAccount(firstName,lastName, email, password);
 
         }
-      //  mProgressBar.setVisibility(View.INVISIBLE);
+
+        handler.post(new Runnable() {
+            public void run() {
+                SignUpFrag.this.getView().setAlpha(1);
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
+        });
+
+
 //        if(!TextUtils.isEmpty(name)&& !TextUtils.isEmpty(email)&& !TextUtils.isEmpty(password)){
 //
 //

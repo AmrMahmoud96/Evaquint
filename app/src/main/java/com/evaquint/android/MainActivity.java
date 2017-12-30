@@ -21,6 +21,9 @@ import android.widget.TextView;
 import com.evaquint.android.fragments.UserProfileFrag;
 import com.evaquint.android.fragments.map.EventLocatorFrag;
 import com.evaquint.android.fragments.FeedFrag;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.roughike.bottombar.BottomBar;
@@ -28,6 +31,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 import static android.content.ContentValues.TAG;
 
+import static com.evaquint.android.utils.code.IntentValues.PLACE_AUTOCOMPLETE_REQUEST_CODE;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -166,6 +170,23 @@ public class MainActivity extends AppCompatActivity
 
         this.drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.i(TAG, "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.i(TAG, status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
     }
 
 }

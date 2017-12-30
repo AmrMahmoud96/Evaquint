@@ -60,6 +60,11 @@ public class QuickEventFrag extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+
+        getDialog().getWindow().setLayout(width, height);
+
         return inflater.inflate(R.layout.fragment_popup_quick_event, container);
     }
 
@@ -95,6 +100,7 @@ public class QuickEventFrag extends DialogFragment {
                     }
 
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
                mTimeText.setText(df.format(dateSelected.getTime()));
             }
         });
@@ -105,6 +111,7 @@ public class QuickEventFrag extends DialogFragment {
             @Override
             public void onClick(View view) {
                 pullFields();
+                dismiss();
             }
         });
 

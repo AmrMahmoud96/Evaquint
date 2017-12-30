@@ -59,7 +59,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
     private GoogleApiClient mGoogleApiClient;
     private View view;
     private Activity a;
-    private SupportPlaceAutocompleteFragment googlePlacesSearchBarFrag;
+    private PlaceAutocompleteFragment googlePlacesSearchBarFrag;
 //    private GeoDataClient mGeoDataClient;
 //    private PlaceDetectionClient mPlaceDetectionClient;
 //    private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -75,21 +75,20 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
         this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
         this.a = getActivity();
 
-        //googlesearchbarsetup.
-        //android.support.v4.app.FragmentManager fm = getFragmentManager();
-//       googlePlacesSearchBarFrag = (SupportPlaceAutocompleteFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.event_maps_searchbar);
-//
-//        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(Place place) {
-//                Log.i(TAG,"Place: "+place.getName());
-//            }
-//
-//            @Override
-//            public void onError(Status status) {
-//                Log.i(TAG,"error: "+status);
-//            }
-//        });
+        android.support.v4.app.FragmentManager fm = getFragmentManager();
+        googlePlacesSearchBarFrag = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
+
+        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                Log.i(TAG,"Place: "+place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.i(TAG,"error: "+status);
+            }
+        });
 
 
 
