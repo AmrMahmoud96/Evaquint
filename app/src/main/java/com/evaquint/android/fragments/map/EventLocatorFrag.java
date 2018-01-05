@@ -55,6 +55,7 @@ import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
+     public String mTitle;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private View view;
@@ -129,10 +130,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
 
     @Override
     public void onMapLongClick(LatLng point) {
-        mMap.addMarker(new MarkerOptions()
-                .position(point)
-                .title("You are here")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
         Geocoder geocoder;
         List<Address> addresses;
 
@@ -146,6 +144,10 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
             FragmentManager fm = getFragmentManager();
             QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address);
             editNameDialogFragment.show(fm, "fragment_popup_quick_event");
+            mMap.addMarker(new MarkerOptions()
+                    .position(point)
+                    .title("")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         } catch (IOException e) {
             e.printStackTrace();

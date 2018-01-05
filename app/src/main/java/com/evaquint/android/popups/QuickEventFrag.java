@@ -24,6 +24,7 @@ import java.text.DateFormat;
 
 import com.evaquint.android.MapActivity;
 import com.evaquint.android.R;
+import com.evaquint.android.fragments.map.EventLocatorFrag;
 
 import java.sql.Time;
 
