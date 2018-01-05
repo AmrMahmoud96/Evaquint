@@ -1,6 +1,8 @@
 package com.evaquint.android.popups;
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -13,13 +15,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 import  android.widget.TimePicker;
 import android.app.TimePickerDialog;
+import android.widget.Toast;
+
 import java.text.DateFormat;
 
 import com.evaquint.android.MapActivity;
@@ -46,6 +50,8 @@ public class QuickEventFrag extends DialogFragment {
     SimpleDateFormat df;
     int mHour,mMinute;
     private DatePickerDialog datePickerDialog;
+
+    final Calendar c = Calendar.getInstance();
 
 
     public QuickEventFrag() {
@@ -86,28 +92,15 @@ public class QuickEventFrag extends DialogFragment {
         mLocationText.setText(address);
         mCalendarBtn = (ImageView) view.findViewById(R.id.calendarBtn);
      //   mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
-
         dateSelected = Calendar.getInstance();
         df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
-
 
         mCalendarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //inflate calendar.
                 Log.w("ContentValues","Calendar Clicked.");
-                Calendar newCalendar = dateSelected;
-                datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        dateSelected.set(year, monthOfYear, dayOfMonth);
-                        pickTime();
-
-                    }
-
-                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.show();
-               //mTimeText.setText(df.format(dateSelected.getTime()));
+                pickDate();
             }
         });
 
@@ -122,20 +115,52 @@ public class QuickEventFrag extends DialogFragment {
         });
 
     }
+    public void pickDate(){
+        Calendar newCalendar = dateSelected;
+        datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                dateSelected.set(year, monthOfYear, dayOfMonth);
+                if(checkValidDate()){
+                    pickTime();
+                }else{
+                    Toast.makeText(getActivity(),"Please select a valid date.",Toast.LENGTH_SHORT).show();
+                    pickDate();
+                }
+            }
+
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+        datePickerDialog.show();
+        //mTimeText.setText(df.format(dateSelected.getTime()));
+    }
+    public boolean checkValidDate(){
+        if(dateSelected.getTimeInMillis()>c.getTimeInMillis()-1000){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public void pickTime(){
         // Get Current Time selected
         mHour = dateSelected.get(Calendar.HOUR_OF_DAY);
         mMinute = dateSelected.get(Calendar.MINUTE);
 
         // Launch Time Picker Dialog
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+        final TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
                 new TimePickerDialog.OnTimeSetListener() {
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
                         dateSelected.set(dateSelected.get(Calendar.YEAR),dateSelected.get(Calendar.MONTH),dateSelected.get(Calendar.DAY_OF_MONTH), hourOfDay, minute);
-                        mTimeText.setText(df.format(dateSelected.getTime()));
+                        if(checkValidDate()){
+                            mTimeText.setText(df.format(dateSelected.getTime()));
+                        }else{
+                            Toast.makeText(getActivity(),"Please select a valid time.",Toast.LENGTH_SHORT).show();
+                            pickTime();
+                        }
+
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
