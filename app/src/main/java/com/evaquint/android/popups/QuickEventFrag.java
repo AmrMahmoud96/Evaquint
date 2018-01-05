@@ -1,4 +1,5 @@
 package com.evaquint.android.popups;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -17,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
+import  android.widget.TimePicker;
+import android.app.TimePickerDialog;
 import java.text.DateFormat;
 
 import com.evaquint.android.MapActivity;
@@ -40,6 +43,7 @@ public class QuickEventFrag extends DialogFragment {
     private Button mCreateEventButton;
     private Calendar dateSelected;
     SimpleDateFormat df;
+    int mHour,mMinute;
     private DatePickerDialog datePickerDialog;
 
 
@@ -95,13 +99,14 @@ public class QuickEventFrag extends DialogFragment {
                 datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
 
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        dateSelected.set(year, monthOfYear, dayOfMonth, 0, 0);
-                        mTimeText.setText(df.format(dateSelected.getTime()));
+                        dateSelected.set(year, monthOfYear, dayOfMonth);
+                        pickTime();
+
                     }
 
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
-               mTimeText.setText(df.format(dateSelected.getTime()));
+               //mTimeText.setText(df.format(dateSelected.getTime()));
             }
         });
 
@@ -115,6 +120,24 @@ public class QuickEventFrag extends DialogFragment {
             }
         });
 
+    }
+    public void pickTime(){
+        // Get Current Time selected
+        mHour = dateSelected.get(Calendar.HOUR_OF_DAY);
+        mMinute = dateSelected.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        dateSelected.set(dateSelected.get(Calendar.YEAR),dateSelected.get(Calendar.MONTH),dateSelected.get(Calendar.DAY_OF_MONTH), hourOfDay, minute);
+                        mTimeText.setText(df.format(dateSelected.getTime()));
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
     }
     public void pullFields(){
         String event_title = mEventTitle.getText().toString().trim();
