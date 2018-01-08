@@ -1,4 +1,6 @@
 package com.evaquint.android.popups;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -122,9 +124,11 @@ public class QuickEventFrag extends DialogFragment {
         Boolean event_private = mPrivateSwitch.isChecked();
        // Boolean event_mult_day = mMultiDaySwitch.isChecked();
         //MapActivity.setFocusToView(getView().findViewById();
-        Log.d("Title", "Title: "+event_title);
-        Log.d("Title", "Title: "+location);
-        Log.d("Title", "Title: "+event_private);
+        Intent i = new Intent()
+                .putExtra("title", event_title)
+                .putExtra("location", location)
+                .putExtra("privacy", event_private);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
     }
 }
