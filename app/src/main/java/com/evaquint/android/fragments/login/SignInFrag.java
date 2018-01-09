@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -28,6 +29,7 @@ import com.evaquint.android.utils.view.ViewAnimator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
@@ -63,6 +65,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
     private Activity activity;
     private ViewAnimator animationManager;
     private boolean register = false;
+    private Handler handler = new Handler();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,6 +103,8 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
+        mProgressView.setVisibility(View.INVISIBLE);
+
         final Button mSwitchButton = (Button) view.findViewById(R.id.switch_button);
         mSwitchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,6 +201,12 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             focusView.requestFocus();
         } else {
             // Show activity progress spinner, and kick off activity background task to
+            handler.post(new Runnable() {
+                public void run() {
+                    mProgressView.setVisibility(View.VISIBLE);
+                    SignInFrag.this.getView().setAlpha( (float) 0.5 );
+                }
+            });
             // perform the user login attempt.
 //            showProgress(true);
 //            if (register)
@@ -204,7 +215,15 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
 //                        )).createAccount(name, email, password);
 //            else
                 (new EmailAuthenticator(activity,new Intent(activity, MainActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY),
+                        new Callable() {
+                            @Override
+                            public Object call() throws Exception {
+                                SignInFrag.this.getView().setAlpha(1);
+                                mProgressView.setVisibility(View.INVISIBLE);
+                                return null;
+                            }
+                        }
                 )).signIn(email, password);
         }
     }

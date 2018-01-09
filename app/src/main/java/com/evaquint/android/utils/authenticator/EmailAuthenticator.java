@@ -19,6 +19,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.Callable;
 
 import static android.content.ContentValues.TAG;
 
@@ -31,6 +32,8 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
     private Activity activity;
     private Intent nextActivity;
     private UserDBHelper userDatabaseHandler;
+    private Callable func;
+
     SimpleDateFormat df;
 
     public EmailAuthenticator(){
@@ -41,6 +44,13 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
 
     public EmailAuthenticator(Activity a, Intent intent){
         this();
+        this.activity = a;
+        this.nextActivity = intent;
+    }
+
+    public EmailAuthenticator(Activity a, Intent intent, Callable func){
+        this(a, intent);
+        this.func=func;
         this.activity = a;
         this.nextActivity = intent;
     }
@@ -72,6 +82,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                             Toast.makeText(activity, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
+                            callFunction();
                         }
 
                         // ...
@@ -135,6 +146,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                                // boolean equals = task.getException().getClass().equals(FirebaseAuthUserCollisionException);
                                Toast.makeText(activity,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                             }
+
                           /*  else if(){
 
                             }*/
@@ -143,6 +155,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                                     Toast.LENGTH_SHORT).show();
                             }
 //                            updateUI(null);
+                            callFunction();
                         }
                         // ...
                     }
@@ -181,6 +194,14 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                         }
                     }
                 });
+    }
+
+    private void callFunction(){
+        try {
+            func.call();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

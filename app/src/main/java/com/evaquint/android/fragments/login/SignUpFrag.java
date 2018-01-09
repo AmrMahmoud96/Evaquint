@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
+import java.util.concurrent.Callable;
+
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 /**
@@ -173,18 +175,20 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
             });
 
             EmailAuthenticator emailAuthenticator = new EmailAuthenticator(activity,
-                    new Intent(activity, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                    new Intent(activity, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY),
+                    new Callable() {
+                        @Override
+                        public Object call() throws Exception {
+                            SignUpFrag.this.getView().setAlpha(1);
+                            mProgressBar.setVisibility(View.INVISIBLE);
+                            return null;
+                        }
+                    });
 
             emailAuthenticator.createAccount(firstName,lastName, email, password);
 
         }
 
-        handler.post(new Runnable() {
-            public void run() {
-                SignUpFrag.this.getView().setAlpha(1);
-                mProgressBar.setVisibility(View.INVISIBLE);
-            }
-        });
 
 
 //        if(!TextUtils.isEmpty(name)&& !TextUtils.isEmpty(email)&& !TextUtils.isEmpty(password)){
