@@ -3,6 +3,7 @@ package com.evaquint.android.fragments.map;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -51,6 +52,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import android.support.v4.app.Fragment;
 
 import static android.content.ContentValues.TAG;
+import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
@@ -143,6 +145,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
 
             FragmentManager fm = getFragmentManager();
             QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address);
+
+            editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
             editNameDialogFragment.show(fm, "fragment_popup_quick_event");
             mMap.addMarker(new MarkerOptions()
                     .position(point)
@@ -289,6 +293,25 @@ if(selfLocation!=null){
 //        });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case QUICK_EVENT_FRAGMENT:
+                if (resultCode == Activity.RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    String event_title = bundle.getString("title");
+                    String location = bundle.getString("location");
+                    Boolean event_private = bundle.getBoolean("privacy");
+                    Log.d("Title", "Event: "+event_title);
+                    Log.d("Title", "Location: "+location);
+                    Log.d("Title", "Privacy: "+event_private);
+
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    //do nothing
+                }
+                break;
+        }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

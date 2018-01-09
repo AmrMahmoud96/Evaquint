@@ -9,4 +9,5 @@ public class IntentValues {
     public static final int FACEBOOK_SIGN_IN = 0102;
 
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 0201;
+    public static final int QUICK_EVENT_FRAGMENT = 0251;
 }

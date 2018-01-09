@@ -1,6 +1,8 @@
 package com.evaquint.android.popups;
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -92,8 +94,10 @@ public class QuickEventFrag extends DialogFragment {
         mLocationText.setText(address);
         mCalendarBtn = (ImageView) view.findViewById(R.id.calendarBtn);
      //   mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
+
         dateSelected = Calendar.getInstance();
         df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
+
 
         mCalendarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,9 +175,11 @@ public class QuickEventFrag extends DialogFragment {
         Boolean event_private = mPrivateSwitch.isChecked();
        // Boolean event_mult_day = mMultiDaySwitch.isChecked();
         //MapActivity.setFocusToView(getView().findViewById();
-        Log.d("Title", "Title: "+event_title);
-        Log.d("Title", "Title: "+location);
-        Log.d("Title", "Title: "+event_private);
+        Intent i = new Intent()
+                .putExtra("title", event_title)
+                .putExtra("location", location)
+                .putExtra("privacy", event_private);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
     }
 }
