@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.location.Geocoder;
 import android.location.Address;
@@ -47,6 +48,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.support.v4.app.Fragment;
@@ -55,7 +57,8 @@ import static android.content.ContentValues.TAG;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
-public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
+public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
+        GoogleMap.OnMapLongClickListener {
 
      public String mTitle;
     private GoogleMap mMap;
@@ -66,6 +69,29 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
 //    private GeoDataClient mGeoDataClient;
 //    private PlaceDetectionClient mPlaceDetectionClient;
 //    private FusedLocationProviderClient mFusedLocationProviderClient;
+    class EventPreviewWindow implements GoogleMap.InfoWindowAdapter{
+
+        private View myContentsView;
+        public EventPreviewWindow(){
+            //inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
+            myContentsView = getLayoutInflater().inflate(R.layout.event_preview_window, null);
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            //initialize the box
+            TextView test = ((TextView)myContentsView.findViewById(R.id.title));
+            test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
+            return myContentsView;
+        }
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -129,6 +155,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback, Go
 
         return this.view;
     }
+
+
 
     @Override
     public void onMapLongClick(LatLng point) {
@@ -242,6 +270,7 @@ if(selfLocation!=null){
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.setOnMapLongClickListener(this);
         mMap.getUiSettings().setCompassEnabled(false);
+        mMap.setInfoWindowAdapter(new EventPreviewWindow());
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
@@ -339,6 +368,4 @@ if(selfLocation!=null){
             // permissions this app might request
         }
     }
-
-
 }
