@@ -18,21 +18,20 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:background="@color/white"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="70dp"
             android:layout_marginTop="26dp"
+            android:background="@color/white"
             app:layout_heightPercent="10%"
             app:layout_marginRightPercent="5%"
             app:layout_marginTopPercent="5%">
 
             <fragment
                 android:id="@+id/event_maps_searchbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </FrameLayout>
 
 

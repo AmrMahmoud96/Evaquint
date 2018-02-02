@@ -13,38 +13,32 @@ import java.util.List;
 @IgnoreExtraProperties
 public class EventDB {
     public String eventTitle;
+    public String eventHost;
     public String eventLocation;
-    public String eventDescription;
     public Date eventDate;
     public Time eventTime;
-    public boolean ageRestriction;
     public boolean eventPrivate;
+    public List<String> invited;
     public List<String> attendees;
-    public List<String> QRCodes;
-    public List<String> pictures;
-    public int capacity;
+    public DetailedEvent details;
 
     public EventDB(String eventTitle,
                    String eventLocation,
-                   String eventDescription,
+                   String eventHost,
                    Date eventDate,
                    Time eventTime,
-                   boolean ageRestriction,
                    boolean eventPrivate,
+                   List<String> invited,
                    List<String> attendees,
-                   List<String> QRCodes,
-                   List<String> pictures,
-                   int capacity) {
+                   DetailedEvent details) {
+        this.eventHost = eventHost;
+        this.details = details;
+        this.invited = invited;
         this.eventTitle = eventTitle;
         this.eventLocation = eventLocation;
-        this.eventDescription = eventDescription;
         this.eventDate = eventDate;
         this.eventTime= eventTime;
-        this.ageRestriction=ageRestriction;
         this.eventPrivate = eventPrivate;
         this.attendees=attendees;
-        this.QRCodes = QRCodes;
-        this.pictures=pictures;
-        this.capacity = capacity;
     }
 }

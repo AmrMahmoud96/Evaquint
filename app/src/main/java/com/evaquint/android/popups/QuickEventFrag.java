@@ -73,6 +73,8 @@ public class QuickEventFrag extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+       // dismiss();
         int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
         int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
 
@@ -84,6 +86,7 @@ public class QuickEventFrag extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+      //  dismiss();
         // Get field from view
         mLocationText = (TextView) view.findViewById(R.id.event_location_field);
         mTimeText = (TextView) view.findViewById(R.id.event_time);
