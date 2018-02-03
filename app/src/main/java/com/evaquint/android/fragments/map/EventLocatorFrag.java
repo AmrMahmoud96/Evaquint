@@ -96,6 +96,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         @Override
         public View getInfoContents(Marker marker) {
             //initialize the box
+            EventDBHelper eventDBHelper = new EventDBHelper();
+            eventDBHelper.retreiveEvent(marker.getTag().toString());
             TextView test = ((TextView)myContentsView.findViewById(R.id.title));
             test.setText(marker.getTag().toString());
         //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");

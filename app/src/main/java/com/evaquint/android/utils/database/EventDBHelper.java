@@ -1,11 +1,16 @@
 package com.evaquint.android.utils.database;
 
 import android.util.EventLog;
+import android.util.Log;
 
 import com.evaquint.android.utils.code.DatabaseValues;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -30,6 +35,27 @@ public class EventDBHelper {
 
     public void addEvent(EventDB event) {
         dbConnector.writeToDB(event.eventID,event);
+    }
+
+    public EventDB retreiveEvent(String eventID){
+        //need to check if event ID exists in event db first
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // add variables for each child info.
+                Log.i("data: ", dataSnapshot.child("eventTitle").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("error: ", "onCancelled", databaseError.toException());
+            }
+        });
+      //  this.database = FirebaseDatabase.getInstance();
+    //    this.mDatabase = database.getReference(value.getName());
+        //dbConnector.
+        return null;
     }
 /*
     public boolean addEntry(DatabaseValues subPath, String value){
