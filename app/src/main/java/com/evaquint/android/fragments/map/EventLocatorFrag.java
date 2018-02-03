@@ -34,6 +34,10 @@ import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.database.EventDBHelper;
+import com.evaquint.android.utils.database.GeofireDBHelper;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderApi;
@@ -56,6 +60,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
 
 import android.support.v4.app.Fragment;
 
@@ -91,8 +96,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         @Override
         public View getInfoContents(Marker marker) {
             //initialize the box
-            TextView test = ((TextView)myContentsView.findViewById(R.id.title));
-            test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
+          //  TextView test = ((TextView)myContentsView.findViewById(R.id.title));
+        //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
             return myContentsView;
         }
     }
@@ -244,6 +249,38 @@ if(selfLocation!=null){
     LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
     CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
     mMap.animateCamera(update);
+    GeofireDBHelper helper = new GeofireDBHelper();
+    GeoQuery surroundingEvents = helper.queryAtLocation(selfLoc,10);
+    surroundingEvents.addGeoQueryEventListener(new GeoQueryEventListener() {
+        @Override
+        public void onKeyEntered(String key, GeoLocation location) {
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(location.latitude,location.longitude))
+                    .title(key)
+                    .snippet(key)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        }
+
+        @Override
+        public void onKeyExited(String key) {
+
+        }
+
+        @Override
+        public void onKeyMoved(String key, GeoLocation location) {
+
+        }
+
+        @Override
+        public void onGeoQueryReady() {
+
+        }
+
+        @Override
+        public void onGeoQueryError(DatabaseError error) {
+
+        }
+    });
 }
 
     }
@@ -345,17 +382,11 @@ if(selfLocation!=null){
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     EventDB event = new EventDB(event_title,user.getUid(),event_date,address,location,event_private, null,Arrays.asList(""), new DetailedEvent());
                     EventDBHelper eventDBHelper = new EventDBHelper();
+                    GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
                     eventDBHelper.addEvent(event);
-                    /* String eventTitle,
-                   String eventHost,
-                   Calendar eventDate,
-                   String address,
-                   LatLng location,
-                   boolean eventPrivate,
-                   List<String> invited,
-                   List<String> attendees,
-                   DetailedEvent details
-*/
+                    geofireDBHelper.addEventToGeofire(event);
+                    geofireDBHelper.queryAtLocation(event.location,10);
+
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     //do nothing
                 }

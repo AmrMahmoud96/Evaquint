@@ -7,7 +7,8 @@ package com.evaquint.android.utils.code;
 public enum DatabaseValues {
     USER_TABLE ("users", 1),
     CONTACTS_TABLE ("contacts", 2),
-    EVENTS_TABLE ("events", 3);
+    EVENTS_TABLE ("events", 3),
+    GEOFIRE_TABLE("geofire", 4);
 
     private final String name;
     private final int code;
