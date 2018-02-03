@@ -24,11 +24,16 @@ import android.location.Geocoder;
 import android.location.Address;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import com.evaquint.android.R;
 import com.evaquint.android.popups.QuickEventFrag;
+import com.evaquint.android.utils.dataStructures.DetailedEvent;
+import com.evaquint.android.utils.dataStructures.EventDB;
+import com.evaquint.android.utils.database.EventDBHelper;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderApi;
@@ -50,6 +55,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import android.support.v4.app.Fragment;
 
@@ -172,7 +178,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             Log.d("Address held","Address: "+addresses.toString());
 
             FragmentManager fm = getFragmentManager();
-            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address);
+            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address,point);
 
             editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
             editNameDialogFragment.show(fm, "fragment_popup_quick_event");
@@ -329,12 +335,27 @@ if(selfLocation!=null){
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
                     String event_title = bundle.getString("title");
-                    String location = bundle.getString("location");
                     Boolean event_private = bundle.getBoolean("privacy");
-                    Log.d("Title", "Event: "+event_title);
+                    Calendar event_date = (Calendar) bundle.get("event_date");
+                    String address = bundle.getString("address");
+                    LatLng location = new LatLng(bundle.getDouble("latitude"),bundle.getDouble("longitude"));
+                 /*   Log.d("Title", "Event: "+event_title);
                     Log.d("Title", "Location: "+location);
-                    Log.d("Title", "Privacy: "+event_private);
-
+                    Log.d("Title", "Privacy: "+event_private);*/
+                    com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    EventDB event = new EventDB(event_title,user.getUid(),event_date,address,location,event_private, null,Arrays.asList(""), new DetailedEvent());
+                    EventDBHelper eventDBHelper = new EventDBHelper();
+                    eventDBHelper.addEvent(event);
+                    /* String eventTitle,
+                   String eventHost,
+                   Calendar eventDate,
+                   String address,
+                   LatLng location,
+                   boolean eventPrivate,
+                   List<String> invited,
+                   List<String> attendees,
+                   DetailedEvent details
+*/
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     //do nothing
                 }

@@ -31,6 +31,7 @@ import java.text.DateFormat;
 import com.evaquint.android.MapActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.fragments.map.EventLocatorFrag;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.sql.Time;
 
@@ -62,10 +63,12 @@ public class QuickEventFrag extends DialogFragment {
         // Use `newInstance` instead as shown below
     }
 
-    public static QuickEventFrag newInstance(String address) {
+    public static QuickEventFrag newInstance(String address, LatLng location) {
         QuickEventFrag frag = new QuickEventFrag();
         Bundle args = new Bundle();
         args.putString("address", address);
+        args.putDouble("latitude", location.latitude);
+        args.putDouble("longitude",location.longitude);
         frag.setArguments(args);
         return frag;
     }
@@ -174,14 +177,17 @@ public class QuickEventFrag extends DialogFragment {
     }
     public void pullFields(){
         String event_title = mEventTitle.getText().toString().trim();
-        String location = mLocationText.getText().toString().trim();
+        //String location = mLocationText.getText().toString().trim();
         Boolean event_private = mPrivateSwitch.isChecked();
        // Boolean event_mult_day = mMultiDaySwitch.isChecked();
         //MapActivity.setFocusToView(getView().findViewById();
         Intent i = new Intent()
                 .putExtra("title", event_title)
-                .putExtra("location", location)
-                .putExtra("privacy", event_private);
+                .putExtra("privacy", event_private)
+                .putExtra("event_date",dateSelected)
+                .putExtra("address", getArguments().getString("address"))
+                .putExtra("latitude", getArguments().getDouble("latitude"))
+                .putExtra("longitude", getArguments().getDouble("longitude"));
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
     }
