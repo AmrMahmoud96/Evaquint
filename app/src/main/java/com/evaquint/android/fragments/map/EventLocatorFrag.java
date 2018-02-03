@@ -96,7 +96,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         @Override
         public View getInfoContents(Marker marker) {
             //initialize the box
-          //  TextView test = ((TextView)myContentsView.findViewById(R.id.title));
+            TextView test = ((TextView)myContentsView.findViewById(R.id.title));
+            test.setText(marker.getTag().toString());
         //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
             return myContentsView;
         }
@@ -258,7 +259,7 @@ if(selfLocation!=null){
                     .position(new LatLng(location.latitude,location.longitude))
                     .title(key)
                     .snippet(key)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).setTag(key);
         }
 
         @Override
