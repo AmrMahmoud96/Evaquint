@@ -97,9 +97,19 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         public View getInfoContents(Marker marker) {
             //initialize the box
             EventDBHelper eventDBHelper = new EventDBHelper();
-            eventDBHelper.retreiveEvent(marker.getTag().toString());
+
+            //Log.i("data2: ", marker.getTag().toString());
+           EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
+           EventDB event2 = eventDBHelper.getEvent();
+           if(event ==null){
+               Log.i("event: " , "no");
+           }
+           if(event2 ==null){
+               Log.i("wrong "," time");
+           }
             TextView test = ((TextView)myContentsView.findViewById(R.id.title));
-            test.setText(marker.getTag().toString());
+//            test.setText(event.eventTitle);
+
         //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
             return myContentsView;
         }
@@ -190,6 +200,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
             editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
             editNameDialogFragment.show(fm, "fragment_popup_quick_event");
+            //relocate this and add the set tag to it the event id
             mMap.addMarker(new MarkerOptions()
                     .position(point)
                     .title("")
@@ -257,11 +268,13 @@ if(selfLocation!=null){
     surroundingEvents.addGeoQueryEventListener(new GeoQueryEventListener() {
         @Override
         public void onKeyEntered(String key, GeoLocation location) {
-            mMap.addMarker(new MarkerOptions()
+           Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.latitude,location.longitude))
                     .title(key)
                     .snippet(key)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).setTag(key);
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+           marker.setTag(key);
+            Log.i("data: ", marker.getTag().toString());
         }
 
         @Override

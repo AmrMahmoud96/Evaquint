@@ -2,6 +2,7 @@ package com.evaquint.android.utils.dataStructures;
 
 import java.sql.Time;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,8 +19,7 @@ public class DetailedEvent {
     public List<String> pictures;
     public int capacity;
     public boolean mult_day;
-    public List<Date> eventDates;
-    public List<Time> eventTimes;
+    public List<Calendar> eventDates;
 
         public DetailedEvent(String description,
                  int ageRestriction,
@@ -27,12 +27,10 @@ public class DetailedEvent {
                  List<String> pictures,
                  int capacity,
                  boolean mult_day,
-                 List<Date> eventDates,
-                 List<Time> eventTimes) {
+                 List<Calendar> eventDates) {
             this.description = description;
             this.mult_day=mult_day;
             this.eventDates = eventDates;
-            this.eventTimes = eventTimes;
             this.ageRestriction=ageRestriction;
             this.QRCodes = QRCodes;
             this.pictures=pictures;
@@ -41,7 +39,6 @@ public class DetailedEvent {
         public DetailedEvent(){
             this.description = "";
             this.mult_day = false;
-            this.eventTimes = null;
             this.eventDates = null;
             this.capacity= 9999;
             this.pictures = Arrays.asList("default");
