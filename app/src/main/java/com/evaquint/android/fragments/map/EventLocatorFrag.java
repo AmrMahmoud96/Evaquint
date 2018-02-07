@@ -96,21 +96,24 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         @Override
         public View getInfoContents(Marker marker) {
             //initialize the box
-            EventDBHelper eventDBHelper = new EventDBHelper();
 
-            //Log.i("data2: ", marker.getTag().toString());
-           EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
-           EventDB event2 = eventDBHelper.getEvent();
-           if(event ==null){
-               Log.i("event: " , "no");
-           }
-           if(event2 ==null){
-               Log.i("wrong "," time");
-           }
-            TextView test = ((TextView)myContentsView.findViewById(R.id.title));
+if(marker.getTag()!=null){
+    EventDBHelper eventDBHelper = new EventDBHelper();
+    //Log.i("data2: ", marker.getTag().toString());
+    EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
+    EventDB event2 = eventDBHelper.getEvent();
+    if(event ==null){
+        Log.i("event: " , "no");
+    }
+    if(event2 ==null){
+        Log.i("wrong "," time");
+    }
+    TextView test = ((TextView)myContentsView.findViewById(R.id.title));
 //            test.setText(event.eventTitle);
 
-        //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
+    //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
+}
+
             return myContentsView;
         }
     }
@@ -399,9 +402,10 @@ if(selfLocation!=null){
                     EventDB event = new EventDB(event_title,user.getUid(),event_date,address,location,event_private, null,Arrays.asList(""), new DetailedEvent());
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
+                    Log.i("event to add: ", event.toString());
                     eventDBHelper.addEvent(event);
                     geofireDBHelper.addEventToGeofire(event);
-                    geofireDBHelper.queryAtLocation(event.location,10);
+                   // geofireDBHelper.queryAtLocation(event.location,10);
 
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     //do nothing

@@ -13,13 +13,13 @@ import java.util.List;
 public class DetailedEvent {
     //Description, age restriction, QR code, pictures, capacity, multiple-day events > dates, time periods for the event 
 
-        public String description;
-        public int ageRestriction;
-    public List<String> QRCodes;
-    public List<String> pictures;
-    public int capacity;
-    public boolean mult_day;
-    public List<Calendar> eventDates;
+       private String description;
+        private int ageRestriction;
+   private List<String> QRCodes;
+    private List<String> pictures;
+    private int capacity;
+    private boolean mult_day;
+    private List<Calendar> eventDates;
 
         public DetailedEvent(String description,
                  int ageRestriction,
@@ -45,6 +45,27 @@ public class DetailedEvent {
             this.QRCodes = null;
             this.ageRestriction = 0;
         }
+    public String getDescription(){
+        return description;
+    }
+    public int getAgeRestriction(){
+        return ageRestriction;
+    }
+    public List<String> getPictures(){
+        return pictures;
+    }
+    public List<String> getQRCodes(){
+        return QRCodes;
+    }
+    public int getCapacity(){
+        return capacity;
+    }
+    public List<Calendar> getEventDates(){
+        return eventDates;
+    }
+    public boolean isMult_day(){
+        return mult_day;
+    }
 
 
 }
