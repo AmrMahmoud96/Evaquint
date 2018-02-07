@@ -57,7 +57,7 @@ public class EventDBHelper {
         //need to check if event ID exists in event db first
             if(!eventID.isEmpty()&&eventID!=null){
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID);
-            ref.addValueEventListener(new ValueEventListener() {
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
