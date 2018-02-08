@@ -203,11 +203,6 @@ if(marker.getTag()!=null){
 
             editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
             editNameDialogFragment.show(fm, "fragment_popup_quick_event");
-            //relocate this and add the set tag to it the event id
-            mMap.addMarker(new MarkerOptions()
-                    .position(point)
-                    .title("")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -405,6 +400,12 @@ if(selfLocation!=null){
                     Log.i("event to add: ", event.toString());
                     eventDBHelper.addEvent(event);
                     geofireDBHelper.addEventToGeofire(event);
+
+                    //relocate this and add the set tag to it the event id
+                    mMap.addMarker(new MarkerOptions()
+                            .position(location)
+                            .title("")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).setTag(event_title);
                    // geofireDBHelper.queryAtLocation(event.location,10);
 
                 } else if (resultCode == Activity.RESULT_CANCELED) {
