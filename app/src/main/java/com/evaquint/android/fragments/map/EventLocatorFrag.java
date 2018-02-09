@@ -408,6 +408,7 @@ if(selfLocation!=null){
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).setTag(event_title);
                    // geofireDBHelper.queryAtLocation(event.location,10);
 
+
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     //do nothing
                 }

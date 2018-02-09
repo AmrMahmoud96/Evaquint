@@ -65,6 +65,7 @@ public class GeofireDBHelper {
 
             }
         });
+        geoQuery.removeAllListeners();
       //  geoQuery.
         return geoQuery;
     }
