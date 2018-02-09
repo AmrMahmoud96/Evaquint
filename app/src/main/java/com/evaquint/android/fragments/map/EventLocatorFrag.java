@@ -295,6 +295,7 @@ if(selfLocation!=null){
 
         }
     });
+    surroundingEvents.removeAllListeners();
 }
 
     }
