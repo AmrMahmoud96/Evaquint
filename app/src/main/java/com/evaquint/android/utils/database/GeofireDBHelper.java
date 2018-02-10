@@ -38,6 +38,7 @@ public class GeofireDBHelper {
 
     public GeoQuery queryAtLocation(LatLng location, int radius){
         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(location.latitude, location.longitude), radius);
+//        Log.d("here","me "+geoQuery.getCenter().latitude + " "+geoQuery.getCenter().longitude );
 //        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
 //            @Override
 //            public void onKeyEntered(String key, GeoLocation location) {
@@ -57,16 +58,17 @@ public class GeofireDBHelper {
 //
 //            @Override
 //            public void onGeoQueryReady() {
-//
+//                Log.d("ready","redy ");
 //            }
 //
 //            @Override
 //            public void onGeoQueryError(DatabaseError error) {
-//
+//                Log.d("error", error.getMessage());
 //            }
 //        });
-//        geoQuery.removeAllListeners();
-      //  geoQuery.
+//        Log.d("here","me 2");
+        //geoQuery.removeAllListeners();
+//        geoQuery.
         return geoQuery;
     }
 /*

@@ -45,7 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Time"
         android:inputType="date"
@@ -66,9 +67,13 @@
         android:id="@+id/calendarBtn"
         android:layout_width="39dp"
         android:layout_height="33dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/event_time"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="@+id/event_time"
         app:layout_constraintTop_toTopOf="@+id/event_time"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_date_range_black_24dp" />
 
 

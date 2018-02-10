@@ -263,7 +263,7 @@ if(selfLocation!=null){
     CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
     mMap.animateCamera(update);
     GeofireDBHelper helper = new GeofireDBHelper();
-    GeoQuery surroundingEvents = helper.queryAtLocation(selfLoc,10);
+    final GeoQuery surroundingEvents = helper.queryAtLocation(selfLoc,10);
     surroundingEvents.addGeoQueryEventListener(new GeoQueryEventListener() {
         @Override
         public void onKeyEntered(String key, GeoLocation location) {
@@ -274,6 +274,7 @@ if(selfLocation!=null){
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
            marker.setTag(key);
             Log.i("data: ", marker.getTag().toString());
+
         }
 
         @Override
@@ -288,7 +289,7 @@ if(selfLocation!=null){
 
         @Override
         public void onGeoQueryReady() {
-
+            surroundingEvents.removeAllListeners();
         }
 
         @Override
@@ -296,7 +297,7 @@ if(selfLocation!=null){
 
         }
     });
-    surroundingEvents.removeAllListeners();
+//    surroundingEvents.removeAllListeners();
 }
 
     }
@@ -402,6 +403,7 @@ if(selfLocation!=null){
                     Log.i("event to add: ", event.toString());
                     eventDBHelper.addEvent(event);
                     geofireDBHelper.addEventToGeofire(event);
+                    eventDBHelper.addTestEvent("test",event);
 
                     //relocate this and add the set tag to it the event id
                     mMap.addMarker(new MarkerOptions()
