@@ -26,7 +26,7 @@ public class UserDBHelper {
     }
 
     public void addUser(FirebaseUser fUser) {
-        dbConnector.writeToDB(fUser.getUid(), new UserDB(fUser.getDisplayName().split(" ")[0], fUser.getDisplayName().split(" ")[1],"default", fUser.getEmail(),"6476731234", new ArrayList<String>(),df.format(Calendar.getInstance().getTime()) ));
+        dbConnector.writeToDB(fUser.getUid(), new UserDB(fUser.getDisplayName().split(" ")[0], fUser.getDisplayName().split(" ")[1],"default", fUser.getEmail(),"6476731234", new ArrayList<String>(),df.format(Calendar.getInstance().getTime()),  new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>()));
     }
 
     public void addUser(String uid, UserDB user) {
