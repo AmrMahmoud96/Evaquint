@@ -29,7 +29,7 @@ public class UserDBHelper {
     SimpleDateFormat df;
 
     public UserDBHelper() {
-         dbConnector = new DBConnector(USER_TABLE);
+        dbConnector = new DBConnector(USER_TABLE);
         df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
     }
 
