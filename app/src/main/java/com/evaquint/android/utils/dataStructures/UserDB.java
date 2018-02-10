@@ -16,13 +16,34 @@ public class UserDB {
     private String firstName;
     private String lastName;
     private String picture;
+    private int hostRating;
+    private int raters;
     private List<String> interests;
     private List<String> eventsHosted;
     private List<String> eventsAttending;
     private String dateCreated;
 
-    public UserDB(String firstName, String lastName, String picture, String email, String phone, List<String> interests, String dateCreated, List<String> eventsAttending, List<String>eventsHosted,List<String>friends) {
+    public int getHostRating() {
+        return hostRating;
+    }
+
+    public void setHostRating(int hostRating) {
+        this.hostRating = hostRating;
+    }
+
+    public int getRaters() {
+        return raters;
+    }
+
+    public void setRaters(int raters) {
+        this.raters = raters;
+    }
+
+    public UserDB(String firstName, String lastName, String picture, String email, String phone, List<String> interests, String dateCreated, List<String> eventsAttending, List<String>eventsHosted, List<String>friends, int hostRating, int raters) {
         this.firstName =firstName;
+        this.raters=raters;
+        this.hostRating = hostRating;
+
         this.friends=friends;
         this.lastName = lastName;
         this.eventsHosted = eventsHosted;
