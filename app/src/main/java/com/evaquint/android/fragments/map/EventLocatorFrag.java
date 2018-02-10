@@ -66,25 +66,28 @@ import com.google.firebase.database.DatabaseError;
 import android.support.v4.app.Fragment;
 
 import static android.content.ContentValues.TAG;
+import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMapLongClickListener {
 
-     public String mTitle;
+    public String mTitle;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private View view;
     private Activity a;
     private PlaceAutocompleteFragment googlePlacesSearchBarFrag;
-//    private GeoDataClient mGeoDataClient;
+
+    //    private GeoDataClient mGeoDataClient;
 //    private PlaceDetectionClient mPlaceDetectionClient;
 //    private FusedLocationProviderClient mFusedLocationProviderClient;
-    class EventPreviewWindow implements GoogleMap.InfoWindowAdapter{
+    class EventPreviewWindow implements GoogleMap.InfoWindowAdapter {
 
         private View myContentsView;
-        public EventPreviewWindow(){
+
+        public EventPreviewWindow() {
             //inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
             myContentsView = getLayoutInflater().inflate(R.layout.event_preview_window, null);
         }
@@ -98,22 +101,22 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         public View getInfoContents(Marker marker) {
             //initialize the box
 
-if(marker.getTag()!=null){
-    EventDBHelper eventDBHelper = new EventDBHelper();
-    //Log.i("data2: ", marker.getTag().toString());
-    EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
-    EventDB event2 = eventDBHelper.getEvent();
-    if(event ==null){
-        Log.i("event: " , "no");
-    }
-    if(event2 ==null){
-        Log.i("wrong "," time");
-    }
-    TextView test = ((TextView)myContentsView.findViewById(R.id.title));
+            if (marker.getTag() != null) {
+                EventDBHelper eventDBHelper = new EventDBHelper();
+                //Log.i("data2: ", marker.getTag().toString());
+                EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
+                EventDB event2 = eventDBHelper.getEvent();
+                if (event == null) {
+                    Log.i("event: ", "no");
+                }
+                if (event2 == null) {
+                    Log.i("wrong ", " time");
+                }
+                TextView test = ((TextView) myContentsView.findViewById(R.id.title));
 //            test.setText(event.eventTitle);
 
-    //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
-}
+                //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
+            }
 
             return myContentsView;
         }
@@ -138,16 +141,14 @@ if(marker.getTag()!=null){
         googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Log.i(TAG,"Place: "+place.getName());
+                Log.i(TAG, "Place: " + place.getName());
             }
 
             @Override
             public void onError(Status status) {
-                Log.i(TAG,"error: "+status);
+                Log.i(TAG, "error: " + status);
             }
         });
-
-
 
 
         //        mGeoDataClient = Places.getGeoDataClient(this,null);
@@ -185,7 +186,6 @@ if(marker.getTag()!=null){
     }
 
 
-
     @Override
     public void onMapLongClick(LatLng point) {
 
@@ -194,20 +194,22 @@ if(marker.getTag()!=null){
 
         geocoder = new Geocoder(this.getContext(), Locale.getDefault());
 
-        try {
-            addresses = geocoder.getFromLocation(point.latitude,point.longitude,1);
-            String address = addresses.get(0).getAddressLine(0);
-            Log.d("Address held","Address: "+addresses.toString());
-
-            FragmentManager fm = getFragmentManager();
-            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address,point);
-
-            editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
-            editNameDialogFragment.show(fm, "fragment_popup_quick_event");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        pickImages();
+//        try {
+//
+//            addresses = geocoder.getFromLocation(point.latitude, point.longitude, 1);
+//            String address = addresses.get(0).getAddressLine(0);
+//            Log.d("Address held", "Address: " + addresses.toString());
+//
+//            FragmentManager fm = getFragmentManager();
+//            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, point);
+//
+//            editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
+//            editNameDialogFragment.show(fm, "fragment_popup_quick_event");
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
     }
@@ -247,7 +249,8 @@ if(marker.getTag()!=null){
         initOverlay();
 
     }
-    public void goToCurrentLocation(){
+
+    public void goToCurrentLocation() {
         LocationManager locationManager =
                 (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
 
@@ -257,48 +260,48 @@ if(marker.getTag()!=null){
 
         Location selfLocation = locationManager
                 .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-if(selfLocation!=null){
-    //Move the map to the user's location
-    LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
-    CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
-    mMap.animateCamera(update);
-    GeofireDBHelper helper = new GeofireDBHelper();
-    final GeoQuery surroundingEvents = helper.queryAtLocation(selfLoc,10);
-    surroundingEvents.addGeoQueryEventListener(new GeoQueryEventListener() {
-        @Override
-        public void onKeyEntered(String key, GeoLocation location) {
-           Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(location.latitude,location.longitude))
-                    .title(key)
-                    .snippet(key)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-           marker.setTag(key);
-            Log.i("data: ", marker.getTag().toString());
+        if (selfLocation != null) {
+            //Move the map to the user's location
+            LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
+            mMap.animateCamera(update);
+            GeofireDBHelper helper = new GeofireDBHelper();
+            final GeoQuery surroundingEvents = helper.queryAtLocation(selfLoc, 10);
+            surroundingEvents.addGeoQueryEventListener(new GeoQueryEventListener() {
+                @Override
+                public void onKeyEntered(String key, GeoLocation location) {
+                    Marker marker = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(location.latitude, location.longitude))
+                            .title(key)
+                            .snippet(key)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    marker.setTag(key);
+                    Log.i("data: ", marker.getTag().toString());
 
-        }
+                }
 
-        @Override
-        public void onKeyExited(String key) {
+                @Override
+                public void onKeyExited(String key) {
 
-        }
+                }
 
-        @Override
-        public void onKeyMoved(String key, GeoLocation location) {
+                @Override
+                public void onKeyMoved(String key, GeoLocation location) {
 
-        }
+                }
 
-        @Override
-        public void onGeoQueryReady() {
-            surroundingEvents.removeAllListeners();
-        }
+                @Override
+                public void onGeoQueryReady() {
+                    surroundingEvents.removeAllListeners();
+                }
 
-        @Override
-        public void onGeoQueryError(DatabaseError error) {
+                @Override
+                public void onGeoQueryError(DatabaseError error) {
 
-        }
-    });
+                }
+            });
 //    surroundingEvents.removeAllListeners();
-}
+        }
 
     }
 
@@ -392,25 +395,25 @@ if(selfLocation!=null){
                     Boolean event_private = bundle.getBoolean("privacy");
                     Calendar event_date = (Calendar) bundle.get("event_date");
                     String address = bundle.getString("address");
-                    LatLng location = new LatLng(bundle.getDouble("latitude"),bundle.getDouble("longitude"));
+                    LatLng location = new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
                  /*   Log.d("Title", "Event: "+event_title);
                     Log.d("Title", "Location: "+location);
                     Log.d("Title", "Privacy: "+event_private);*/
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    EventDB event = new EventDB(event_title,user.getUid(),event_date,address,location,new ArrayList<String>(),event_private, null,Arrays.asList(""), new DetailedEvent());
+                    EventDB event = new EventDB(event_title, user.getUid(), event_date, address, location, new ArrayList<String>(), event_private, null, Arrays.asList(""), new DetailedEvent());
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
                     Log.i("event to add: ", event.toString());
                     eventDBHelper.addEvent(event);
                     geofireDBHelper.addEventToGeofire(event);
-                    eventDBHelper.addTestEvent("test",event);
+                    eventDBHelper.addTestEvent("test", event);
 
                     //relocate this and add the set tag to it the event id
                     mMap.addMarker(new MarkerOptions()
                             .position(location)
                             .title("")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).setTag(event_title);
-                   // geofireDBHelper.queryAtLocation(event.location,10);
+                    // geofireDBHelper.queryAtLocation(event.location,10);
 
 
                 } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -429,7 +432,7 @@ if(selfLocation!=null){
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        initOverlay();
+                    initOverlay();
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                 } else {
@@ -445,5 +448,14 @@ if(selfLocation!=null){
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    public void pickImages() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        getActivity().startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+//        getDialog().dismiss();
     }
 }

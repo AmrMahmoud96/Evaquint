@@ -1,39 +1,32 @@
 package com.evaquint.android.popups;
 import android.app.Activity;
 import android.app.TimePickerDialog;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import java.util.Date;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 import  android.widget.TimePicker;
-import android.app.TimePickerDialog;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-
-import com.evaquint.android.MapActivity;
 import com.evaquint.android.R;
-import com.evaquint.android.fragments.map.EventLocatorFrag;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.sql.Time;
+import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 
 /**
  * Created by henry on 11/27/2017.
@@ -45,6 +38,7 @@ public class QuickEventFrag extends DialogFragment {
     private TextView mLocationText;
     private TextView mTimeText;
     private EditText mEventTitle;
+    private ImageView mEventPicture;
     private Switch mPrivateSwitch;
     private ImageView mCalendarBtn;
   //  private CheckBox mMultiDaySwitch;
@@ -99,21 +93,35 @@ public class QuickEventFrag extends DialogFragment {
         String address = getArguments().getString("address");
         mLocationText.setText(address);
         mCalendarBtn = (ImageView) view.findViewById(R.id.calendarBtn);
+        mEventPicture = (ImageView) view.findViewById(R.id.eventImageBtn);
      //   mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
 
         dateSelected = Calendar.getInstance();
         df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
 
+        mEventPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickImages();
+            }
+        });
 
         mCalendarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //inflate calendar.
                 Log.w("ContentValues","Calendar Clicked.");
-                pickDate();
+//                pickDate();
+                pickImages();
             }
         });
-
+        mEventPicture.setOnClickListener(new View.OnClickListener() {
+                                             @Override
+                                             public void onClick(View view) {
+                                                  //  chooseImage();
+                                             }
+                                         }
+        );
         mCreateEventButton = (Button) view.findViewById(R.id.create_event_btn);
 
         mCreateEventButton.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +133,15 @@ public class QuickEventFrag extends DialogFragment {
         });
 
     }
+
+    public void pickImages(){
+        Intent intent = new Intent(); intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        getActivity().startActivityForResult(Intent.createChooser(intent,"Select Picture"),PICK_IMAGE_REQUEST);
+//        getDialog().dismiss();
+    }
+
     public void pickDate(){
         Calendar newCalendar = dateSelected;
         datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
@@ -190,5 +207,11 @@ public class QuickEventFrag extends DialogFragment {
                 .putExtra("longitude", getArguments().getDouble("longitude"));
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }
