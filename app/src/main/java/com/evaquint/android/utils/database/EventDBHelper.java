@@ -73,6 +73,7 @@ public class EventDBHelper {
                         List<String> invited =  dataSnapshot.child("invited").getValue(t);
                         List<String> attendees = dataSnapshot.child("invited").getValue(t);
                         DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
+                        List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
                         /*Log.i("be2: ",""+details1.isMult_day() );
                         Log.i("be: ", details1.getPictures().toString());
                         String desc = dataSnapshot.child("details").child("description").getValue(String.class);
@@ -98,7 +99,7 @@ public class EventDBHelper {
                         }*/
 
 
-                        EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,eventPrivate,invited,attendees,details);
+                        EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,categorizations,eventPrivate,invited,attendees,details);
 
                         setEvent(event);
                     }

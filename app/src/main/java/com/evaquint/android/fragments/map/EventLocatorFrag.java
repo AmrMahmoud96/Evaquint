@@ -24,6 +24,7 @@ import android.location.Geocoder;
 import android.location.Address;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -394,7 +395,7 @@ if(selfLocation!=null){
                     Log.d("Title", "Location: "+location);
                     Log.d("Title", "Privacy: "+event_private);*/
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    EventDB event = new EventDB(event_title,user.getUid(),event_date,address,location,event_private, null,Arrays.asList(""), new DetailedEvent());
+                    EventDB event = new EventDB(event_title,user.getUid(),event_date,address,location,new ArrayList<String>(),event_private, null,Arrays.asList(""), new DetailedEvent());
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
                     Log.i("event to add: ", event.toString());

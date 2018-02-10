@@ -19,6 +19,7 @@ public class EventDB {
     public String eventTitle;
     public String eventHost;
     public LatLng location;
+    public List<String> categorizations;
     public String address;
     public Calendar eventDate;
     public boolean eventPrivate;
@@ -31,11 +32,13 @@ public class EventDB {
                    Calendar eventDate,
                    String address,
                    LatLng location,
+                   List<String> categorizations,
                    boolean eventPrivate,
                    List<String> invited,
                    List<String> attendees,
                    DetailedEvent details) {
         this.eventID  = UUID.randomUUID().toString();
+        this.categorizations=categorizations;
         this.location = location;
         this.address = address;
         this.eventHost = eventHost;
