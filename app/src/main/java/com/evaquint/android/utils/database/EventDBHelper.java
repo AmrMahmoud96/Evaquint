@@ -57,23 +57,23 @@ public class EventDBHelper {
         //need to check if event ID exists in event db first
             if(!eventID.isEmpty()&&eventID!=null){
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID);
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
-                        Log.i("datasnapshot", dataSnapshot.toString());
-                        String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
-                        String eventHost = dataSnapshot.child("eventHost").getValue().toString();
-                        Calendar eventDate = Calendar.getInstance();
-                        eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
-                        String address = dataSnapshot.child("address").getValue().toString();
-                        LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
-                        boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
-                        GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                        List<String> invited =  dataSnapshot.child("invited").getValue(t);
-                        List<String> attendees = dataSnapshot.child("invited").getValue(t);
-                        DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
-                        List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
+              ValueEventListener listener =  new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                            Log.i("datasnapshot", dataSnapshot.toString());
+                            String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
+                            String eventHost = dataSnapshot.child("eventHost").getValue().toString();
+                            Calendar eventDate = Calendar.getInstance();
+                            eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
+                            String address = dataSnapshot.child("address").getValue().toString();
+                            LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
+                            boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
+                            GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                            List<String> invited =  dataSnapshot.child("invited").getValue(t);
+                            List<String> attendees = dataSnapshot.child("invited").getValue(t);
+                            DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
+                            List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
                         /*Log.i("be2: ",""+details1.isMult_day() );
                         Log.i("be: ", details1.getPictures().toString());
                         String desc = dataSnapshot.child("details").child("description").getValue(String.class);
@@ -99,18 +99,19 @@ public class EventDBHelper {
                         }*/
 
 
-                        EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,categorizations,eventPrivate,invited,attendees,details);
+                            EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,categorizations,eventPrivate,invited,attendees,details);
 
-                        setEvent(event);
+                            setEvent(event);
+                        }
+
                     }
 
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w("error: ", "onCancelled", databaseError.toException());
-                }
-            });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("error: ", "onCancelled", databaseError.toException());
+                    }
+                };
+            ref.addListenerForSingleValueEvent(listener);
         }
 
 

@@ -43,7 +43,6 @@ dependencies {
     compile 'com.roughike:bottom-bar:2.3.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.firebase:geofire-android:2.3.0'
     compile 'com.android.support:recyclerview-v7:26.0.2'
     compile 'com.google.firebase:firebase-database:11.2.0'
     compile 'com.google.firebase:firebase-storage:11.2.0'
@@ -52,6 +51,7 @@ dependencies {
     compile 'com.google.firebase:firebase-core:11.2.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.firebase:geofire-android:2.2.0'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
