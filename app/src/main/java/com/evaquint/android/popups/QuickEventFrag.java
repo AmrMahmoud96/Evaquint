@@ -257,12 +257,23 @@ public class QuickEventFrag extends DialogFragment {
                             Log.e("Pick Image Failed With:", e.getMessage());
                         }
                     }
-                }
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && data != null) {
+                    images = new ArrayList();
+                    try {
+                        ImageData imageData = new ImageData();
+                        imageData.uri = data.getData();
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageData.uri);
+                        imageData.icon = Bitmap.createScaledBitmap(bitmap, getPixelsFromDP(50), getPixelsFromDP(50), false);
+                        images.add(imageData);
+                    } catch (Exception e) {
+                        Log.e("Pick Image Failed With:", e.getMessage());
+                    }
                 }
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
         }
+    }
 
     private int getPixelsFromDP(float dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,  Resources.getSystem().getDisplayMetrics());
