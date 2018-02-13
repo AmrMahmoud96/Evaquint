@@ -12,6 +12,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.FileInputStream;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
@@ -21,10 +22,10 @@ import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
  * Created by henry on 2/9/2018.
  */
 
-public class photoUploadHelper {
+public class PhotoUploadHelper {
     FirebaseStorage storage;
     StorageReference storageRef;
-    public photoUploadHelper(){
+    public PhotoUploadHelper(){
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference().child("images");
     }
@@ -33,7 +34,7 @@ public class photoUploadHelper {
 
     }
     public void uploadEventImage(String eventID, Uri filePath){
-       StorageReference ref =  storageRef.child(EVENTS_TABLE.getName()).child(eventID);
+       StorageReference ref =  storageRef.child(EVENTS_TABLE.getName()).child(eventID).child((new File(filePath.toString())).getName());
         if(filePath != null)
         {
 

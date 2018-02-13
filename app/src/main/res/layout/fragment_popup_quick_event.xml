@@ -85,7 +85,7 @@
         android:layout_marginTop="32dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/private_switch"
-        app:srcCompat="@drawable/logo"
+        app:srcCompat="@drawable/ic_add_a_photo_black_24dp"
         tools:layout_editor_absoluteX="16dp" />
 
 

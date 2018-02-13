@@ -79,6 +79,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private View view;
     private Activity a;
     private PlaceAutocompleteFragment googlePlacesSearchBarFrag;
+    private Fragment popupFragment;
 
     //    private GeoDataClient mGeoDataClient;
 //    private PlaceDetectionClient mPlaceDetectionClient;
@@ -194,22 +195,21 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
         geocoder = new Geocoder(this.getContext(), Locale.getDefault());
 
-        pickImages();
-//        try {
-//
-//            addresses = geocoder.getFromLocation(point.latitude, point.longitude, 1);
-//            String address = addresses.get(0).getAddressLine(0);
-//            Log.d("Address held", "Address: " + addresses.toString());
-//
-//            FragmentManager fm = getFragmentManager();
-//            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, point);
-//
-//            editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
-//            editNameDialogFragment.show(fm, "fragment_popup_quick_event");
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            addresses = geocoder.getFromLocation(point.latitude, point.longitude, 1);
+            String address = addresses.get(0).getAddressLine(0);
+            Log.d("Address held", "Address: " + addresses.toString());
+
+            FragmentManager fm = getFragmentManager();
+            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, point);
+            popupFragment = editNameDialogFragment;
+
+            editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
+            editNameDialogFragment.show(fm, "fragment_popup_quick_event");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -420,6 +420,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     //do nothing
                 }
                 break;
+            case PICK_IMAGE_REQUEST:
+                popupFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -450,12 +452,4 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    public void pickImages() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        getActivity().startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-//        getDialog().dismiss();
-    }
 }

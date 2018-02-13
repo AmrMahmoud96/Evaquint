@@ -1,22 +1,32 @@
 package com.evaquint.android.popups;
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.ClipData;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
@@ -24,9 +34,18 @@ import  android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.evaquint.android.R;
+import com.evaquint.android.utils.storage.PhotoUploadHelper;
+import com.facebook.internal.Logger;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
+import static com.evaquint.android.utils.code.IntentValues.PLACE_AUTOCOMPLETE_REQUEST_CODE;
 
 /**
  * Created by henry on 11/27/2017.
@@ -44,12 +63,17 @@ public class QuickEventFrag extends DialogFragment {
   //  private CheckBox mMultiDaySwitch;
     private Button mCreateEventButton;
     private Calendar dateSelected;
+    private ArrayList<ImageData> images;
     SimpleDateFormat df;
     int mHour,mMinute;
     private DatePickerDialog datePickerDialog;
 
     final Calendar c = Calendar.getInstance();
 
+    private class ImageData {
+        public Bitmap icon;
+        public Uri uri;
+    }
 
     public QuickEventFrag() {
         // Empty constructor is required for DialogFragment
@@ -111,23 +135,17 @@ public class QuickEventFrag extends DialogFragment {
             public void onClick(View view) {
                 //inflate calendar.
                 Log.w("ContentValues","Calendar Clicked.");
-//                pickDate();
-                pickImages();
+                pickDate();
+//                pickImages();
             }
         });
-        mEventPicture.setOnClickListener(new View.OnClickListener() {
-                                             @Override
-                                             public void onClick(View view) {
-                                                  //  chooseImage();
-                                             }
-                                         }
-        );
         mCreateEventButton = (Button) view.findViewById(R.id.create_event_btn);
 
         mCreateEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pullFields();
+                uploadData();
                 dismiss();
             }
         });
@@ -138,7 +156,7 @@ public class QuickEventFrag extends DialogFragment {
         Intent intent = new Intent(); intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        getActivity().startActivityForResult(Intent.createChooser(intent,"Select Picture"),PICK_IMAGE_REQUEST);
+        getTargetFragment().startActivityForResult(Intent.createChooser(intent,"Select Picture"),PICK_IMAGE_REQUEST);
 //        getDialog().dismiss();
     }
 
@@ -205,13 +223,49 @@ public class QuickEventFrag extends DialogFragment {
                 .putExtra("address", getArguments().getString("address"))
                 .putExtra("latitude", getArguments().getDouble("latitude"))
                 .putExtra("longitude", getArguments().getDouble("longitude"));
-        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
+    }
+
+    public void uploadData(){
+        PhotoUploadHelper puh = new PhotoUploadHelper();
+        for (ImageData image : images) {
+            puh.uploadEventImage(
+                    ((EditText)getView().findViewById(R.id.event_title_field)).getText().toString()
+                    , image.uri);
+        }
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && data.getClipData() != null) {
+                    int numberOfImages = data.getClipData().getItemCount();
+                    images = new ArrayList();
+                    for (int i = 0; i < numberOfImages; i++) {
+                        try {
+                            ImageData imageData = new ImageData();
+                            imageData.uri = data.getClipData().getItemAt(i).getUri();
 
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageData.uri);
+                            imageData.icon = Bitmap.createScaledBitmap(bitmap, getPixelsFromDP(50), getPixelsFromDP(50), false);
+
+                            images.add(imageData);
+                        } catch (Exception e) {
+                            Log.e("Pick Image Failed With:", e.getMessage());
+                        }
+                    }
+                }
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+
+    private int getPixelsFromDP(float dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,  Resources.getSystem().getDisplayMetrics());
     }
+
 }
