@@ -78,6 +78,24 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_date_range_black_24dp" />
 
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:scrollbars="none"
+        app:layout_constraintLeft_toRightOf="@+id/eventImageBtn"
+        app:layout_constraintTop_toTopOf="@+id/eventImageBtn"
+        app:layout_constraintBottom_toBottomOf="@+id/eventImageBtn"
+        >
+
+        <LinearLayout
+            android:id="@+id/id_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"></LinearLayout>
+    </HorizontalScrollView>
+
     <ImageView
         android:id="@+id/eventImageBtn"
         android:layout_width="73dp"

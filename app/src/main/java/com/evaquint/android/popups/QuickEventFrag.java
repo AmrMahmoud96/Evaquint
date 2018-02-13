@@ -18,10 +18,12 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -60,6 +62,7 @@ public class QuickEventFrag extends DialogFragment {
     private ImageView mEventPicture;
     private Switch mPrivateSwitch;
     private ImageView mCalendarBtn;
+    private LinearLayout mGalleryView;
   //  private CheckBox mMultiDaySwitch;
     private Button mCreateEventButton;
     private Calendar dateSelected;
@@ -113,6 +116,7 @@ public class QuickEventFrag extends DialogFragment {
         mTimeText = (TextView) view.findViewById(R.id.event_time);
         mEventTitle = (EditText) view.findViewById(R.id.event_title_field);
         mPrivateSwitch = (Switch) view.findViewById(R.id.private_switch);
+        mGalleryView = (LinearLayout) view.findViewById(R.id.id_gallery);
         // Fetch arguments from bundle and set title
         String address = getArguments().getString("address");
         mLocationText.setText(address);
@@ -244,14 +248,16 @@ public class QuickEventFrag extends DialogFragment {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && data.getClipData() != null) {
                     int numberOfImages = data.getClipData().getItemCount();
                     images = new ArrayList();
+                    mGalleryView.removeAllViews();
                     for (int i = 0; i < numberOfImages; i++) {
                         try {
                             ImageData imageData = new ImageData();
                             imageData.uri = data.getClipData().getItemAt(i).getUri();
 
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageData.uri);
-                            imageData.icon = Bitmap.createScaledBitmap(bitmap, getPixelsFromDP(50), getPixelsFromDP(50), false);
+                            imageData.icon = Bitmap.createScaledBitmap(bitmap, getPixelsFromDP(75), getPixelsFromDP(75), false);
 
+                            addView(imageData.icon);
                             images.add(imageData);
                         } catch (Exception e) {
                             Log.e("Pick Image Failed With:", e.getMessage());
@@ -259,20 +265,33 @@ public class QuickEventFrag extends DialogFragment {
                     }
                 } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && data != null) {
                     images = new ArrayList();
+                    mGalleryView.removeAllViews();
                     try {
                         ImageData imageData = new ImageData();
                         imageData.uri = data.getData();
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageData.uri);
-                        imageData.icon = Bitmap.createScaledBitmap(bitmap, getPixelsFromDP(50), getPixelsFromDP(50), false);
+                        imageData.icon = Bitmap.createScaledBitmap(bitmap, getPixelsFromDP(75), getPixelsFromDP(75), false);
+
+                        addView(imageData.icon);
                         images.add(imageData);
                     } catch (Exception e) {
                         Log.e("Pick Image Failed With:", e.getMessage());
                     }
                 }
+
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
         }
+    }
+
+    private void addView(Bitmap bm) {
+        //ImageView Setup
+        ImageView imageView = new ImageView(getActivity());
+        imageView.setImageBitmap(bm);
+        imageView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT));
+        mGalleryView.addView(imageView);
     }
 
     private int getPixelsFromDP(float dp) {
