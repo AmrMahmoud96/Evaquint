@@ -1,6 +1,7 @@
 package com.evaquint.android.utils.dataStructures;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.sql.Time;
@@ -13,7 +14,7 @@ import java.util.UUID;
  * Created by Amr on 12/01/2017.
  */
 
-@IgnoreExtraProperties
+
 public class EventDB {
     public String eventID;
     public String eventTitle;
