@@ -61,11 +61,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import android.support.v4.app.Fragment;
 
 import static android.content.ContentValues.TAG;
+import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
@@ -102,20 +108,28 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         public View getInfoContents(Marker marker) {
             //initialize the box
 
-            if (marker.getTag() != null) {
-                EventDBHelper eventDBHelper = new EventDBHelper();
-                //Log.i("data2: ", marker.getTag().toString());
-                EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
-                EventDB event2 = eventDBHelper.getEvent();
-                if (event == null) {
-                    Log.i("event: ", "no");
-                }
-                if (event2 == null) {
-                    Log.i("wrong ", " time");
-                }
+            if (marker.getTag() != null &&marker.getTag().getClass()!=String.class) {
+                EventDB event = (EventDB) marker.getTag();
+    //EventDB event= null;
                 TextView test = ((TextView) myContentsView.findViewById(R.id.title));
-//            test.setText(event.eventTitle);
+               // EventDBHelper eventDBHelper = new EventDBHelper();
+                //Log.i("data2: ", marker.getTag().toString());
+                //EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
+             //   EventDB event2 = eventDBHelper.getEvent();
+                if (event == null) {
+                    Log.i("event: ","null");
+                    test.setText("");
+                }
+               /* if (event2 == null) {
+                    Log.i("wrong ", " time");
+                }*/
+               else{
+                   Log.i("event2: ", "dog");
 
+                    test.setText(event.eventTitle);
+                    //test.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+                }
+//            test.setText(event.eventTitle);
                 //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
             }
 
@@ -276,6 +290,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                             .snippet(key)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     marker.setTag(key);
+                    stickEventToMarker(marker,key);
                     Log.i("data: ", marker.getTag().toString());
 
                 }
@@ -302,6 +317,86 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             });
 //    surroundingEvents.removeAllListeners();
         }
+
+    }
+    private void stickEventToMarker(final Marker marker, String eventID){
+            //need to check if event ID exists in event db first
+            if(!eventID.isEmpty()&&eventID!=null){
+                Log.i("data: ", "in");
+                Log.i("path ", EVENTS_TABLE.getName()+"/"+eventID);
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID);
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.i("data: ", "out2");
+                        if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                            Log.i("data: ", "out");
+
+                            Log.i("datasnapshot", dataSnapshot.toString());
+                            String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
+                            String eventHost = dataSnapshot.child("eventHost").getValue().toString();
+                            Calendar eventDate = Calendar.getInstance();
+                            eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
+                            String address = dataSnapshot.child("address").getValue().toString();
+                            LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
+                            boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
+                            GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                            List<String> invited =  dataSnapshot.child("invited").getValue(t);
+                            List<String> attendees = dataSnapshot.child("invited").getValue(t);
+                            DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
+                            List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
+
+                            EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,categorizations,eventPrivate,invited,attendees,details);
+                            marker.setTag(event);
+                            Log.i("true: ", marker.getTag().toString());
+
+                            //  setEvent(event);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("error: ", "onCancelled", databaseError.toException());
+
+                    }
+                });
+                ValueEventListener listener =  new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                            Log.i("data: ", "out");
+
+                            Log.i("datasnapshot", dataSnapshot.toString());
+                            String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
+                            String eventHost = dataSnapshot.child("eventHost").getValue().toString();
+                            Calendar eventDate = Calendar.getInstance();
+                            eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
+                            String address = dataSnapshot.child("address").getValue().toString();
+                            LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
+                            boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
+                            GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                            List<String> invited =  dataSnapshot.child("invited").getValue(t);
+                            List<String> attendees = dataSnapshot.child("invited").getValue(t);
+                            DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
+                            List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
+
+                            EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,categorizations,eventPrivate,invited,attendees,details);
+                            marker.setTag(event);
+                            Log.i("true: ", marker.getTag().toString());
+
+                            //  setEvent(event);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("error: ", "onCancelled", databaseError.toException());
+                    }
+                };
+              //  ref.addListenerForSingleValueEvent(listener);
+            }
 
     }
 
@@ -411,8 +506,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     //relocate this and add the set tag to it the event id
                     mMap.addMarker(new MarkerOptions()
                             .position(location)
-                            .title("")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).setTag(event_title);
+                            .title(event_title)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).setTag(event);
                     // geofireDBHelper.queryAtLocation(event.location,10);
 
 

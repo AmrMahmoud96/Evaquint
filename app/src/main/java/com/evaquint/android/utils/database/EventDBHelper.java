@@ -42,6 +42,9 @@ public class EventDBHelper {
 
     public void addEvent(EventDB event) {
         dbConnector.writeToDB(event.eventID,event);
+        Log.i("yoyo", dbConnector.toString());
+
+       // dbConnector.toString();
     }
     public void addTestEvent(String id, EventDB event) {
         dbConnector.writeToDB(id,event);
@@ -65,7 +68,9 @@ public class EventDBHelper {
                             String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
                             String eventHost = dataSnapshot.child("eventHost").getValue().toString();
                             Calendar eventDate = Calendar.getInstance();
-                            eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
+                            if(dataSnapshot.child("eventDate")!=null){
+                                eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
+                            }
                             String address = dataSnapshot.child("address").getValue().toString();
                             LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
                             boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();

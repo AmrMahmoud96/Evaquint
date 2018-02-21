@@ -229,11 +229,14 @@ public class QuickEventFrag extends DialogFragment {
 
     public void uploadData(){
         PhotoUploadHelper puh = new PhotoUploadHelper();
-        for (ImageData image : images) {
-            puh.uploadEventImage(
-                    ((EditText)getView().findViewById(R.id.event_title_field)).getText().toString()
-                    , image.uri);
+        if(images!=null){
+            for (ImageData image : images) {
+                puh.uploadEventImage(
+                        ((EditText)getView().findViewById(R.id.event_title_field)).getText().toString()
+                        , image.uri);
+            }
         }
+
 
     }
 
