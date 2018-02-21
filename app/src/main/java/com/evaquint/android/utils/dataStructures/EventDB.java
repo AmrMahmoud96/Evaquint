@@ -14,7 +14,6 @@ import java.util.UUID;
  * Created by Amr on 12/01/2017.
  */
 
-
 public class EventDB {
     public String eventID;
     public String eventTitle;
@@ -22,15 +21,17 @@ public class EventDB {
     public LatLng location;
     public List<String> categorizations;
     public String address;
-    public Calendar eventDate;
+    public long timeInMillis;
     public boolean eventPrivate;
     public List<String> invited;
     public List<String> attendees;
     public DetailedEvent details;
 
-    public EventDB(String eventTitle,
+    public EventDB(
+                      String eventID,
+                      String eventTitle,
                    String eventHost,
-                   Calendar eventDate,
+                   long timeInMillis,
                    String address,
                    LatLng location,
                    List<String> categorizations,
@@ -38,15 +39,15 @@ public class EventDB {
                    List<String> invited,
                    List<String> attendees,
                    DetailedEvent details) {
-        this.eventID  = UUID.randomUUID().toString();
+        this.eventID  = eventID;
         this.categorizations=categorizations;
+        this.timeInMillis = timeInMillis;
         this.location = location;
         this.address = address;
         this.eventHost = eventHost;
         this.details = details;
         this.invited = invited;
         this.eventTitle = eventTitle;
-        this.eventDate = eventDate;
         this.eventPrivate = eventPrivate;
         this.attendees=attendees;
     }

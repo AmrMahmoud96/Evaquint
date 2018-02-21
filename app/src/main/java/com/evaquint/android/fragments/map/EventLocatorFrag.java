@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import com.evaquint.android.R;
 import com.evaquint.android.popups.QuickEventFrag;
@@ -215,7 +216,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             Log.d("Address held", "Address: " + addresses.toString());
 
             FragmentManager fm = getFragmentManager();
-            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, point);
+            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, point, UUID.randomUUID().toString());
             popupFragment = editNameDialogFragment;
 
             editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
@@ -334,10 +335,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                             Log.i("data: ", "out");
 
                             Log.i("datasnapshot", dataSnapshot.toString());
+                            String eventID = dataSnapshot.child("eventID").getValue().toString();
                             String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
                             String eventHost = dataSnapshot.child("eventHost").getValue().toString();
                             Calendar eventDate = Calendar.getInstance();
-                            eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
+                            eventDate.setTimeInMillis(dataSnapshot.child("timeInMillis").getValue(long.class));
                             String address = dataSnapshot.child("address").getValue().toString();
                             LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
                             boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
@@ -347,7 +349,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                             DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
                             List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
 
-                            EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,categorizations,eventPrivate,invited,attendees,details);
+                            EventDB event = new EventDB(eventID,eventTitle,eventHost,eventDate.getTimeInMillis(),address,location,categorizations,eventPrivate,invited,attendees,details);
                             marker.setTag(event);
                             Log.i("true: ", marker.getTag().toString());
 
@@ -360,7 +362,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                         Log.w("error: ", "onCancelled", databaseError.toException());
 
                     }
-                });
+                });/*
                 ValueEventListener listener =  new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -368,6 +370,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                             Log.i("data: ", "out");
 
                             Log.i("datasnapshot", dataSnapshot.toString());
+                            String Eve
                             String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
                             String eventHost = dataSnapshot.child("eventHost").getValue().toString();
                             Calendar eventDate = Calendar.getInstance();
@@ -394,7 +397,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     public void onCancelled(DatabaseError databaseError) {
                         Log.w("error: ", "onCancelled", databaseError.toException());
                     }
-                };
+                };*/
               //  ref.addListenerForSingleValueEvent(listener);
             }
 
@@ -486,6 +489,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             case QUICK_EVENT_FRAGMENT:
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
+                    String eventID = bundle.getString("eventID");
                     String event_title = bundle.getString("title");
                     Boolean event_private = bundle.getBoolean("privacy");
                     Calendar event_date = (Calendar) bundle.get("event_date");
@@ -495,7 +499,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     Log.d("Title", "Location: "+location);
                     Log.d("Title", "Privacy: "+event_private);*/
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    EventDB event = new EventDB(event_title, user.getUid(), event_date, address, location, new ArrayList<String>(), event_private, null, Arrays.asList(""), new DetailedEvent());
+                    EventDB event = new EventDB(eventID,event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(), event_private, null, Arrays.asList(""), new DetailedEvent());
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
                     Log.i("event to add: ", event.toString());

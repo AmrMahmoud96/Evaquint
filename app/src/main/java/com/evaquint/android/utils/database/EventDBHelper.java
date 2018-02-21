@@ -65,12 +65,11 @@ public class EventDBHelper {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
                             Log.i("datasnapshot", dataSnapshot.toString());
+                            String eventID = dataSnapshot.child("eventID").getValue().toString();
                             String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
                             String eventHost = dataSnapshot.child("eventHost").getValue().toString();
                             Calendar eventDate = Calendar.getInstance();
-                            if(dataSnapshot.child("eventDate")!=null){
-                                eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
-                            }
+                                eventDate.setTimeInMillis(dataSnapshot.child("timeInMillis").getValue(long.class));
                             String address = dataSnapshot.child("address").getValue().toString();
                             LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
                             boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
@@ -104,7 +103,7 @@ public class EventDBHelper {
                         }*/
 
 
-                            EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,categorizations,eventPrivate,invited,attendees,details);
+                            EventDB event = new EventDB(eventID,eventTitle,eventHost,eventDate.getTimeInMillis(),address,location,categorizations,eventPrivate,invited,attendees,details);
 
                             setEvent(event);
                         }

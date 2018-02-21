@@ -84,12 +84,13 @@ public class QuickEventFrag extends DialogFragment {
         // Use `newInstance` instead as shown below
     }
 
-    public static QuickEventFrag newInstance(String address, LatLng location) {
+    public static QuickEventFrag newInstance(String address, LatLng location,String eventID) {
         QuickEventFrag frag = new QuickEventFrag();
         Bundle args = new Bundle();
         args.putString("address", address);
         args.putDouble("latitude", location.latitude);
         args.putDouble("longitude",location.longitude);
+        args.putString("eventID",eventID);
         frag.setArguments(args);
         return frag;
     }
@@ -222,6 +223,7 @@ public class QuickEventFrag extends DialogFragment {
         //MapActivity.setFocusToView(getView().findViewById();
         Intent i = new Intent()
                 .putExtra("title", event_title)
+                .putExtra("eventID",getArguments().getString("eventID"))
                 .putExtra("privacy", event_private)
                 .putExtra("event_date",dateSelected)
                 .putExtra("address", getArguments().getString("address"))
