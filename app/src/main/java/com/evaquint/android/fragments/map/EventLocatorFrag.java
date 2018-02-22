@@ -57,6 +57,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -87,6 +88,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private Activity a;
     private PlaceAutocompleteFragment googlePlacesSearchBarFrag;
     private Fragment popupFragment;
+
 
     //    private GeoDataClient mGeoDataClient;
 //    private PlaceDetectionClient mPlaceDetectionClient;
@@ -289,6 +291,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                             .position(new LatLng(location.latitude, location.longitude))
                             .title(key)
                             .snippet(key)
+                          //  .icon(BitmapDescriptorFactory.fromResource(R.mipmap.soccerball)));
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     marker.setTag(key);
                     stickEventToMarker(marker,key);

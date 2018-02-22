@@ -238,7 +238,7 @@ public class QuickEventFrag extends DialogFragment {
         if(images!=null){
             for (ImageData image : images) {
                 puh.uploadEventImage(
-                        ((EditText)getView().findViewById(R.id.event_title_field)).getText().toString()
+                        getArguments().getString("eventID")
                         , image.uri);
             }
         }
