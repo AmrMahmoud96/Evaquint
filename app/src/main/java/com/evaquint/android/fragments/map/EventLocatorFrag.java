@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.location.Geocoder;
@@ -31,15 +33,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import com.bumptech.glide.Glide;
 import com.evaquint.android.R;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.database.EventDBHelper;
 import com.evaquint.android.utils.database.GeofireDBHelper;
+import com.evaquint.android.utils.storage.PhotoUploadHelper;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderApi;
@@ -62,6 +67,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -112,6 +118,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             //initialize the box
 
             if (marker.getTag() != null &&marker.getTag().getClass()!=String.class) {
+                final ImageView eventPic = (ImageView) myContentsView.findViewById(R.id.eventPic);
+                PhotoUploadHelper photoUploadHelper = new PhotoUploadHelper();
+
                 EventDB event = (EventDB) marker.getTag();
     //EventDB event= null;
                 TextView test = ((TextView) myContentsView.findViewById(R.id.title));
@@ -127,9 +136,21 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     Log.i("wrong ", " time");
                 }*/
                else{
-                   Log.i("event2: ", "dog");
+                   Log.i("event2: ", photoUploadHelper.getStorageRef().getPath()+"/events/"+event.eventID+"/0");
 
                     test.setText(event.eventTitle);
+                                  /*   photoUploadHelper.getStorageRef().child("events").child(event.eventID).child("0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            eventPic.setImageURI(uri);
+                        }
+                    });
+   Glide.with(this.myContentsView.getContext())
+                            .using(new FirebaseImageLoader())
+                            .load(photoUploadHelper.getStorageRef().child("events").child(event.eventID).child("0"))
+                            .into(eventPic);*/
+                    Log.i("event2: ", "doggo");
+
                     //test.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
                 }
 //            test.setText(event.eventTitle);
@@ -514,7 +535,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     mMap.addMarker(new MarkerOptions()
                             .position(location)
                             .title(event_title)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).setTag(event);
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(event);
                     // geofireDBHelper.queryAtLocation(event.location,10);
 
 

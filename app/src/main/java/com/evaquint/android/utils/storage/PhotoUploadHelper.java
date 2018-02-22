@@ -69,6 +69,46 @@ public class PhotoUploadHelper {
                     });
         }
     }
+    public void uploadEventImageAt(String eventID, Uri filePath,int index){
+        StorageReference ref =  storageRef.child(EVENTS_TABLE.getName()).child(eventID).child(""+index);
+        if(filePath != null)
+        {
+
+//            final ProgressDialog progressDialog = new ProgressDialog(this);
+//             progressDialog.setTitle("Uploading...");
+//            progressDialog.show();
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            Log.d("Image upload", "Success");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.d("Image upload", "fail");
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            Log.d("progress", ""+ progress);
+//                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
+    }
+
+    public StorageReference getStorageRef(){
+        return storageRef;
+    }
 
     public void uploadEventImage(String eventID, FileInputStream rawData){
         storageRef.child(EVENTS_TABLE.getName()).child(eventID).putStream(rawData);
