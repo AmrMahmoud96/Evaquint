@@ -145,7 +145,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                             eventPic.setImageURI(uri);
                         }
                     });
-   Glide.with(this.myContentsView.getContext())
+                        Glide.with(getActivity())
                             .using(new FirebaseImageLoader())
                             .load(photoUploadHelper.getStorageRef().child("events").child(event.eventID).child("0"))
                             .into(eventPic);*/
