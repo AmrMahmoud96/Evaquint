@@ -39,8 +39,10 @@ public class UserProfileFrag extends Fragment{
     public void init_page(){
 
         ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
-        Picasso.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl())
-                .into(((ImageView) view.findViewById(R.id.user_profile_image)));
+        if(!mAuth.getCurrentUser().getPhotoUrl().toString().isEmpty()){
+            Picasso.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl())
+                    .into(((ImageView) view.findViewById(R.id.user_profile_image)));
+        }
         ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
         ((TextView) view.findViewById(R.id.userEmail)).setText(mAuth.getCurrentUser().getEmail());
         ((TextView) view.findViewById(R.id.userPhone)).setText(mAuth.getCurrentUser().getPhoneNumber());
