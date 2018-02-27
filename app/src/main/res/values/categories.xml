@@ -17,4 +17,8 @@
         <item>Art</item>
         <item>Other</item>
     </string-array>
+    <string-array name="Music_subcategories">
+        <item>Rock</item>
+        <item>HipHop</item>
+    </string-array>
 </resources>

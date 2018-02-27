@@ -5,35 +5,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.location.Geocoder;
-import android.location.Address;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-
-import com.bumptech.glide.Glide;
 import com.evaquint.android.R;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
@@ -44,30 +33,20 @@ import com.evaquint.android.utils.storage.PhotoUploadHelper;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderApi;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -76,13 +55,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import android.support.v4.app.Fragment;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
-import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMapLongClickListener {
@@ -171,26 +155,28 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             if (parent != null)
                 parent.removeView(view);
         }
-        this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
-        this.a = getActivity();
+        try {
+            this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
+            this.a = getActivity();
 
-        android.support.v4.app.FragmentManager fm = getFragmentManager();
-        googlePlacesSearchBarFrag = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
+            android.support.v4.app.FragmentManager fm = getFragmentManager();
+            googlePlacesSearchBarFrag = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
 
-        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                Log.i(TAG, "Place: " + place.getName());
-            }
+            googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(Place place) {
+                    Log.i(TAG, "Place: " + place.getName());
+                }
 
-            @Override
-            public void onError(Status status) {
-                Log.i(TAG, "error: " + status);
-            }
-        });
+                @Override
+                public void onError(Status status) {
+                    Log.i(TAG, "error: " + status);
+                }
+            });
 
 
-        //        mGeoDataClient = Places.getGeoDataClient(this,null);
+
+            //        mGeoDataClient = Places.getGeoDataClient(this,null);
 //        mPlaceDetectionClient = Places.getPlaceDetectionClient(this,null);
 //        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 //        googlePlacesSearchBarFrag = new SupportPlaceAutocompleteFragment();
@@ -198,28 +184,36 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 //        FragmentTransaction ft = fm.beginTransaction();
 //        ft.add(R.id.map_searchbar_container, googlePlacesSearchBarFrag).commit();
 
-        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        mapFragment.getMapAsync(this);
-        getChildFragmentManager()
-                .beginTransaction()
-                .add(R.id.map_container, mapFragment)
-                .commit();
+            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+            mapFragment.getMapAsync(this);
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.map_container, mapFragment)
+                    .commit();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 //        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
 //                .findFragmentById(R.id.map);
 //
 //        mapFragment.getMapAsync(this);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
+            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Acquire a reference to the system Location Manager
-                initOverlay();
-                goToCurrentLocation();
-            }
-        });
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Acquire a reference to the system Location Manager
+                    initOverlay();
+                    goToCurrentLocation();
+                }
+            });
+
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
+
+
+
+
 
         return this.view;
     }
@@ -289,6 +283,15 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     }
 
     public void goToCurrentLocation() {
+       // String[] categories = getResources().getStringArray(R.array.event_categories);
+       // String search = categories[0]+"_"+"subcategories";
+       // Class<R.array> categories = R.array.event_categories;
+       // Class<R.array> cat = R.array.event_categories;
+
+        //String[] musicSubCategories = getResources();
+       // Log.d("this is cat array",Arrays.toString(categories));
+        //Log.d("this is cat array",Arrays.toString(musicSubCategories));
+
         LocationManager locationManager =
                 (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
 

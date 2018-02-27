@@ -3,7 +3,6 @@ package com.evaquint.android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,20 +17,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.evaquint.android.fragments.FeedFrag;
 import com.evaquint.android.fragments.UserProfileFrag;
 import com.evaquint.android.fragments.map.EventLocatorFrag;
-import com.evaquint.android.fragments.FeedFrag;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
 
 import static android.content.ContentValues.TAG;
-
-import static com.evaquint.android.utils.code.IntentValues.PLACE_AUTOCOMPLETE_REQUEST_CODE;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -90,11 +82,20 @@ public class MainActivity extends AppCompatActivity
     private void initNavHeader(NavigationView navigationView){
         ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_name))
                 .setText(mAuth.getCurrentUser().getDisplayName());
-        ((ImageView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile_picture))
-                .setOnClickListener(new View.OnClickListener() {
+
+        ImageView profileOverview = ((ImageView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile_picture));
+
+        if(mAuth.getCurrentUser().getPhotoUrl()!=null && !mAuth.getCurrentUser().getPhotoUrl().toString().isEmpty()){
+            profileOverview.setImageURI(mAuth.getCurrentUser().getPhotoUrl());
+        }
+
+        profileOverview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         setActiveFragment(getSupportFragmentManager(), new UserProfileFrag());
+                        if (drawer.isDrawerOpen(GravityCompat.START)) {
+                            drawer.closeDrawer(GravityCompat.START);
+                        }
                     }
                 });
     }
