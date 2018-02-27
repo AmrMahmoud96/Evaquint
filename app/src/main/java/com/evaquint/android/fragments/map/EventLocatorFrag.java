@@ -5,11 +5,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -47,6 +52,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,7 +62,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -79,6 +90,23 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private PlaceAutocompleteFragment googlePlacesSearchBarFrag;
     private Fragment popupFragment;
 
+
+    private Bitmap getImageBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            URL aURL = new URL(url);
+            URLConnection conn = aURL.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Error getting bitmap", e);
+        }
+        return bm;
+    }
 
     //    private GeoDataClient mGeoDataClient;
 //    private PlaceDetectionClient mPlaceDetectionClient;
@@ -108,6 +136,45 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 EventDB event = (EventDB) marker.getTag();
     //EventDB event= null;
                 TextView test = ((TextView) myContentsView.findViewById(R.id.title));
+                photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Got the download URL for 'users/me/profile.png'
+
+                        Log.i("downloadurl", uri.toString());
+                       // eventPic.setImageBitmap(getImageBitmap(uri.toString()));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
+                //eventPic.setImageBitmap(getImageBitmap("https://firebasestorage.googleapis.com/v0/b/evaquint-db85c.appspot.com/o/images%2Fevents%2Fa02107dd-60bc-4d21-9ba0-f27e5f6a2187%2F0?alt=media&token=fb333603-d75a-4b21-b165-5a7a8d432758"));
+               /* eventPic.setImageBitmap(getImageBitmap(photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().toString()));
+                photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Got the download URL for 'users/me/profile.png'
+                        eventPic.setImageBitmap(getImageBitmap(uri.toString()));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
+                /*storageRef.child("users/me/profile.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Got the download URL for 'users/me/profile.png'
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });*/
                // EventDBHelper eventDBHelper = new EventDBHelper();
                 //Log.i("data2: ", marker.getTag().toString());
                 //EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
@@ -140,7 +207,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 //            test.setText(event.eventTitle);
                 //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
             }
-
+          //  marker.setZIndex(100);
+       // googlePlacesSearchBarFrag.getView().setZ(0);
             return myContentsView;
         }
     }
@@ -158,6 +226,16 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         try {
             this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
             this.a = getActivity();
+
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+            if (SDK_INT > 8)
+            {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                //your codes here
+
+            }
 
             android.support.v4.app.FragmentManager fm = getFragmentManager();
             googlePlacesSearchBarFrag = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
