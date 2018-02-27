@@ -142,20 +142,26 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 EventDB event = (EventDB) marker.getTag();
     //EventDB event= null;
                 TextView test = ((TextView) myContentsView.findViewById(R.id.title));
-                photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        // Got the download URL for 'users/me/profile.png'
+                try{
+                    photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Got the download URL for 'users/me/profile.png'
 
-                        Log.i("downloadurl", uri.toString());
-                       // eventPic.setImageBitmap(getImageBitmap(uri.toString()));
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });
+                                Log.i("downloadurl", uri.toString());
+                                // eventPic.setImageBitmap(getImageBitmap(uri.toString()));
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle any errors
+                            }
+                        });
+                }catch(Exception e){
+                    Log.e("event image error", e.getMessage());
+                }
+
+
                 //eventPic.setImageBitmap(getImageBitmap("https://firebasestorage.googleapis.com/v0/b/evaquint-db85c.appspot.com/o/images%2Fevents%2Fa02107dd-60bc-4d21-9ba0-f27e5f6a2187%2F0?alt=media&token=fb333603-d75a-4b21-b165-5a7a8d432758"));
                /* eventPic.setImageBitmap(getImageBitmap(photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().toString()));
                 photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
