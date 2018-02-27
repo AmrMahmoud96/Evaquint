@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -49,6 +50,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -91,6 +94,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private Fragment popupFragment;
     private GeoQuery surroundingEvents;
     private List<Marker> currentMapMarkers;
+    private Circle searchCircle;
+
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -238,6 +243,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 //your codes here
 
             }
+            //searchCircle = new Circle();
 
             android.support.v4.app.FragmentManager fm = getFragmentManager();
             googlePlacesSearchBarFrag = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
@@ -380,6 +386,31 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         }
         return null;
     }
+    private void drawCircle(LatLng point){
+
+        // Instantiating CircleOptions to draw a circle around the marker
+        CircleOptions circleOptions = new CircleOptions();
+
+        // Specifying the center of the circle
+        circleOptions.center(point);
+
+        // Radius of the circle
+        circleOptions.radius(1000);
+
+        // Border color of the circle
+        circleOptions.strokeColor(Color.BLACK);
+
+        // Fill color of the circle
+        circleOptions.fillColor(0x30ff0000);
+
+        // Border width of the circle
+        circleOptions.strokeWidth(2);
+
+        // Adding the circle to the GoogleMap
+        searchCircle = mMap.addCircle(circleOptions);
+
+    }
+
 
     public void goToCurrentLocation() {
        // String[] categories = getResources().getStringArray(R.array.event_categories);
@@ -563,7 +594,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 return;
             }
         }
-
+        drawCircle(mMap.getCameraPosition().target);
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
@@ -574,6 +605,12 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             @Override
             public void onCameraMoveStarted(int i) {
                 view.findViewById(R.id.event_maps_searchbar).setVisibility(View.INVISIBLE);
+            }
+        });
+        mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                searchCircle.setCenter(mMap.getCameraPosition().target);
             }
         });
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
