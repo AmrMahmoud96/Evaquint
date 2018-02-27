@@ -89,7 +89,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private Activity a;
     private PlaceAutocompleteFragment googlePlacesSearchBarFrag;
     private Fragment popupFragment;
-
+    private GeoQuery surroundingEvents;
+    private List<Marker> currentMapMarkers;
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -226,6 +227,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         try {
             this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
             this.a = getActivity();
+            currentMapMarkers =  new ArrayList<Marker>();
 
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
             if (SDK_INT > 8)
@@ -359,6 +361,25 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         initOverlay();
 
     }
+    public Marker getMarkerFromMap(String eventID){
+        if(currentMapMarkers!=null){
+            for(Marker m: currentMapMarkers){
+                if (m.getTag() != null &&m.getTag().getClass()!=String.class) {
+                    EventDB event = (EventDB) m.getTag();
+                    Log.i("marker with eventid",event.eventID);
+                    if(eventID.equals(event.eventID)){
+                    //    Log.i("in","true");
+                        return m;
+                    }
+                  //      Log.i("in","false");
+                }else{
+                    return null;
+                }
+
+            }
+        }
+        return null;
+    }
 
     public void goToCurrentLocation() {
        // String[] categories = getResources().getStringArray(R.array.event_categories);
@@ -385,25 +406,36 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
             mMap.animateCamera(update);
             GeofireDBHelper helper = new GeofireDBHelper();
-            final GeoQuery surroundingEvents = helper.queryAtLocation(selfLoc, 10);
+            surroundingEvents = helper.queryAtLocation(selfLoc, 1);
             surroundingEvents.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(String key, GeoLocation location) {
-                    Marker marker = mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(location.latitude, location.longitude))
-                            .title(key)
-                            .snippet(key)
-                          //  .icon(BitmapDescriptorFactory.fromResource(R.mipmap.soccerball)));
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    marker.setTag(key);
-                    stickEventToMarker(marker,key);
-                    Log.i("data: ", marker.getTag().toString());
+                    Marker marker;
+                    marker = getMarkerFromMap(key);
+                    if(marker!=null){
+                        marker.setVisible(true);
+                    }else{
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(location.latitude, location.longitude))
+                                .title(key)
+                                .snippet(key)
+                                //  .icon(BitmapDescriptorFactory.fromResource(R.mipmap.soccerball)));
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        marker.setTag(key);
+                        stickEventToMarker(marker,key);
+                        currentMapMarkers.add(marker);
+                        Log.i("data: ", marker.getTag().toString());
+                    }
 
                 }
 
                 @Override
                 public void onKeyExited(String key) {
-
+                    Log.i("event has left radius",key);
+                    Marker marker=getMarkerFromMap(key);
+                    if(marker != null){
+                        marker.setVisible(false);
+                    }
                 }
 
                 @Override
@@ -413,7 +445,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
                 @Override
                 public void onGeoQueryReady() {
-                    surroundingEvents.removeAllListeners();
+                   // surroundingEvents.removeAllListeners();
+
                 }
 
                 @Override
@@ -546,6 +579,10 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
+                LatLng loc = mMap.getCameraPosition().target;
+
+//                Log.i("idle location",loc.toString());
+                surroundingEvents.setCenter(new GeoLocation(loc.latitude,loc.longitude));
                 view.findViewById(R.id.event_maps_searchbar).setVisibility(View.VISIBLE);
             }
         });
@@ -613,10 +650,12 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     eventDBHelper.addTestEvent("test", event);
 
                     //relocate this and add the set tag to it the event id
-                    mMap.addMarker(new MarkerOptions()
+                    Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(location)
                             .title(event_title)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(event);
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    marker.setTag(event);
+                    currentMapMarkers.add(marker);
                     // geofireDBHelper.queryAtLocation(event.location,10);
 
 
