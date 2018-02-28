@@ -2,8 +2,10 @@ package com.evaquint.android;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,26 +20,42 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.evaquint.android.fragments.FeedFrag;
 import com.evaquint.android.fragments.UserProfileFrag;
 import com.evaquint.android.fragments.map.EventLocatorFrag;
-import com.evaquint.android.fragments.FeedFrag;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import static android.content.ContentValues.TAG;
-
-import static com.evaquint.android.utils.code.IntentValues.PLACE_AUTOCOMPLETE_REQUEST_CODE;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private FirebaseAuth mAuth;
+
+    private Bitmap getImageBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            URL aURL = new URL(url);
+            URLConnection conn = aURL.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Error getting bitmap", e);
+        }
+        return bm;
+    }
 
 
     @Override
@@ -46,6 +64,17 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
+
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if (SDK_INT > 8)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            //your codes here
+
+        }
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -90,11 +119,21 @@ public class MainActivity extends AppCompatActivity
     private void initNavHeader(NavigationView navigationView){
         ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_name))
                 .setText(mAuth.getCurrentUser().getDisplayName());
-        ((ImageView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile_picture))
-                .setOnClickListener(new View.OnClickListener() {
+
+        ImageView profileOverview = ((ImageView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile_picture));
+
+        if(mAuth.getCurrentUser().getPhotoUrl()!=null && !mAuth.getCurrentUser().getPhotoUrl().toString().isEmpty()){
+           // profileOverview.setImageURI(mAuth.getCurrentUser().getPhotoUrl());
+            profileOverview.setImageBitmap(getImageBitmap(mAuth.getCurrentUser().getPhotoUrl().toString()));
+        }
+
+        profileOverview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         setActiveFragment(getSupportFragmentManager(), new UserProfileFrag());
+                        if (drawer.isDrawerOpen(GravityCompat.START)) {
+                            drawer.closeDrawer(GravityCompat.START);
+                        }
                     }
                 });
     }

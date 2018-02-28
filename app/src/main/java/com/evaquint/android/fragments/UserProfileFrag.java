@@ -1,6 +1,5 @@
 package com.evaquint.android.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,13 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ViewAnimator;
 
 import com.evaquint.android.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
-
-import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 /**
  * Created by henry on 9/10/2017.
@@ -37,10 +33,15 @@ public class UserProfileFrag extends Fragment{
     }
 
     public void init_page(){
+
         ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
-        Picasso.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl())
-                .into(((ImageView) view.findViewById(R.id.user_profile_image)));
+        if(mAuth.getCurrentUser().getPhotoUrl()!=null && !mAuth.getCurrentUser().getPhotoUrl().toString().isEmpty()){
+            Picasso.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl())
+                    .into(((ImageView) view.findViewById(R.id.user_profile_image)));
+        }
         ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
+        ((TextView) view.findViewById(R.id.userEmail)).setText(mAuth.getCurrentUser().getEmail());
+        ((TextView) view.findViewById(R.id.userPhone)).setText(mAuth.getCurrentUser().getPhoneNumber());
         ((ImageView) view.findViewById(R.id.user_profile_edit_name)).setOnClickListener(
                 new View.OnClickListener() {
                     @Override

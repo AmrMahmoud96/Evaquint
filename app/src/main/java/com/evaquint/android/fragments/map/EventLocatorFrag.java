@@ -5,30 +5,29 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.location.Geocoder;
-import android.location.Address;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 
 import com.evaquint.android.R;
 import com.evaquint.android.popups.QuickEventFrag;
@@ -36,39 +35,52 @@ import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.database.EventDBHelper;
 import com.evaquint.android.utils.database.GeofireDBHelper;
+import com.evaquint.android.utils.storage.PhotoUploadHelper;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderApi;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
-import android.support.v4.app.Fragment;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
+import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
-import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMapLongClickListener {
@@ -80,6 +92,27 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private Activity a;
     private PlaceAutocompleteFragment googlePlacesSearchBarFrag;
     private Fragment popupFragment;
+    private GeoQuery surroundingEvents;
+    private List<Marker> currentMapMarkers;
+    private Circle searchCircle;
+
+
+    private Bitmap getImageBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            URL aURL = new URL(url);
+            URLConnection conn = aURL.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Error getting bitmap", e);
+        }
+        return bm;
+    }
 
     //    private GeoDataClient mGeoDataClient;
 //    private PlaceDetectionClient mPlaceDetectionClient;
@@ -102,23 +135,92 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         public View getInfoContents(Marker marker) {
             //initialize the box
 
-            if (marker.getTag() != null) {
-                EventDBHelper eventDBHelper = new EventDBHelper();
-                //Log.i("data2: ", marker.getTag().toString());
-                EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
-                EventDB event2 = eventDBHelper.getEvent();
-                if (event == null) {
-                    Log.i("event: ", "no");
-                }
-                if (event2 == null) {
-                    Log.i("wrong ", " time");
-                }
-                TextView test = ((TextView) myContentsView.findViewById(R.id.title));
-//            test.setText(event.eventTitle);
+            if (marker.getTag() != null &&marker.getTag().getClass()!=String.class) {
+                final ImageView eventPic = (ImageView) myContentsView.findViewById(R.id.eventPic);
+                PhotoUploadHelper photoUploadHelper = new PhotoUploadHelper();
 
+                EventDB event = (EventDB) marker.getTag();
+    //EventDB event= null;
+                TextView test = ((TextView) myContentsView.findViewById(R.id.title));
+                try{
+                    photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Got the download URL for 'users/me/profile.png'
+
+                                Log.i("downloadurl", uri.toString());
+                                // eventPic.setImageBitmap(getImageBitmap(uri.toString()));
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle any errors
+                            }
+                        });
+                }catch(Exception e){
+                    Log.e("event image error", e.getMessage());
+                }
+
+
+                //eventPic.setImageBitmap(getImageBitmap("https://firebasestorage.googleapis.com/v0/b/evaquint-db85c.appspot.com/o/images%2Fevents%2Fa02107dd-60bc-4d21-9ba0-f27e5f6a2187%2F0?alt=media&token=fb333603-d75a-4b21-b165-5a7a8d432758"));
+               /* eventPic.setImageBitmap(getImageBitmap(photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().toString()));
+                photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Got the download URL for 'users/me/profile.png'
+                        eventPic.setImageBitmap(getImageBitmap(uri.toString()));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
+                /*storageRef.child("users/me/profile.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Got the download URL for 'users/me/profile.png'
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });*/
+               // EventDBHelper eventDBHelper = new EventDBHelper();
+                //Log.i("data2: ", marker.getTag().toString());
+                //EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
+             //   EventDB event2 = eventDBHelper.getEvent();
+                if (event == null) {
+                    Log.i("event: ","null");
+                    test.setText("");
+                }
+               /* if (event2 == null) {
+                    Log.i("wrong ", " time");
+                }*/
+               else{
+                   Log.i("event2: ", photoUploadHelper.getStorageRef().getPath()+"/events/"+event.eventID+"/0");
+
+                    test.setText(event.eventTitle);
+                                  /*   photoUploadHelper.getStorageRef().child("events").child(event.eventID).child("0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            eventPic.setImageURI(uri);
+                        }
+                    });
+                        Glide.with(getActivity())
+                            .using(new FirebaseImageLoader())
+                            .load(photoUploadHelper.getStorageRef().child("events").child(event.eventID).child("0"))
+                            .into(eventPic);*/
+                    Log.i("event2: ", "doggo");
+
+                    //test.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+                }
+//            test.setText(event.eventTitle);
                 //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
             }
-
+          //  marker.setZIndex(100);
+       // googlePlacesSearchBarFrag.getView().setZ(0);
             return myContentsView;
         }
     }
@@ -133,26 +235,40 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             if (parent != null)
                 parent.removeView(view);
         }
-        this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
-        this.a = getActivity();
+        try {
+            this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
+            this.a = getActivity();
+            currentMapMarkers =  new ArrayList<Marker>();
 
-        android.support.v4.app.FragmentManager fm = getFragmentManager();
-        googlePlacesSearchBarFrag = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+            if (SDK_INT > 8)
+            {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                //your codes here
 
-        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                Log.i(TAG, "Place: " + place.getName());
             }
+            //searchCircle = new Circle();
 
-            @Override
-            public void onError(Status status) {
-                Log.i(TAG, "error: " + status);
-            }
-        });
+            android.support.v4.app.FragmentManager fm = getFragmentManager();
+            googlePlacesSearchBarFrag = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
+
+            googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(Place place) {
+                    Log.i(TAG, "Place: " + place.getName());
+                }
+
+                @Override
+                public void onError(Status status) {
+                    Log.i(TAG, "error: " + status);
+                }
+            });
 
 
-        //        mGeoDataClient = Places.getGeoDataClient(this,null);
+
+            //        mGeoDataClient = Places.getGeoDataClient(this,null);
 //        mPlaceDetectionClient = Places.getPlaceDetectionClient(this,null);
 //        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 //        googlePlacesSearchBarFrag = new SupportPlaceAutocompleteFragment();
@@ -160,28 +276,36 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 //        FragmentTransaction ft = fm.beginTransaction();
 //        ft.add(R.id.map_searchbar_container, googlePlacesSearchBarFrag).commit();
 
-        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        mapFragment.getMapAsync(this);
-        getChildFragmentManager()
-                .beginTransaction()
-                .add(R.id.map_container, mapFragment)
-                .commit();
+            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+            mapFragment.getMapAsync(this);
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.map_container, mapFragment)
+                    .commit();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 //        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
 //                .findFragmentById(R.id.map);
 //
 //        mapFragment.getMapAsync(this);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
+            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.current_location_button);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Acquire a reference to the system Location Manager
-                initOverlay();
-                goToCurrentLocation();
-            }
-        });
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Acquire a reference to the system Location Manager
+                    initOverlay();
+                    goToCurrentLocation();
+                }
+            });
+
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
+
+
+
+
 
         return this.view;
     }
@@ -201,7 +325,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             Log.d("Address held", "Address: " + addresses.toString());
 
             FragmentManager fm = getFragmentManager();
-            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, point);
+            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, point, UUID.randomUUID().toString());
             popupFragment = editNameDialogFragment;
 
             editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
@@ -249,8 +373,61 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         initOverlay();
 
     }
+    public Marker getMarkerFromMap(String eventID){
+        if(currentMapMarkers!=null){
+            for(Marker m: currentMapMarkers){
+                if (m.getTag() != null &&m.getTag().getClass()!=String.class) {
+                    EventDB event = (EventDB) m.getTag();
+                    Log.i("marker with eventid",event.eventID);
+                    if(eventID.equals(event.eventID)){
+                    //    Log.i("in","true");
+                        return m;
+                    }
+                  //      Log.i("in","false");
+                }else{
+                    return null;
+                }
+
+            }
+        }
+        return null;
+    }
+    private void drawCircle(LatLng point){
+
+        // Instantiating CircleOptions to draw a circle around the marker
+        CircleOptions circleOptions = new CircleOptions();
+
+        // Specifying the center of the circle
+        circleOptions.center(point);
+
+        // Radius of the circle
+        circleOptions.radius(1000);
+
+        // Border color of the circle
+        circleOptions.strokeColor(Color.BLACK);
+
+        // Fill color of the circle
+        circleOptions.fillColor(0x30ff0000);
+
+        // Border width of the circle
+        circleOptions.strokeWidth(2);
+
+        // Adding the circle to the GoogleMap
+        searchCircle = mMap.addCircle(circleOptions);
+
+    }
+
 
     public void goToCurrentLocation() {
+       // String[] categories = getResources().getStringArray(R.array.event_categories);
+       // String search = categories[0]+"_"+"subcategories";
+       // Class<R.array> categories = R.array.event_categories;
+       // Class<R.array> cat = R.array.event_categories;
+
+        //String[] musicSubCategories = getResources();
+       // Log.d("this is cat array",Arrays.toString(categories));
+        //Log.d("this is cat array",Arrays.toString(musicSubCategories));
+
         LocationManager locationManager =
                 (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
 
@@ -266,23 +443,36 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
             mMap.animateCamera(update);
             GeofireDBHelper helper = new GeofireDBHelper();
-            final GeoQuery surroundingEvents = helper.queryAtLocation(selfLoc, 10);
+            surroundingEvents = helper.queryAtLocation(selfLoc, 1);
             surroundingEvents.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(String key, GeoLocation location) {
-                    Marker marker = mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(location.latitude, location.longitude))
-                            .title(key)
-                            .snippet(key)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    marker.setTag(key);
-                    Log.i("data: ", marker.getTag().toString());
+                    Marker marker;
+                    marker = getMarkerFromMap(key);
+                    if(marker!=null){
+                        marker.setVisible(true);
+                    }else{
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(location.latitude, location.longitude))
+                                .title(key)
+                                .snippet(key)
+                                //  .icon(BitmapDescriptorFactory.fromResource(R.mipmap.soccerball)));
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        marker.setTag(key);
+                        stickEventToMarker(marker,key);
+                        currentMapMarkers.add(marker);
+                        Log.i("data: ", marker.getTag().toString());
+                    }
 
                 }
 
                 @Override
                 public void onKeyExited(String key) {
-
+                    Log.i("event has left radius",key);
+                    Marker marker=getMarkerFromMap(key);
+                    if(marker != null){
+                        marker.setVisible(false);
+                    }
                 }
 
                 @Override
@@ -292,7 +482,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
                 @Override
                 public void onGeoQueryReady() {
-                    surroundingEvents.removeAllListeners();
+                   // surroundingEvents.removeAllListeners();
+
                 }
 
                 @Override
@@ -302,6 +493,88 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             });
 //    surroundingEvents.removeAllListeners();
         }
+
+    }
+    private void stickEventToMarker(final Marker marker, String eventID){
+            //need to check if event ID exists in event db first
+            if(!eventID.isEmpty()&&eventID!=null){
+                Log.i("data: ", "in");
+                Log.i("path ", EVENTS_TABLE.getName()+"/"+eventID);
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID);
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.i("data: ", "out2");
+                        if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                            Log.i("data: ", "out");
+
+                            Log.i("datasnapshot", dataSnapshot.toString());
+                            String eventID = dataSnapshot.child("eventID").getValue().toString();
+                            String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
+                            String eventHost = dataSnapshot.child("eventHost").getValue().toString();
+                            Calendar eventDate = Calendar.getInstance();
+                            eventDate.setTimeInMillis(dataSnapshot.child("timeInMillis").getValue(long.class));
+                            String address = dataSnapshot.child("address").getValue().toString();
+                            LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
+                            boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
+                            GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                            List<String> invited =  dataSnapshot.child("invited").getValue(t);
+                            List<String> attendees = dataSnapshot.child("invited").getValue(t);
+                            DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
+                            List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
+
+                            EventDB event = new EventDB(eventID,eventTitle,eventHost,eventDate.getTimeInMillis(),address,location,categorizations,eventPrivate,invited,attendees,details);
+                            marker.setTag(event);
+                            Log.i("true: ", marker.getTag().toString());
+
+                            //  setEvent(event);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("error: ", "onCancelled", databaseError.toException());
+
+                    }
+                });/*
+                ValueEventListener listener =  new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                            Log.i("data: ", "out");
+
+                            Log.i("datasnapshot", dataSnapshot.toString());
+                            String Eve
+                            String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
+                            String eventHost = dataSnapshot.child("eventHost").getValue().toString();
+                            Calendar eventDate = Calendar.getInstance();
+                            eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
+                            String address = dataSnapshot.child("address").getValue().toString();
+                            LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
+                            boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
+                            GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                            List<String> invited =  dataSnapshot.child("invited").getValue(t);
+                            List<String> attendees = dataSnapshot.child("invited").getValue(t);
+                            DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
+                            List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
+
+                            EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,categorizations,eventPrivate,invited,attendees,details);
+                            marker.setTag(event);
+                            Log.i("true: ", marker.getTag().toString());
+
+                            //  setEvent(event);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("error: ", "onCancelled", databaseError.toException());
+                    }
+                };*/
+              //  ref.addListenerForSingleValueEvent(listener);
+            }
 
     }
 
@@ -327,7 +600,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 return;
             }
         }
-
+        drawCircle(mMap.getCameraPosition().target);
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
@@ -340,9 +613,19 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 view.findViewById(R.id.event_maps_searchbar).setVisibility(View.INVISIBLE);
             }
         });
+        mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                searchCircle.setCenter(mMap.getCameraPosition().target);
+            }
+        });
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
+                LatLng loc = mMap.getCameraPosition().target;
+
+//                Log.i("idle location",loc.toString());
+                surroundingEvents.setCenter(new GeoLocation(loc.latitude,loc.longitude));
                 view.findViewById(R.id.event_maps_searchbar).setVisibility(View.VISIBLE);
             }
         });
@@ -391,6 +674,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             case QUICK_EVENT_FRAGMENT:
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
+                    String eventID = bundle.getString("eventID");
                     String event_title = bundle.getString("title");
                     Boolean event_private = bundle.getBoolean("privacy");
                     Calendar event_date = (Calendar) bundle.get("event_date");
@@ -400,7 +684,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     Log.d("Title", "Location: "+location);
                     Log.d("Title", "Privacy: "+event_private);*/
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    EventDB event = new EventDB(event_title, user.getUid(), event_date, address, location, new ArrayList<String>(), event_private, null, Arrays.asList(""), new DetailedEvent());
+                    EventDB event = new EventDB(eventID,event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(), event_private, null, Arrays.asList(""), new DetailedEvent());
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
                     Log.i("event to add: ", event.toString());
@@ -409,10 +693,12 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     eventDBHelper.addTestEvent("test", event);
 
                     //relocate this and add the set tag to it the event id
-                    mMap.addMarker(new MarkerOptions()
+                    Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(location)
-                            .title("")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).setTag(event_title);
+                            .title(event_title)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    marker.setTag(event);
+                    currentMapMarkers.add(marker);
                     // geofireDBHelper.queryAtLocation(event.location,10);
 
 
