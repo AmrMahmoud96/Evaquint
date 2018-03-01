@@ -460,8 +460,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                         marker.setTag(key);
                         stickEventToMarker(marker,key);
-                        currentMapMarkers.add(marker);
-                        Log.i("data: ", marker.getTag().toString());
+
+                      //  Log.i("success: ", ""+success);
+                        /*if(success){
+                            currentMapMarkers.add(marker);
+                        }*/
                     }
 
                 }
@@ -482,7 +485,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
                 @Override
                 public void onGeoQueryReady() {
-                   // surroundingEvents.removeAllListeners();
 
                 }
 
@@ -491,7 +493,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
                 }
             });
-//    surroundingEvents.removeAllListeners();
         }
 
     }
@@ -509,12 +510,21 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                         if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
                             Log.i("data: ", "out");
 
-                            Log.i("datasnapshot", dataSnapshot.toString());
+                            Log.i("datasnapshot", dataSnapshot.getValue().toString());
                             String eventID = dataSnapshot.child("eventID").getValue().toString();
+                            Calendar eventDate = Calendar.getInstance();
+                            long timeInMillis = dataSnapshot.child("timeInMillis").getValue(long.class);
+                            if(eventDate.getTimeInMillis() > timeInMillis + 3600000) {
+                                //remove event from geofire + don't show on map
+                                GeofireDBHelper helper = new GeofireDBHelper();
+                                helper.removeEvent(eventID);
+                                marker.remove();
+                                return;
+                            }
+                            eventDate.setTimeInMillis(timeInMillis);
                             String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
                             String eventHost = dataSnapshot.child("eventHost").getValue().toString();
-                            Calendar eventDate = Calendar.getInstance();
-                            eventDate.setTimeInMillis(dataSnapshot.child("timeInMillis").getValue(long.class));
+
                             String address = dataSnapshot.child("address").getValue().toString();
                             LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
                             boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
@@ -526,9 +536,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
                             EventDB event = new EventDB(eventID,eventTitle,eventHost,eventDate.getTimeInMillis(),address,location,categorizations,eventPrivate,invited,attendees,details);
                             marker.setTag(event);
+                            currentMapMarkers.add(marker);
                             Log.i("true: ", marker.getTag().toString());
 
-                            //  setEvent(event);
                         }
                     }
 
@@ -537,45 +547,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                         Log.w("error: ", "onCancelled", databaseError.toException());
 
                     }
-                });/*
-                ValueEventListener listener =  new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
-                            Log.i("data: ", "out");
-
-                            Log.i("datasnapshot", dataSnapshot.toString());
-                            String Eve
-                            String eventTitle  = dataSnapshot.child("eventTitle").getValue().toString();
-                            String eventHost = dataSnapshot.child("eventHost").getValue().toString();
-                            Calendar eventDate = Calendar.getInstance();
-                            eventDate.setTimeInMillis(dataSnapshot.child("eventDate").child("timeInMillis").getValue(long.class));
-                            String address = dataSnapshot.child("address").getValue().toString();
-                            LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
-                            boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
-                            GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                            List<String> invited =  dataSnapshot.child("invited").getValue(t);
-                            List<String> attendees = dataSnapshot.child("invited").getValue(t);
-                            DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
-                            List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
-
-                            EventDB event = new EventDB(eventTitle,eventHost,eventDate,address,location,categorizations,eventPrivate,invited,attendees,details);
-                            marker.setTag(event);
-                            Log.i("true: ", marker.getTag().toString());
-
-                            //  setEvent(event);
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w("error: ", "onCancelled", databaseError.toException());
-                    }
-                };*/
-              //  ref.addListenerForSingleValueEvent(listener);
+                });
             }
-
     }
 
     private void initOverlay() {
@@ -625,7 +598,10 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 LatLng loc = mMap.getCameraPosition().target;
 
 //                Log.i("idle location",loc.toString());
-                surroundingEvents.setCenter(new GeoLocation(loc.latitude,loc.longitude));
+                if(surroundingEvents!=null){
+
+                    surroundingEvents.setCenter(new GeoLocation(loc.latitude,loc.longitude));
+                }
                 view.findViewById(R.id.event_maps_searchbar).setVisibility(View.VISIBLE);
             }
         });

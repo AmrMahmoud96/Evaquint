@@ -1,20 +1,13 @@
 package com.evaquint.android.utils.database;
 
-import android.util.Log;
-
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
-import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.SimpleDateFormat;
-
-import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
 import static com.evaquint.android.utils.code.DatabaseValues.GEOFIRE_TABLE;
 
 /**
@@ -34,6 +27,10 @@ public class GeofireDBHelper {
 
     public void addEventToGeofire(EventDB event) {
         geoFire.setLocation(event.eventID, new GeoLocation(event.location.latitude, event.location.longitude));
+    }
+    public void removeEvent(String eventID){
+        geoFire.removeLocation(eventID);
+
     }
 
     public GeoQuery queryAtLocation(LatLng location, int radius){
