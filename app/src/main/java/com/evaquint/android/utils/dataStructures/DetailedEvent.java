@@ -20,6 +20,7 @@ public class DetailedEvent {
     private int capacity;
     private boolean mult_day;
     private List<Calendar> eventDates;
+    private boolean tournamentMode;
 
         public DetailedEvent(String description,
                  int ageRestriction,
@@ -27,7 +28,9 @@ public class DetailedEvent {
                  List<String> pictures,
                  int capacity,
                  boolean mult_day,
-                 List<Calendar> eventDates) {
+                 List<Calendar> eventDates,
+                             boolean tournamentMode) {
+            this.tournamentMode = tournamentMode;
             this.description = description;
             this.mult_day=mult_day;
             this.eventDates = eventDates;
@@ -44,6 +47,7 @@ public class DetailedEvent {
             this.pictures = Arrays.asList("default");
             this.QRCodes = null;
             this.ageRestriction = 0;
+            this.tournamentMode = false;
         }
     public String getDescription(){
         return description;
@@ -66,6 +70,7 @@ public class DetailedEvent {
     public boolean isMult_day(){
         return mult_day;
     }
+    public boolean isTournamentMode(){return tournamentMode;}
 
 
 }
