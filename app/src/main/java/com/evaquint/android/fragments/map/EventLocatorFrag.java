@@ -257,7 +257,15 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(Place place) {
-                    Log.i(TAG, "Place: " + place.getName());
+                    LatLng placeLocation = place.getLatLng();
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLocation));
+                    searchCircle.setCenter(placeLocation);
+                    Log.i("place","Place: " + place.getName());
+
+                    Log.i("place","Place: " + place.getAddress());
+                    Log.i("place","Place: " + place.getRating());
+                    Log.i("place","Place: " + place.getAttributions());
+                 //   Log.i("place","Place: " + place.get);
                 }
 
                 @Override
