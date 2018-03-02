@@ -2,15 +2,25 @@ package com.evaquint.android.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.evaquint.android.R;
+import com.evaquint.android.utils.dataStructures.UserDB;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
 /**
  * Created by henry on 9/10/2017.
@@ -19,6 +29,7 @@ import com.squareup.picasso.Picasso;
 public class UserProfileFrag extends Fragment{
     private View view;
     private FirebaseAuth mAuth;
+    UserDB user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,22 +45,54 @@ public class UserProfileFrag extends Fragment{
 
     public void init_page(){
 
-        ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
-        if(mAuth.getCurrentUser().getPhotoUrl()!=null && !mAuth.getCurrentUser().getPhotoUrl().toString().isEmpty()){
-            Picasso.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl())
-                    .into(((ImageView) view.findViewById(R.id.user_profile_image)));
-        }
-        ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
-        ((TextView) view.findViewById(R.id.userEmail)).setText(mAuth.getCurrentUser().getEmail());
-        ((TextView) view.findViewById(R.id.userPhone)).setText(mAuth.getCurrentUser().getPhoneNumber());
-        ((ImageView) view.findViewById(R.id.user_profile_edit_name)).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+        String userID = mAuth.getCurrentUser().getUid();
+        if(!userID.isEmpty()&&userID!=null){
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID);
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                        Log.i("datasnapshot", dataSnapshot.toString());
+                        user = dataSnapshot.getValue(UserDB.class);
+                        ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
+                        if(mAuth.getCurrentUser().getPhotoUrl()!=null && !mAuth.getCurrentUser().getPhotoUrl().toString().isEmpty()){
+                            Picasso.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl())
+                                    .into(((ImageView) view.findViewById(R.id.user_profile_image)));
+                        }
+                        ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
+                        ((TextView) view.findViewById(R.id.userEmail)).setText(mAuth.getCurrentUser().getEmail());
+                        ((TextView) view.findViewById(R.id.userPhone)).setText(mAuth.getCurrentUser().getPhoneNumber());
 
+                        RatingBar hostRating =(RatingBar) view.findViewById(R.id.hostRating);
+
+                        hostRating.setNumStars(5);
+                        if(user.getHostRating() ==0 || user.getRaters()==0){
+                            hostRating.setRating(0);
+                        }else{
+                            hostRating.setRating(user.getHostRating()/user.getRaters());
+                        }
+
+                        ((ImageView) view.findViewById(R.id.user_profile_edit_name)).setOnClickListener(
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                }
+                        );
+                       // user[0] = dataSnapshot.getValue(UserDB.class);
                     }
+
                 }
-        );
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w("error: ", "onCancelled", databaseError.toException());
+                }
+            });
+        }
+
+
     }
 //        ((ImageView) view.findViewById(R.id.user_profile_image)).setImageURI(mAuth.getCurrentUser().getPhotoUrl());
 }

@@ -302,11 +302,10 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 @Override
                 public void onClick(View view) {
                     //Acquire a reference to the system Location Manager
-                    initOverlay();
+
                     goToCurrentLocation();
                 }
             });
-
         } catch (InflateException e) {
         /* map is already there, just return view as it is */
         }
@@ -376,9 +375,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             return;
         }
 //        view.findViewById(R.id.map_searchbar_container).bringToFront();
-
-        goToCurrentLocation();
         initOverlay();
+        goToCurrentLocation();
+
 
     }
     public Marker getMarkerFromMap(String eventID){
