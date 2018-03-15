@@ -2,6 +2,8 @@ package com.evaquint.android.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +13,18 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.evaquint.android.R;
+import com.evaquint.android.utils.Adapter.FriendsListAdapter;
 import com.evaquint.android.utils.dataStructures.UserDB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
@@ -62,7 +68,17 @@ public class UserProfileFrag extends Fragment{
                         ((TextView) view.findViewById(R.id.user_profile_name)).setText(user.getFirstName()+" "+user.getLastName());
                         ((TextView) view.findViewById(R.id.userEmail)).setText(user.getEmail());
                         ((TextView) view.findViewById(R.id.userPhone)).setText(user.getPhone());
+                        RecyclerView friends = ((RecyclerView)view.findViewById(R.id.friendsListView));
+                        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+                        friends.setLayoutManager(layoutManager);
+                        GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                        List<String> friendsList =  dataSnapshot.child("friends").getValue(t);
 
+                        Log.i("datasnapshot", friendsList.toArray(new String[0])[0]);
+                        FriendsListAdapter f = new FriendsListAdapter(friendsList.toArray(new String[0]));
+                        friends.setAdapter(f);
+                        //friends.set
+                       //dataSnapshot.getValue();
                         RatingBar hostRating =(RatingBar) view.findViewById(R.id.hostRating);
 
                         hostRating.setNumStars(5);
