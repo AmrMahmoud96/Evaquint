@@ -52,7 +52,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
             // create a new view
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.test_recyclerview, parent, false);
-            v.setTag(false);
+            v.setTag(true);
             final ViewHolder vh = new ViewHolder(v);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,8 +84,8 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
                         Log.i("datasnapshot", dataSnapshot.toString());
-
-                        holder.mTextView.setText(dataSnapshot.child("firstName").getValue(String.class));
+                        String fullName = dataSnapshot.child("firstName").getValue(String.class)+" "+dataSnapshot.child("lastName").getValue(String.class);
+                        holder.mTextView.setText(fullName);
                         holder.mTextView.setTag(mDataset[position]);
                     }
 
