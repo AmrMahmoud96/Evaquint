@@ -53,6 +53,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -98,6 +99,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private List<Marker> currentMapMarkers;
     private Circle searchCircle;
     private Marker marker;
+    private Marker googlePlaceMarker;
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -135,6 +137,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
         @Override
         public View getInfoContents(Marker marker) {
+            if(marker.getTag().equals("PlaceMarker")){
+                return null;
+            }
             //initialize the box
 
             if (marker.getTag() != null &&marker.getTag().getClass()!=String.class) {
@@ -259,7 +264,14 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(Place place) {
+                    if(googlePlaceMarker!=null){
+                        googlePlaceMarker.remove();
+                    }
                     LatLng placeLocation = place.getLatLng();
+                    googlePlaceMarker = mMap.addMarker(new MarkerOptions()
+                            .position(placeLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    googlePlaceMarker.setTag("PlaceMarker");
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLocation));
                     searchCircle.setCenter(placeLocation);
                     Log.i("place","Place: " + place.getName());
@@ -318,6 +330,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
         return this.view;
     }
+
 
 
     @Override
@@ -578,7 +591,27 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 return;
             }
         }
-        drawCircle(mMap.getCameraPosition().target);
+        LatLng target = mMap.getCameraPosition().target;
+
+        drawCircle(target);
+
+        double lat = target.latitude;
+        double lon = target.longitude;
+        double earthR= 6371;  // earth radius in km
+
+        double radius = 500; // km
+
+        double x1 = lon - Math.toDegrees(radius/earthR/Math.cos(Math.toRadians(lat)));
+
+        double x2 = lon + Math.toDegrees(radius/earthR/Math.cos(Math.toRadians(lat)));
+
+        double y1 = lat + Math.toDegrees(radius/earthR);
+
+        double y2 = lat - Math.toDegrees(radius/earthR);
+        LatLngBounds bounds = new LatLngBounds(new LatLng(y2,x2),new LatLng(y1,x1));
+        googlePlacesSearchBarFrag.setBoundsBias(bounds);
+        //googlePlacesSearchBarFrag.setBoundsBias(new LatLngBounds.Builder().include(target).build());
+        //Log.i("bounds",new LatLngBounds.Builder().include(mMap.getCameraPosition().target).build().toString());
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
@@ -589,6 +622,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             @Override
             public void onCameraMoveStarted(int i) {
                 view.findViewById(R.id.event_maps_searchbar).setVisibility(View.INVISIBLE);
+                view.findViewById(R.id.event_searchbar_frame).setVisibility(View.INVISIBLE);
             }
         });
         mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
@@ -608,6 +642,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     surroundingEvents.setCenter(new GeoLocation(loc.latitude,loc.longitude));
                 }
                 view.findViewById(R.id.event_maps_searchbar).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.event_searchbar_frame).setVisibility(View.VISIBLE);
             }
         });
 
