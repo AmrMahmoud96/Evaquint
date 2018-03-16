@@ -149,6 +149,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 EventDB event = (EventDB) marker.getTag();
     //EventDB event= null;
                 TextView test = ((TextView) myContentsView.findViewById(R.id.title));
+
                 try{
                     photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
@@ -608,6 +609,21 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         double y1 = lat + Math.toDegrees(radius/earthR);
 
         double y2 = lat - Math.toDegrees(radius/earthR);
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                if (marker.getTag() != null &&marker.getTag().getClass()!=String.class) {
+                EventDB event = (EventDB) marker.getTag();
+                //Bundle bundle;
+                //bundle.put
+                 /*   FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    EventPageFrag fragment = EventPageFrag.newInstance(event);
+                   // ft.replace(R.i, fragment);
+                    ft.commit();
+                    */
+                }
+            }
+        });
         LatLngBounds bounds = new LatLngBounds(new LatLng(y2,x2),new LatLng(y1,x1));
         googlePlacesSearchBarFrag.setBoundsBias(bounds);
         //googlePlacesSearchBarFrag.setBoundsBias(new LatLngBounds.Builder().include(target).build());

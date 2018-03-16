@@ -2,6 +2,7 @@ package com.evaquint.android.utils.dataStructures;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
  * Created by Amr on 12/01/2017.
  */
 
-public class EventDB {
+public class EventDB implements Serializable{
     public String eventID;
     public String eventTitle;
     public String eventHost;
