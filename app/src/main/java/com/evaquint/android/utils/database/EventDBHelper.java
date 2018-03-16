@@ -1,14 +1,10 @@
 package com.evaquint.android.utils.database;
 
-import android.util.EventLog;
 import android.util.Log;
 
-import com.evaquint.android.utils.code.DatabaseValues;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,15 +12,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
-import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
 /**
  * Created by henry on 8/22/2017.
@@ -74,8 +67,8 @@ public class EventDBHelper {
                             LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
                             boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
                             GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                            List<String> invited =  dataSnapshot.child("invited").getValue(t);
-                            List<String> attendees = dataSnapshot.child("invited").getValue(t);
+                            Map<String, String> invited = (Map<String, String> )dataSnapshot.child("invited").getValue();
+                            List<String> attendees = dataSnapshot.child("attendees").getValue(t);
                             DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
                             List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
                         /*Log.i("be2: ",""+details1.isMult_day() );

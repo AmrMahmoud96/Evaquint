@@ -42,9 +42,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -60,7 +62,7 @@ import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 public class QuickEventFrag extends DialogFragment {
 
     private TextView mLocationText;
-    private ArrayList<String> invited;
+    private HashMap<String, String> invited;
     private TextView mTimeText;
     private EditText mEventTitle;
     private ImageView mEventPicture;
@@ -128,7 +130,7 @@ public class QuickEventFrag extends DialogFragment {
         mCalendarBtn = (ImageView) view.findViewById(R.id.calendarBtn);
         mEventPicture = (ImageView) view.findViewById(R.id.eventImageBtn);
      //   mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
-        invited = new ArrayList<>();
+        invited = new HashMap<String,String>();
         dateSelected = Calendar.getInstance();
         df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
 
@@ -168,10 +170,10 @@ public class QuickEventFrag extends DialogFragment {
                                public void onItemClick(View v, int position) {
                                    String userID = friendsList.get(position);
                                    Log.i("invite friend",userID);
-                                   if(invited.contains(userID)){
+                                   if(invited.get(userID)!=null){
                                        invited.remove(userID);
                                    }else{
-                                       invited.add(userID);
+                                       invited.put(userID,userID);
                                    }
                                 //   Log.i("invited",invited.toString());
                                }
@@ -269,7 +271,7 @@ public class QuickEventFrag extends DialogFragment {
                 .putExtra("address", getArguments().getString("address"))
                 .putExtra("latitude", getArguments().getDouble("latitude"))
                 .putExtra("longitude", getArguments().getDouble("longitude"))
-                .putExtra("invited",invited);
+                .putExtra("invited", (Serializable) invited);
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
     }

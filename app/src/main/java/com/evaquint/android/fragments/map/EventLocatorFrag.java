@@ -73,8 +73,10 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
@@ -95,7 +97,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private GeoQuery surroundingEvents;
     private List<Marker> currentMapMarkers;
     private Circle searchCircle;
-
+    private Marker marker;
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -454,24 +456,12 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             surroundingEvents.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(String key, GeoLocation location) {
-                    Marker marker;
-                    marker = getMarkerFromMap(key);
-                    if(marker!=null){
-                        marker.setVisible(true);
+                    Marker mapMarker;
+                    mapMarker = getMarkerFromMap(key);
+                    if(mapMarker!=null){
+                        mapMarker.setVisible(true);
                     }else{
-                        marker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(location.latitude, location.longitude))
-                                .title(key)
-                                .snippet(key)
-                                //  .icon(BitmapDescriptorFactory.fromResource(R.mipmap.soccerball)));
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                        marker.setTag(key);
                         stickEventToMarker(marker,key);
-
-                      //  Log.i("success: ", ""+success);
-                        /*if(success){
-                            currentMapMarkers.add(marker);
-                        }*/
                     }
 
                 }
@@ -503,7 +493,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         }
 
     }
-    private void stickEventToMarker(final Marker marker, String eventID){
+    private void stickEventToMarker(final Marker marker2, String eventID){
             //need to check if event ID exists in event db first
             if(!eventID.isEmpty()&&eventID!=null){
                 Log.i("data: ", "in");
@@ -525,7 +515,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                                 //remove event from geofire + don't show on map
                                 GeofireDBHelper helper = new GeofireDBHelper();
                                 helper.removeEvent(eventID);
-                                marker.remove();
+                               // marker.remove();
                                 return;
                             }
                             eventDate.setTimeInMillis(timeInMillis);
@@ -536,15 +526,23 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                             LatLng location = new LatLng(dataSnapshot.child("location").child("latitude").getValue(double.class),dataSnapshot.child("location").child("longitude").getValue(double.class));
                             boolean eventPrivate = (boolean) dataSnapshot.child("eventPrivate").getValue();
                             GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                            List<String> invited =  dataSnapshot.child("invited").getValue(t);
-                            List<String> attendees = dataSnapshot.child("invited").getValue(t);
+                            HashMap<String, String> invited = (HashMap<String, String>) dataSnapshot.child("invited").getValue();
+                            List<String> attendees = dataSnapshot.child("attendees").getValue(t);
                             DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
                             List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
 
                             EventDB event = new EventDB(eventID,eventTitle,eventHost,eventDate.getTimeInMillis(),address,location,categorizations,eventPrivate,invited,attendees,details);
+
+                            marker = mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(location.latitude, location.longitude))
+                                    .title(eventTitle)
+                                    .snippet(eventID)
+                                    //  .icon(BitmapDescriptorFactory.fromResource(R.mipmap.soccerball)));
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                             marker.setTag(event);
+                           // marker.setTag(key);
                             currentMapMarkers.add(marker);
-                            Log.i("true: ", marker.getTag().toString());
+                            Log.i("Marker Added to map", marker.getTag().toString());
 
                         }
                     }
@@ -663,7 +661,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     Calendar event_date = (Calendar) bundle.get("event_date");
                     String address = bundle.getString("address");
                     LatLng location = new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
-                    ArrayList<String> invited = bundle.getStringArrayList("invited");
+                    Map<String, String> invited = (Map<String, String>) bundle.getSerializable("invited");
+                    Log.i("invited", invited.toString());
                  /*   Log.d("Title", "Event: "+event_title);
                     Log.d("Title", "Location: "+location);
                     Log.d("Title", "Privacy: "+event_private);*/
