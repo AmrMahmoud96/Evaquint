@@ -663,11 +663,12 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     Calendar event_date = (Calendar) bundle.get("event_date");
                     String address = bundle.getString("address");
                     LatLng location = new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
+                    ArrayList<String> invited = bundle.getStringArrayList("invited");
                  /*   Log.d("Title", "Event: "+event_title);
                     Log.d("Title", "Location: "+location);
                     Log.d("Title", "Privacy: "+event_private);*/
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    EventDB event = new EventDB(eventID,event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(), event_private, null, Arrays.asList(""), new DetailedEvent());
+                    EventDB event = new EventDB(eventID,event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(), event_private, invited, Arrays.asList(""), new DetailedEvent());
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
                     Log.i("event to add: ", event.toString());

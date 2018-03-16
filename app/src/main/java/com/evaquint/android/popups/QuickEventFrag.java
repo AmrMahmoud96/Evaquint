@@ -1,10 +1,9 @@
 package com.evaquint.android.popups;
-import android.app.Activity;
+
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -12,7 +11,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -20,34 +20,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.evaquint.android.R;
+import com.evaquint.android.utils.Adapter.FriendsListAdapter;
+import com.evaquint.android.utils.listeners.CustomItemClickListener;
+import com.evaquint.android.utils.storage.PhotoUploadHelper;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import android.app.DatePickerDialog;
-import android.widget.DatePicker;
-import  android.widget.TimePicker;
-import android.widget.Toast;
-
-import com.evaquint.android.R;
-import com.evaquint.android.utils.storage.PhotoUploadHelper;
-import com.facebook.internal.Logger;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.maps.model.LatLng;
+import java.util.List;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
+import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
-import static com.evaquint.android.utils.code.IntentValues.PLACE_AUTOCOMPLETE_REQUEST_CODE;
 
 /**
  * Created by henry on 11/27/2017.
@@ -57,6 +60,7 @@ import static com.evaquint.android.utils.code.IntentValues.PLACE_AUTOCOMPLETE_RE
 public class QuickEventFrag extends DialogFragment {
 
     private TextView mLocationText;
+    private ArrayList<String> invited;
     private TextView mTimeText;
     private EditText mEventTitle;
     private ImageView mEventPicture;
@@ -124,7 +128,7 @@ public class QuickEventFrag extends DialogFragment {
         mCalendarBtn = (ImageView) view.findViewById(R.id.calendarBtn);
         mEventPicture = (ImageView) view.findViewById(R.id.eventImageBtn);
      //   mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
-
+        invited = new ArrayList<>();
         dateSelected = Calendar.getInstance();
         df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
 
@@ -146,14 +150,50 @@ public class QuickEventFrag extends DialogFragment {
         });
         mCreateEventButton = (Button) view.findViewById(R.id.create_event_btn);
 
-        mCreateEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pullFields();
-                uploadData();
-                dismiss();
-            }
-        });
+        final RecyclerView friends = ((RecyclerView)view.findViewById(R.id.friendsListView));
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("friends");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                   @Override
+                   public void onDataChange(DataSnapshot dataSnapshot) {
+                       if(dataSnapshot!=null&&dataSnapshot.getValue()!=null) {
+                           Log.i("friends", dataSnapshot.toString());
+                           LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+                           friends.setLayoutManager(layoutManager);
+                           GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                           final List<String> friendsList = dataSnapshot.getValue(t);
+                           FriendsListAdapter f = new FriendsListAdapter(friendsList.toArray(new String[0]), new CustomItemClickListener() {
+                               @Override
+                               public void onItemClick(View v, int position) {
+                                   String userID = friendsList.get(position);
+                                   Log.i("invite friend",userID);
+                                   if(invited.contains(userID)){
+                                       invited.remove(userID);
+                                   }else{
+                                       invited.add(userID);
+                                   }
+                                //   Log.i("invited",invited.toString());
+                               }
+                           });
+                           friends.setAdapter(f);
+                       }
+                   }
+
+                   @Override
+                   public void onCancelled(DatabaseError databaseError) {
+
+                   }
+               });
+
+                mCreateEventButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pullFields();
+                        uploadData();
+                        dismiss();
+                    }
+                });
 
     }
 
@@ -228,7 +268,8 @@ public class QuickEventFrag extends DialogFragment {
                 .putExtra("event_date",dateSelected)
                 .putExtra("address", getArguments().getString("address"))
                 .putExtra("latitude", getArguments().getDouble("latitude"))
-                .putExtra("longitude", getArguments().getDouble("longitude"));
+                .putExtra("longitude", getArguments().getDouble("longitude"))
+                .putExtra("invited",invited);
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
     }

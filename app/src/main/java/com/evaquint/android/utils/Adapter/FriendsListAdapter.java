@@ -1,5 +1,6 @@
 package com.evaquint.android.utils.Adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.evaquint.android.R;
+import com.evaquint.android.utils.listeners.CustomItemClickListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +25,7 @@ import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
 
         private String[] mDataset;
-
+        CustomItemClickListener listener;
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
@@ -38,8 +40,9 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public FriendsListAdapter(String[] myDataset) {
+        public FriendsListAdapter(String[] myDataset, CustomItemClickListener listener) {
             mDataset = myDataset;
+            this.listener = listener;
         }
 
         // Create new views (invoked by the layout manager)
@@ -49,8 +52,21 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
             // create a new view
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.test_recyclerview, parent, false);
-
-            ViewHolder vh = new ViewHolder(v);
+            v.setTag(false);
+            final ViewHolder vh = new ViewHolder(v);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean selected = (boolean)v.getTag();
+                    v.setTag(!selected);
+                    if(selected){
+                        v.setBackgroundColor(Color.GREEN);
+                    }else{
+                        v.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                    listener.onItemClick(v, vh.getAdapterPosition());
+                }
+            });
             return vh;
         }
 
@@ -70,6 +86,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
                         Log.i("datasnapshot", dataSnapshot.toString());
 
                         holder.mTextView.setText(dataSnapshot.child("firstName").getValue(String.class));
+                        holder.mTextView.setTag(mDataset[position]);
                     }
 
                 }

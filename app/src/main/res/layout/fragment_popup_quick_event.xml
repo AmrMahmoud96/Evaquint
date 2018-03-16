@@ -34,11 +34,11 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/bb_height"
         android:layout_margin="@dimen/bb_default_elevation"
+        android:layout_marginTop="10dp"
         android:text="Private"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_time"
-        tools:layout_editor_absoluteX="16dp"
-        android:layout_marginTop="10dp" />
+        tools:layout_editor_absoluteX="16dp" />
 
     <TextView
         android:id="@+id/event_time"
@@ -46,6 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_marginLeft="4dp"
+        android:layout_marginRight="40dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Time"
@@ -83,10 +84,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:scrollbars="none"
-        app:layout_constraintLeft_toRightOf="@+id/eventImageBtn"
-        app:layout_constraintTop_toTopOf="@+id/eventImageBtn"
         app:layout_constraintBottom_toBottomOf="@+id/eventImageBtn"
-        >
+        app:layout_constraintLeft_toRightOf="@+id/eventImageBtn"
+        app:layout_constraintTop_toTopOf="@+id/eventImageBtn">
 
         <LinearLayout
             android:id="@+id/id_gallery"
@@ -96,14 +96,34 @@
             android:orientation="horizontal"></LinearLayout>
     </HorizontalScrollView>
 
+    <TextView
+        android:id="@+id/friendsLabel"
+        android:layout_width="66dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="left"
+        android:text="Friends"
+        app:layout_constraintTop_toBottomOf="@+id/private_switch" />
+
+
     <ImageView
         android:id="@+id/eventImageBtn"
         android:layout_width="73dp"
         android:layout_height="67dp"
         android:layout_marginTop="32dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/private_switch"
+        app:layout_constraintTop_toBottomOf="@+id/friendsListView"
         app:srcCompat="@drawable/ic_add_a_photo_black_24dp"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/friendsListView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="left"
+        app:layout_constraintTop_toBottomOf="@+id/friendsLabel"
         tools:layout_editor_absoluteX="16dp" />
 
 
