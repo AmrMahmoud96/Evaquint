@@ -715,12 +715,20 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     String address = bundle.getString("address");
                     LatLng location = new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
                     Map<String, String> invited = (Map<String, String>) bundle.getSerializable("invited");
-                    Log.i("invited", invited.toString());
-                 /*   Log.d("Title", "Event: "+event_title);
-                    Log.d("Title", "Location: "+location);
-                    Log.d("Title", "Privacy: "+event_private);*/
+                    DetailedEvent details;
+                    String description = bundle.getString("description");
+                    if(description!=null){
+                        int cap = bundle.getInt("capacity");
+                        boolean tournMode = bundle.getBoolean("tournMode");
+                        boolean QRCodes = bundle.getBoolean("QRCodes");
+                        int ageRestriction = bundle.getInt("ageRestriction");
+                        details = new DetailedEvent(description,ageRestriction,Arrays.asList(""),Arrays.asList(""),cap,tournMode);
+                    }
+                    else{
+                        details = new DetailedEvent();
+                    }
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    EventDB event = new EventDB(eventID,event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(), event_private, invited, Arrays.asList(""), new DetailedEvent());
+                    EventDB event = new EventDB(eventID,event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(), event_private, invited, Arrays.asList(""), details);
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
                     UserDBHelper userDBHelper = new UserDBHelper();

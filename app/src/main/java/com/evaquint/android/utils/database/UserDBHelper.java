@@ -32,7 +32,7 @@ public class UserDBHelper {
     }
 
     public void addUser(FirebaseUser fUser) {
-        dbConnector.writeToDB(fUser.getUid(), new UserDB(fUser.getDisplayName().split(" ")[0], fUser.getDisplayName().split(" ")[1],"default", fUser.getEmail(),fUser.getPhoneNumber(), new ArrayList<String>(),df.format(Calendar.getInstance().getTime()),  new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>(),0,0));
+        dbConnector.writeToDB(fUser.getUid(), new UserDB(fUser.getDisplayName().split(" ")[0], fUser.getDisplayName().split(" ")[1],20,"default", fUser.getEmail(),fUser.getPhoneNumber(), new ArrayList<String>(),df.format(Calendar.getInstance().getTime()),  new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>(),0,0));
     }
 
     public void addUser(String uid, UserDB user) {

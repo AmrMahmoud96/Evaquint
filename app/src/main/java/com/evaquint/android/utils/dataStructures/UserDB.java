@@ -11,6 +11,7 @@ import java.util.List;
 @IgnoreExtraProperties
 public class UserDB {
     private List<String> friends;
+    private int age;
     private String email;
     private String phone;
     private String firstName;
@@ -39,8 +40,9 @@ public class UserDB {
         this.raters = raters;
     }
 
-    public UserDB(String firstName, String lastName, String picture, String email, String phone, List<String> interests, String dateCreated, List<String> eventsAttending, List<String>eventsHosted, List<String>friends, int hostRating, int raters) {
+    public UserDB(String firstName, String lastName, int age, String picture, String email, String phone, List<String> interests, String dateCreated, List<String> eventsAttending, List<String>eventsHosted, List<String>friends, int hostRating, int raters) {
         this.firstName =firstName;
+        this.age = age;
         this.raters=raters;
         this.hostRating = hostRating;
 
@@ -59,6 +61,8 @@ public class UserDB {
 
     }
 
+    public int getAge(){return age;}
+    public void setAge(int age){this.age=age;}
     public List<String> getFriends() {
         return friends;
     }

@@ -69,10 +69,18 @@ public class QuickEventFrag extends DialogFragment {
     private Switch mPrivateSwitch;
     private ImageView mCalendarBtn;
     private LinearLayout mGalleryView;
-  //  private CheckBox mMultiDaySwitch;
+    private Switch mAgeRestriction;
+    private Switch mQRCodes;
+    private Switch mTournamentMode;
+    private EditText eventAgeRestriction;
+    private EditText eventDescription;
+    private EditText capacity;
     private Button mCreateEventButton;
     private Calendar dateSelected;
     private ArrayList<ImageData> images;
+    private boolean moreDetails=false;
+    private TextView mMoreDetails;
+
     SimpleDateFormat df;
     int mHour,mMinute;
     private DatePickerDialog datePickerDialog;
@@ -129,7 +137,65 @@ public class QuickEventFrag extends DialogFragment {
         mLocationText.setText(address);
         mCalendarBtn = (ImageView) view.findViewById(R.id.calendarBtn);
         mEventPicture = (ImageView) view.findViewById(R.id.eventImageBtn);
-     //   mMultiDaySwitch = (CheckBox) view.findViewById(R.id.multiDaySwitch);
+        mMoreDetails = (TextView) view.findViewById(R.id.moreDetails);
+
+        mCreateEventButton = (Button) view.findViewById(R.id.create_event_btn);
+
+        mAgeRestriction = (Switch) view.findViewById(R.id.ageRestriction);
+        mQRCodes = (Switch) view.findViewById(R.id.QRCodeSwitch);
+        mTournamentMode = (Switch) view.findViewById(R.id.tournamentMode);
+        eventAgeRestriction = (EditText) view.findViewById(R.id.eventAgeRestriction);
+        eventDescription= (EditText) view.findViewById(R.id.eventDescription);
+        capacity =  (EditText) view.findViewById(R.id.capacity);
+
+        mMoreDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eventAgeRestriction.setVisibility(View.INVISIBLE);
+                int visibility;
+                if(!moreDetails){
+                    moreDetails = true;
+                    mMoreDetails.setText("Remove extra details");
+                    visibility = View.VISIBLE;
+                    eventAgeRestriction.setVisibility(mAgeRestriction.isChecked()? View.VISIBLE:View.INVISIBLE);
+                }else{
+                    moreDetails = false;
+                    mMoreDetails.setText("Add more details");
+                    visibility = View.INVISIBLE;
+                }
+                mAgeRestriction.setVisibility(visibility);
+                mQRCodes.setVisibility(visibility);
+                mTournamentMode.setVisibility(visibility);
+                eventDescription.setVisibility(visibility);
+                capacity.setVisibility(visibility);
+            }
+        });
+        int visibility = View.INVISIBLE;
+        mAgeRestriction.setVisibility(visibility);
+        mQRCodes.setVisibility(visibility);
+        mTournamentMode.setVisibility(visibility);
+        eventDescription.setVisibility(visibility);
+        capacity.setVisibility(visibility);
+        eventAgeRestriction.setVisibility(visibility);
+        mAgeRestriction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(eventAgeRestriction.getVisibility()==View.INVISIBLE){
+                    eventAgeRestriction.setVisibility(View.VISIBLE);
+                }else{
+                    eventAgeRestriction.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+        mTournamentMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //if user is < 1000 host rating, dont allow
+                mTournamentMode.setChecked(false);
+                Toast.makeText(getActivity(),"Need 1000 host rating to host a tournament.",Toast.LENGTH_SHORT).show();
+            }
+        });
+
         invited = new HashMap<String,String>();
         dateSelected = Calendar.getInstance();
         df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
@@ -150,7 +216,6 @@ public class QuickEventFrag extends DialogFragment {
 //                pickImages();
             }
         });
-        mCreateEventButton = (Button) view.findViewById(R.id.create_event_btn);
 
         final RecyclerView friends = ((RecyclerView)view.findViewById(R.id.friendsListView));
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -261,6 +326,7 @@ public class QuickEventFrag extends DialogFragment {
         String event_title = mEventTitle.getText().toString().trim();
         //String location = mLocationText.getText().toString().trim();
         Boolean event_private = mPrivateSwitch.isChecked();
+
        // Boolean event_mult_day = mMultiDaySwitch.isChecked();
         //MapActivity.setFocusToView(getView().findViewById();
         Intent i = new Intent()
@@ -272,6 +338,25 @@ public class QuickEventFrag extends DialogFragment {
                 .putExtra("latitude", getArguments().getDouble("latitude"))
                 .putExtra("longitude", getArguments().getDouble("longitude"))
                 .putExtra("invited", (Serializable) invited);
+
+        if(moreDetails){
+            String description = eventDescription.getText().toString();
+            int cap=0;
+            if(!capacity.getText().toString().isEmpty()){
+                 cap = Integer.parseInt(capacity.getText().toString());
+            }
+            boolean tournMode = mTournamentMode.isChecked();
+            boolean QRCodes = mQRCodes.isChecked();
+            int ageRestriction = 0;
+            if(!eventAgeRestriction.getText().toString().isEmpty()) {
+                ageRestriction = Integer.parseInt(eventAgeRestriction.getText().toString());
+            }
+            i.putExtra("description",description)
+                    .putExtra("capacity",cap)
+                    .putExtra("tournMode",tournMode)
+                    .putExtra("QRCodes",QRCodes)
+                    .putExtra("ageRestriction",ageRestriction);
+        }
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
     }
