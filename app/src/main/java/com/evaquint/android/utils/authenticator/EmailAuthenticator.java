@@ -17,8 +17,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 import static android.content.ContentValues.TAG;
@@ -133,7 +134,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                          //   userDatabaseHandler.addUser(fUser.getUid(),new UserDB());
                             userDatabaseHandler.addUser(fUser.getUid(),
 
-                                    new UserDB(firstName,lastName,20,"default",email,"", new ArrayList<String>(),df.format(Calendar.getInstance().getTime()),new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(),0,0));
+                                    new UserDB(firstName,lastName,20,"default",email,"", Arrays.asList(""),df.format(Calendar.getInstance().getTime()),new HashMap<String, String>(), new HashMap<String, String>(), Arrays.asList(""),0,0));
                           //  sendVerificationEmail();
                             activity.startActivity(nextActivity);
 //                            updateUI(user);

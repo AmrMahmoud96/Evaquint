@@ -3,6 +3,7 @@ package com.evaquint.android.utils.dataStructures;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by henry on 8/19/2017.
@@ -20,8 +21,8 @@ public class UserDB {
     private int hostRating;
     private int raters;
     private List<String> interests;
-    private List<String> eventsHosted;
-    private List<String> eventsAttending;
+    private Map<String,String> eventsHosted;
+    private Map<String,String> eventsAttending;
     private String dateCreated;
 
     public int getHostRating() {
@@ -40,7 +41,7 @@ public class UserDB {
         this.raters = raters;
     }
 
-    public UserDB(String firstName, String lastName, int age, String picture, String email, String phone, List<String> interests, String dateCreated, List<String> eventsAttending, List<String>eventsHosted, List<String>friends, int hostRating, int raters) {
+    public UserDB(String firstName, String lastName, int age, String picture, String email, String phone, List<String> interests, String dateCreated, Map<String,String> eventsAttending, Map<String,String>eventsHosted, List<String>friends, int hostRating, int raters) {
         this.firstName =firstName;
         this.age = age;
         this.raters=raters;
@@ -119,19 +120,19 @@ public class UserDB {
         this.interests = interests;
     }
 
-    public List<String> getEventsHosted() {
+    public Map<String,String> getEventsHosted() {
         return eventsHosted;
     }
 
-    public void setEventsHosted(List<String> eventsHosted) {
+    public void setEventsHosted(Map<String,String> eventsHosted) {
         this.eventsHosted = eventsHosted;
     }
 
-    public List<String> getEventsAttending() {
+    public Map<String,String> getEventsAttending() {
         return eventsAttending;
     }
 
-    public void setEventsAttending(List<String> eventsAttending) {
+    public void setEventsAttending(Map<String,String> eventsAttending) {
         this.eventsAttending = eventsAttending;
     }
 

@@ -14,7 +14,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
@@ -32,7 +34,7 @@ public class UserDBHelper {
     }
 
     public void addUser(FirebaseUser fUser) {
-        dbConnector.writeToDB(fUser.getUid(), new UserDB(fUser.getDisplayName().split(" ")[0], fUser.getDisplayName().split(" ")[1],20,"default", fUser.getEmail(),fUser.getPhoneNumber(), new ArrayList<String>(),df.format(Calendar.getInstance().getTime()),  new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>(),0,0));
+        dbConnector.writeToDB(fUser.getUid(), new UserDB(fUser.getDisplayName().split(" ")[0], fUser.getDisplayName().split(" ")[1],20,"default", fUser.getEmail(),fUser.getPhoneNumber(), new ArrayList<String>(),df.format(Calendar.getInstance().getTime()),  new HashMap<String, String>(),new HashMap<String, String>(), Arrays.asList(""),0,0));
     }
 
     public void addUser(String uid, UserDB user) {
