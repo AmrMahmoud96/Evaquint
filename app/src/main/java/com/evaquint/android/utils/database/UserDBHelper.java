@@ -10,13 +10,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
@@ -47,7 +45,22 @@ public class UserDBHelper {
                 + "/" + value;
         return dbConnector.writeToDB(path, value);
     }
-
+    public void addEventHosted(String userID, String eventID){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("eventsHosted").child(eventID);
+        ref.setValue(eventID);
+    }
+    public void addEventAttended(String userID, String eventID){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("eventsAttended").child(eventID);
+        ref.setValue(eventID);
+    }
+    public void removeEventAttended(String userID, String eventID){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("eventsAttended").child(eventID);
+        ref.removeValue();
+    }
+    public void removeEventHosted(String userID, String eventID){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("eventsAttended").child(eventID);
+        ref.removeValue();
+    }
     public boolean deleteEntry(DatabaseValues subPath, String value){
         String path = USER_TABLE.getName() + "/"
                 + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/" + subPath.getName()
@@ -87,5 +100,6 @@ public class UserDBHelper {
 
         return user[0];
     }
+
 
 }

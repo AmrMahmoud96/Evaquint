@@ -35,6 +35,7 @@ import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.database.EventDBHelper;
 import com.evaquint.android.utils.database.GeofireDBHelper;
+import com.evaquint.android.utils.database.UserDBHelper;
 import com.evaquint.android.utils.storage.PhotoUploadHelper;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -647,6 +648,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 searchCircle.setCenter(mMap.getCameraPosition().target);
             }
         });
+
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
@@ -721,16 +723,17 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     EventDB event = new EventDB(eventID,event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(), event_private, invited, Arrays.asList(""), new DetailedEvent());
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
+                    UserDBHelper userDBHelper = new UserDBHelper();
                     Log.i("event to add: ", event.toString());
                     eventDBHelper.addEvent(event);
                     geofireDBHelper.addEventToGeofire(event);
                     eventDBHelper.addTestEvent("test", event);
+                    userDBHelper.addEventHosted(user.getUid(),eventID);
 
-                    //relocate this and add the set tag to it the event id
                     Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(location)
                             .title(event_title)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                     marker.setTag(event);
                     currentMapMarkers.add(marker);
                     // geofireDBHelper.queryAtLocation(event.location,10);
