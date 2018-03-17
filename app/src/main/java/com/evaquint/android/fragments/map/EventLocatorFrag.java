@@ -8,6 +8,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,6 +24,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -36,6 +41,7 @@ import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.database.EventDBHelper;
 import com.evaquint.android.utils.database.GeofireDBHelper;
 import com.evaquint.android.utils.database.UserDBHelper;
+import com.evaquint.android.utils.listeners.ShakeDetector;
 import com.evaquint.android.utils.storage.PhotoUploadHelper;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -82,6 +88,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.SENSOR_SERVICE;
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
@@ -101,6 +108,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private Circle searchCircle;
     private Marker marker;
     private Marker googlePlaceMarker;
+
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeDetector mShakeDetector;
+
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -130,6 +142,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             //inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
             myContentsView = getLayoutInflater().inflate(R.layout.event_preview_window, null);
         }
+
 
         @Override
         public View getInfoWindow(Marker marker) {
@@ -239,6 +252,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null)
@@ -290,6 +304,23 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 }
             });
 
+            // ShakeDetector initialization
+            mSensorManager = (SensorManager) a.getSystemService(Context.SENSOR_SERVICE);
+            mAccelerometer = mSensorManager
+                    .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            mShakeDetector = new ShakeDetector();
+            mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+
+                @Override
+                public void onShake(int count) {
+				/*
+				 * The following method, "handleShakeEvent(count):" is a stub //
+				 * method you would use to setup whatever you want done once the
+				 * device has been shook.
+				 */
+                    handleShakeEvent(count);
+                }
+            });
 
 
             //        mGeoDataClient = Places.getGeoDataClient(this,null);
@@ -333,7 +364,26 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         return this.view;
     }
 
+    public void handleShakeEvent(int count) {
+        if(count>=2) {
+            mShakeDetector.setmShakeCount(0);
+            Log.i(TAG,"YAYAYAYA");
+        }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Add the following line to register the Session Manager Listener onResume
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    public void onPause() {
+        // Add the following line to unregister the Sensor Manager onPause
+        mSensorManager.unregisterListener(mShakeDetector);
+        super.onPause();
+    }
 
     @Override
     public void onMapLongClick(LatLng point) {
