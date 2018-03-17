@@ -1,9 +1,6 @@
 package com.evaquint.android.utils.dataStructures;
 
-import java.sql.Time;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,8 +15,8 @@ public class DetailedEvent {
    private List<String> QRCodes;
     private List<String> pictures;
     private int capacity;
-    private boolean mult_day;
-    private List<Calendar> eventDates;
+   // private boolean mult_day;
+    //private List<Calendar> eventDates;
     private boolean tournamentMode;
 
         public DetailedEvent(String description,
@@ -27,13 +24,11 @@ public class DetailedEvent {
                  List<String> QRCodes,
                  List<String> pictures,
                  int capacity,
-                 boolean mult_day,
-                 List<Calendar> eventDates,
                              boolean tournamentMode) {
             this.tournamentMode = tournamentMode;
             this.description = description;
-            this.mult_day=mult_day;
-            this.eventDates = eventDates;
+      //      this.mult_day=mult_day;
+       //     this.eventDates = eventDates;
             this.ageRestriction=ageRestriction;
             this.QRCodes = QRCodes;
             this.pictures=pictures;
@@ -41,8 +36,8 @@ public class DetailedEvent {
         }
         public DetailedEvent(){
             this.description = "";
-            this.mult_day = false;
-            this.eventDates = null;
+         //   this.mult_day = false;
+          //  this.eventDates = null;
             this.capacity= 9999;
             this.pictures = Arrays.asList("default");
             this.QRCodes = null;
@@ -64,12 +59,12 @@ public class DetailedEvent {
     public int getCapacity(){
         return capacity;
     }
-    public List<Calendar> getEventDates(){
+   /* public List<Calendar> getEventDates(){
         return eventDates;
     }
     public boolean isMult_day(){
         return mult_day;
-    }
+    }*/
     public boolean isTournamentMode(){return tournamentMode;}
 
 
