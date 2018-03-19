@@ -3,10 +3,11 @@ package com.evaquint.android.utils.storage;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -15,9 +16,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.FileInputStream;
 
-import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
-
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
+import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 /**
  * Created by henry on 2/9/2018.
  */
@@ -69,7 +69,7 @@ public class PhotoUploadHelper {
                     });
         }
     }
-    public void uploadEventImageAt(String eventID, Uri filePath,int index){
+    public void uploadEventImageAt(final String eventID, final Uri filePath,final int index){
         StorageReference ref =  storageRef.child(EVENTS_TABLE.getName()).child(eventID).child(""+index);
         if(filePath != null)
         {
@@ -81,6 +81,9 @@ public class PhotoUploadHelper {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("details").child("pictures");
+                            ref.child(""+index).setValue(taskSnapshot.getDownloadUrl().toString());
 //                            progressDialog.dismiss();
 //                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             Log.d("Image upload", "Success");

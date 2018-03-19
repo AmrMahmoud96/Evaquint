@@ -9,8 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -24,7 +22,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -38,6 +35,7 @@ import com.evaquint.android.R;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventDB;
+import com.evaquint.android.utils.dataStructures.ImageData;
 import com.evaquint.android.utils.database.EventDBHelper;
 import com.evaquint.android.utils.database.GeofireDBHelper;
 import com.evaquint.android.utils.database.UserDBHelper;
@@ -72,6 +70,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -88,7 +87,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
-import static android.content.Context.SENSOR_SERVICE;
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
@@ -179,6 +177,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                                 // Handle any errors
                             }
                         });
+                    Picasso.with(myContentsView.getContext()).load(event.details.getPictures().get(0)).into(eventPic);
+                    //eventPic.setImageBitmap(getImageBitmap(event.details.getPictures().get(0)));
+                    Log.i("downloaded", "true");
                 }catch(Exception e){
                     Log.e("event image error", e.getMessage());
                 }
@@ -751,6 +752,17 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 //            }
 //        });
     }
+    public void uploadData(String eventID,ArrayList<ImageData> images){
+        PhotoUploadHelper puh = new PhotoUploadHelper();
+        int count = 0;
+        if(images!=null){
+            for (ImageData image : images) {
+                puh.uploadEventImageAt(eventID
+                        , image.uri,count);
+                count++;
+            }
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -766,12 +778,15 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     LatLng location = new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
                     Map<String, String> invited = (Map<String, String>) bundle.getSerializable("invited");
                     DetailedEvent details;
+                    ArrayList<ImageData> images = new ArrayList<>();
                     String description = bundle.getString("description");
                     if(description!=null){
                         int cap = bundle.getInt("capacity");
                         boolean tournMode = bundle.getBoolean("tournMode");
                         boolean QRCodes = bundle.getBoolean("QRCodes");
                         int ageRestriction = bundle.getInt("ageRestriction");
+                        images = (ArrayList<ImageData>) bundle.get("images");
+
                         details = new DetailedEvent(description,ageRestriction,Arrays.asList(""),Arrays.asList(""),cap,tournMode);
                     }
                     else{
@@ -787,7 +802,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     geofireDBHelper.addEventToGeofire(event);
                     eventDBHelper.addTestEvent("test", event);
                     userDBHelper.addEventHosted(user.getUid(),eventID);
-
+                    if(description!=null){
+                        uploadData(eventID,images);
+                    }
                     Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(location)
                             .title(event_title)

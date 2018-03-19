@@ -32,7 +32,6 @@ import com.evaquint.android.R;
 import com.evaquint.android.utils.Adapter.FriendsListAdapter;
 import com.evaquint.android.utils.dataStructures.ImageData;
 import com.evaquint.android.utils.listeners.CustomItemClickListener;
-import com.evaquint.android.utils.storage.PhotoUploadHelper;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -258,7 +257,7 @@ public class QuickEventFrag extends DialogFragment {
                     @Override
                     public void onClick(View view) {
                         pullFields();
-                        uploadData();
+                      //  uploadData();
                         dismiss();
                     }
                 });
@@ -356,27 +355,13 @@ public class QuickEventFrag extends DialogFragment {
                     .putExtra("capacity",cap)
                     .putExtra("tournMode",tournMode)
                     .putExtra("QRCodes",QRCodes)
-                    .putExtra("ageRestriction",ageRestriction);
-                    //.putExtra("images",images);
+                    .putExtra("ageRestriction",ageRestriction)
+                    .putExtra("images",images);
         }
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
     }
 
-    public void uploadData(){
-        PhotoUploadHelper puh = new PhotoUploadHelper();
-        int count = 0;
-        if(images!=null){
-            for (ImageData image : images) {
-                puh.uploadEventImageAt(
-                        getArguments().getString("eventID")
-                        , image.uri,count);
-                count++;
-            }
-        }
-
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
