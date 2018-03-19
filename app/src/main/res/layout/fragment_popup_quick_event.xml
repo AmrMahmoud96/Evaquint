@@ -193,7 +193,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:ems="10"
+        android:ems="2"
         android:hint="Age"
         android:inputType="number"
         app:layout_constraintTop_toTopOf="@id/ageRestriction"
