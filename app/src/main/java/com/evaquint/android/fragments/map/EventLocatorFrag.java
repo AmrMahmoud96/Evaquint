@@ -150,7 +150,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             }
             if (marker.getTag() != null &&marker.getTag().getClass()!=String.class) {
                 final ImageView eventPic = (ImageView) myContentsView.findViewById(R.id.eventPic);
-                PhotoUploadHelper photoUploadHelper = new PhotoUploadHelper();
                 EventDB event = (EventDB) marker.getTag();
                 TextView test = ((TextView) myContentsView.findViewById(R.id.title));
 
@@ -167,8 +166,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     test.setText("");
                 }
                else{
-                   Log.i("event: ", photoUploadHelper.getStorageRef().getPath()+"/events/"+event.eventID+"/0");
-
                     test.setText(event.eventTitle);
                 }
             }
