@@ -69,6 +69,39 @@ public class PhotoUploadHelper {
                     });
         }
     }
+    public void uploadUserProfileImage(final String userID, final Uri filePath){
+        StorageReference ref =  storageRef.child(USER_TABLE.getName()).child(userID).child(""+0);
+        if(filePath != null)
+        {
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("picture");
+                            ref.setValue(taskSnapshot.getDownloadUrl().toString());
+                            Log.d("Image upload", "Success");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.d("Image upload", "fail");
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            Log.d("progress", ""+ progress);
+//                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
+    }
     public void uploadEventImageAt(final String eventID, final Uri filePath,final int index){
         StorageReference ref =  storageRef.child(EVENTS_TABLE.getName()).child(eventID).child(""+index);
         if(filePath != null)

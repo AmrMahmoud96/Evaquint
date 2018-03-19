@@ -1,11 +1,13 @@
 package com.evaquint.android.utils.Adapter;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.evaquint.android.R;
@@ -15,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
@@ -32,10 +35,11 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
         public static class ViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
             public TextView mTextView;
-
+            public ImageView mImageView;
             public ViewHolder(View v) {
                 super(v);
                 mTextView = (TextView) v.findViewById(R.id.subject_textview);
+                mImageView = (ImageView) v.findViewById(R.id.imageView);
             }
         }
 
@@ -88,6 +92,9 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
                         holder.mTextView.setText(fullName);
                         holder.mTextView.setTag(mDataset[position]);
                         if(!dataSnapshot.child("picture").getValue(String.class).equals("default")){
+                            String downloadUrl = dataSnapshot.child("picture").getValue(String.class);
+                            Log.i("downloadurl", downloadUrl);
+                            Picasso.with(holder.itemView.getContext()).load(Uri.parse(downloadUrl)).fit().into(holder.mImageView);
                          //   URL url = dataSnapshot.child("picture").getValue(URL.class);
                         }
                     }

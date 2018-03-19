@@ -155,7 +155,7 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String email = mEmailView.getText().toString().trim();
         String password = mPasswordView.getText().toString();
 //        String passwordConfirm = mPasswordView.getText().toString();
 //        String name = mNameView.getText().toString();
