@@ -87,6 +87,9 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
                         String fullName = dataSnapshot.child("firstName").getValue(String.class)+" "+dataSnapshot.child("lastName").getValue(String.class);
                         holder.mTextView.setText(fullName);
                         holder.mTextView.setTag(mDataset[position]);
+                        if(!dataSnapshot.child("picture").getValue(String.class).equals("default")){
+                         //   URL url = dataSnapshot.child("picture").getValue(URL.class);
+                        }
                     }
 
                 }

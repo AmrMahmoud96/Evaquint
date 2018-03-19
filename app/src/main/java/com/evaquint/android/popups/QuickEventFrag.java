@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,6 +30,7 @@ import android.widget.Toast;
 
 import com.evaquint.android.R;
 import com.evaquint.android.utils.Adapter.FriendsListAdapter;
+import com.evaquint.android.utils.dataStructures.ImageData;
 import com.evaquint.android.utils.listeners.CustomItemClickListener;
 import com.evaquint.android.utils.storage.PhotoUploadHelper;
 import com.google.android.gms.maps.model.LatLng;
@@ -87,10 +87,6 @@ public class QuickEventFrag extends DialogFragment {
 
     final Calendar c = Calendar.getInstance();
 
-    private class ImageData {
-        public Bitmap icon;
-        public Uri uri;
-    }
 
     public QuickEventFrag() {
         // Empty constructor is required for DialogFragment
@@ -168,6 +164,8 @@ public class QuickEventFrag extends DialogFragment {
                 mTournamentMode.setVisibility(visibility);
                 eventDescription.setVisibility(visibility);
                 capacity.setVisibility(visibility);
+                mEventPicture.setVisibility(visibility);
+                mGalleryView.setVisibility(visibility);
             }
         });
         int visibility = View.INVISIBLE;
@@ -177,6 +175,9 @@ public class QuickEventFrag extends DialogFragment {
         eventDescription.setVisibility(visibility);
         capacity.setVisibility(visibility);
         eventAgeRestriction.setVisibility(visibility);
+        mEventPicture.setVisibility(visibility);
+        mGalleryView.setVisibility(visibility);
+
         mAgeRestriction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -356,6 +357,7 @@ public class QuickEventFrag extends DialogFragment {
                     .putExtra("tournMode",tournMode)
                     .putExtra("QRCodes",QRCodes)
                     .putExtra("ageRestriction",ageRestriction);
+                    //.putExtra("images",images);
         }
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
         //Log.d("Title", "Title: "+event_mult_day);
