@@ -115,7 +115,7 @@
         android:layout_height="67dp"
         android:layout_marginTop="32dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/friendsListView"
+        app:layout_constraintTop_toBottomOf="@+id/moreDetails"
         app:srcCompat="@drawable/ic_add_a_photo_black_24dp"
         tools:layout_editor_absoluteX="16dp" />
 
@@ -138,7 +138,7 @@
         android:onClick="onClick"
         android:clickable="true"
         android:textColor="@color/wallet_link_text_light"
-        app:layout_constraintTop_toBottomOf="@id/eventImageBtn"
+        app:layout_constraintTop_toBottomOf="@id/friendsListView"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <EditText
@@ -149,7 +149,7 @@
         android:ems="10"
         android:hint="Description"
         android:inputType="textMultiLine"
-        app:layout_constraintTop_toBottomOf="@id/moreDetails"
+        app:layout_constraintTop_toBottomOf="@id/eventImageBtn"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <EditText
         android:id="@+id/capacity"
