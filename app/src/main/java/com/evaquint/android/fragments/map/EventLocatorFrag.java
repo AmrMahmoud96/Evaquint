@@ -151,7 +151,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             if (marker.getTag() != null &&marker.getTag().getClass()!=String.class) {
                 final ImageView eventPic = (ImageView) myContentsView.findViewById(R.id.eventPic);
                 EventDB event = (EventDB) marker.getTag();
-                TextView test = ((TextView) myContentsView.findViewById(R.id.title));
+                TextView title = ((TextView) myContentsView.findViewById(R.id.title));
 
                 try{
                     Picasso.with(myContentsView.getContext()).load(event.details.getPictures().get(0)).into(eventPic);
@@ -163,10 +163,10 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
                 if (event == null) {
                     Log.i("event: ","null");
-                    test.setText("");
+                    title.setText("");
                 }
                else{
-                    test.setText(event.eventTitle);
+                    title.setText(event.eventTitle);
                 }
             }
             return myContentsView;
