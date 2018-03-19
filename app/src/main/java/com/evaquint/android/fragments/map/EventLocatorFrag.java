@@ -152,9 +152,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 final ImageView eventPic = (ImageView) myContentsView.findViewById(R.id.eventPic);
                 EventDB event = (EventDB) marker.getTag();
                 TextView title = ((TextView) myContentsView.findViewById(R.id.title));
-
                 try{
-                    Picasso.with(myContentsView.getContext()).load(event.details.getPictures().get(0)).into(eventPic);
+                    String picURL = event.details.getPictures().get(0);
+                    if(picURL!=null&&!picURL.isEmpty()){
+                        Picasso.with(myContentsView.getContext()).load(event.details.getPictures().get(0)).resize(220,90).into(eventPic);
+                    }
                     Log.i("downloaded", "true");
                 }catch(Exception e){
                     Log.e("event image error", e.getMessage());
