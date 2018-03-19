@@ -42,6 +42,25 @@ public class UserProfileFrag extends Fragment{
         init_page();
         return view;
     }
+    /*
+    * to update user profile image and photo url
+    * FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+        .setDisplayName("Jane Q. User")
+        .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+        .build();
+
+user.updateProfile(profileUpdates)
+        .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "User profile updated.");
+                }
+            }
+        });
+    * */
 
     public void init_page(){
 
@@ -55,8 +74,9 @@ public class UserProfileFrag extends Fragment{
                         Log.i("datasnapshot", dataSnapshot.toString());
                         user = dataSnapshot.getValue(UserDB.class);
                         ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
-                        if(mAuth.getCurrentUser().getPhotoUrl()!=null && !mAuth.getCurrentUser().getPhotoUrl().toString().isEmpty()){
-                            Picasso.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl())
+                      // if(mAuth.getCurrentUser().getPhotoUrl()!=null && !mAuth.getCurrentUser().getPhotoUrl().toString().isEmpty()){
+                        if(!user.getPicture().equals("default")) {
+                            Picasso.with(getActivity()).load(user.getPicture())
                                     .into(((ImageView) view.findViewById(R.id.user_profile_image)));
                         }
                         ((TextView) view.findViewById(R.id.user_profile_name)).setText(user.getFirstName()+" "+user.getLastName());
