@@ -14,10 +14,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -61,8 +59,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -152,98 +148,30 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             if(marker.getTag().equals("PlaceMarker")){
                 return null;
             }
-            //initialize the box
-
             if (marker.getTag() != null &&marker.getTag().getClass()!=String.class) {
                 final ImageView eventPic = (ImageView) myContentsView.findViewById(R.id.eventPic);
                 PhotoUploadHelper photoUploadHelper = new PhotoUploadHelper();
-
                 EventDB event = (EventDB) marker.getTag();
-    //EventDB event= null;
                 TextView test = ((TextView) myContentsView.findViewById(R.id.title));
 
                 try{
-                    photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                // Got the download URL for 'users/me/profile.png'
-
-                                Log.i("downloadurl", uri.toString());
-                                // eventPic.setImageBitmap(getImageBitmap(uri.toString()));
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle any errors
-                            }
-                        });
                     Picasso.with(myContentsView.getContext()).load(event.details.getPictures().get(0)).into(eventPic);
-                    //eventPic.setImageBitmap(getImageBitmap(event.details.getPictures().get(0)));
                     Log.i("downloaded", "true");
                 }catch(Exception e){
                     Log.e("event image error", e.getMessage());
                 }
 
 
-                //eventPic.setImageBitmap(getImageBitmap("https://firebasestorage.googleapis.com/v0/b/evaquint-db85c.appspot.com/o/images%2Fevents%2Fa02107dd-60bc-4d21-9ba0-f27e5f6a2187%2F0?alt=media&token=fb333603-d75a-4b21-b165-5a7a8d432758"));
-               /* eventPic.setImageBitmap(getImageBitmap(photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().toString()));
-                photoUploadHelper.getStorageRef().child("events/"+event.eventID+"/0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        // Got the download URL for 'users/me/profile.png'
-                        eventPic.setImageBitmap(getImageBitmap(uri.toString()));
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });
-                /*storageRef.child("users/me/profile.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        // Got the download URL for 'users/me/profile.png'
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });*/
-               // EventDBHelper eventDBHelper = new EventDBHelper();
-                //Log.i("data2: ", marker.getTag().toString());
-                //EventDB event = eventDBHelper.retreiveEvent(marker.getTag().toString());
-             //   EventDB event2 = eventDBHelper.getEvent();
                 if (event == null) {
                     Log.i("event: ","null");
                     test.setText("");
                 }
-               /* if (event2 == null) {
-                    Log.i("wrong ", " time");
-                }*/
                else{
-                   Log.i("event2: ", photoUploadHelper.getStorageRef().getPath()+"/events/"+event.eventID+"/0");
+                   Log.i("event: ", photoUploadHelper.getStorageRef().getPath()+"/events/"+event.eventID+"/0");
 
                     test.setText(event.eventTitle);
-                                  /*   photoUploadHelper.getStorageRef().child("events").child(event.eventID).child("0").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            eventPic.setImageURI(uri);
-                        }
-                    });
-                        Glide.with(getActivity())
-                            .using(new FirebaseImageLoader())
-                            .load(photoUploadHelper.getStorageRef().child("events").child(event.eventID).child("0"))
-                            .into(eventPic);*/
-                    Log.i("event2: ", "doggo");
-
-                    //test.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
                 }
-//            test.setText(event.eventTitle);
-                //    test.setText("KKKKKKKKKKKKK FUCK YA BITCH HOMES");
             }
-          //  marker.setZIndex(100);
-       // googlePlacesSearchBarFrag.getView().setZ(0);
             return myContentsView;
         }
     }
