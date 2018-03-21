@@ -338,7 +338,8 @@ public class QuickEventFrag extends DialogFragment {
             focusView = mEventTitle;
         }
         if(mTimeText.getText().toString().isEmpty()){
-            mTimeText.setError("Please select an event time.");
+           // mTimeText.setError("Please select an event time.");
+            Toast.makeText(getActivity(),"Please select an event time.",Toast.LENGTH_SHORT).show();
             focusView = mTimeText;
         }
        /* if(moreDetails){
