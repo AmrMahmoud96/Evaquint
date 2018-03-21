@@ -155,6 +155,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 try{
                     String picURL = event.details.getPictures().get(0);
                     if(picURL!=null&&!picURL.isEmpty()){
+                      //  eventPic.setImageBitmap(getImageBitmap(picURL));
                         Picasso.with(myContentsView.getContext()).load(event.details.getPictures().get(0)).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).resize(220,90).into(eventPic);
                     }
                     Log.i("downloaded", "true");

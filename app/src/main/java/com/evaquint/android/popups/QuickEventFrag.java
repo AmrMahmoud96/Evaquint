@@ -116,6 +116,35 @@ public class QuickEventFrag extends DialogFragment {
 
         return inflater.inflate(R.layout.fragment_popup_quick_event, container);
     }
+/*
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState = pullFields().getExtras();
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState!=null){
+            mEventTitle.setText(savedInstanceState.getString("event_title"));
+            getArguments().putString("eventID",savedInstanceState.getString("eventID"));
+            mPrivateSwitch.setChecked(savedInstanceState.getBoolean("privacy"));
+            dateSelected = (Calendar) savedInstanceState.get("event_date");
+            mTimeText.setText(df.format(dateSelected.getTime()));
+            getArguments().putString("address",savedInstanceState.getString("address"));
+            getArguments().putDouble("latitude",savedInstanceState.getDouble("latitude"));
+            getArguments().putDouble("longitude",savedInstanceState.getDouble("longitude"));
+            invited = (HashMap<String, String>) savedInstanceState.getSerializable("invited");
+            moreDetails = savedInstanceState.getBoolean("moreDetails");
+            eventDescription.setText(savedInstanceState.getString("description"));
+            capacity.setText(savedInstanceState.getInt("capacity"));
+            mTournamentMode.setChecked(savedInstanceState.getBoolean("tournMode"));
+            mQRCodes.setChecked(savedInstanceState.getBoolean("QRCodes"));
+            eventAgeRestriction.setText(savedInstanceState.getInt("ageRestriction"));
+            images = (ArrayList<ImageData>) savedInstanceState.get("images");
+        }
+    }*/
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -256,9 +285,12 @@ public class QuickEventFrag extends DialogFragment {
                 mCreateEventButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        pullFields();
-                      //  uploadData();
-                        dismiss();
+                        if(validateFields()){
+                            Intent i = pullFields();
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
+                            dismiss();
+                        }
+
                     }
                 });
 
@@ -298,6 +330,30 @@ public class QuickEventFrag extends DialogFragment {
             return false;
         }
     }
+    public boolean validateFields(){
+        // need to add string values for these messages
+        View focusView=null;
+        if(mEventTitle.getText().toString().trim().isEmpty()){
+            mEventTitle.setError("Please enter an event title.");
+            focusView = mEventTitle;
+        }
+        if(mTimeText.getText().toString().isEmpty()){
+            mTimeText.setError("Please select an event time.");
+            focusView = mTimeText;
+        }
+       /* if(moreDetails){
+            if(eventDescription.getText().toString().trim().isEmpty()){
+                eventDescription.setError("Please enter an event description.");
+            }
+        }*/
+
+
+        if(focusView != null){
+            focusView.requestFocus();
+            return false;
+        }
+        return true;
+    }
     public void pickTime(){
         // Get Current Time selected
         mHour = dateSelected.get(Calendar.HOUR_OF_DAY);
@@ -322,7 +378,7 @@ public class QuickEventFrag extends DialogFragment {
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
-    public void pullFields(){
+    public Intent pullFields(){
         String event_title = mEventTitle.getText().toString().trim();
         //String location = mLocationText.getText().toString().trim();
         Boolean event_private = mPrivateSwitch.isChecked();
@@ -337,7 +393,8 @@ public class QuickEventFrag extends DialogFragment {
                 .putExtra("address", getArguments().getString("address"))
                 .putExtra("latitude", getArguments().getDouble("latitude"))
                 .putExtra("longitude", getArguments().getDouble("longitude"))
-                .putExtra("invited", (Serializable) invited);
+                .putExtra("invited", (Serializable) invited)
+                .putExtra("moreDetails",moreDetails);
 
         if(moreDetails){
             String description = eventDescription.getText().toString();
@@ -358,7 +415,7 @@ public class QuickEventFrag extends DialogFragment {
                     .putExtra("ageRestriction",ageRestriction)
                     .putExtra("images",images);
         }
-        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
+        return i;
         //Log.d("Title", "Title: "+event_mult_day);
     }
 
