@@ -39,7 +39,7 @@ public class DetailedEvent {
          //   this.mult_day = false;
           //  this.eventDates = null;
             this.capacity= 9999;
-            this.pictures = Arrays.asList("default");
+            this.pictures = Arrays.asList("");
             this.QRCodes = null;
             this.ageRestriction = 0;
             this.tournamentMode = false;
