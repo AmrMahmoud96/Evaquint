@@ -248,39 +248,49 @@ public class QuickEventFrag extends DialogFragment {
 
         final RecyclerView friends = ((RecyclerView)view.findViewById(R.id.friendsListView));
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("friends");
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("friends");
+        new Thread() {
+            public void run() {
+                try {
+                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot!=null&&dataSnapshot.getValue()!=null) {
+                                        Log.i("friends", dataSnapshot.toString());
+                                        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+                                        friends.setLayoutManager(layoutManager);
+                                        GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                                        final List<String> friendsList = dataSnapshot.getValue(t);
+                                        FriendsListAdapter f = new FriendsListAdapter(friendsList.toArray(new String[0]), new CustomItemClickListener() {
+                                            @Override
+                                            public void onItemClick(View v, int position) {
+                                                String userID = friendsList.get(position);
+                                                Log.i("invite friend",userID);
+                                                if(invited.get(userID)!=null){
+                                                    invited.remove(userID);
+                                                }else{
+                                                    invited.put(userID,userID);
+                                                }
+                                                //   Log.i("invited",invited.toString());
+                                            }
+                                        });
+                                        friends.setAdapter(f);
+                                    }
+                                }
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(DataSnapshot dataSnapshot) {
-                       if(dataSnapshot!=null&&dataSnapshot.getValue()!=null) {
-                           Log.i("friends", dataSnapshot.toString());
-                           LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
-                           friends.setLayoutManager(layoutManager);
-                           GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                           final List<String> friendsList = dataSnapshot.getValue(t);
-                           FriendsListAdapter f = new FriendsListAdapter(friendsList.toArray(new String[0]), new CustomItemClickListener() {
-                               @Override
-                               public void onItemClick(View v, int position) {
-                                   String userID = friendsList.get(position);
-                                   Log.i("invite friend",userID);
-                                   if(invited.get(userID)!=null){
-                                       invited.remove(userID);
-                                   }else{
-                                       invited.put(userID,userID);
-                                   }
-                                //   Log.i("invited",invited.toString());
-                               }
-                           });
-                           friends.setAdapter(f);
-                       }
-                   }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                   @Override
-                   public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
 
-                   }
-               });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.start();
 
                 mCreateEventButton.setOnClickListener(new View.OnClickListener() {
                     @Override
