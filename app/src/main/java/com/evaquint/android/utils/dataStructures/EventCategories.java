@@ -2,6 +2,7 @@ package com.evaquint.android.utils.dataStructures;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -21,6 +22,8 @@ public class EventCategories {
                 subCategories = null;
             }else{
                 subCategories = new ArrayList<>(Arrays.asList(splitItem[1].split(",")));
+               // subCategories.sort(Comp);
+                Collections.sort(subCategories,String.CASE_INSENSITIVE_ORDER);
             }
             categories.put(category,subCategories);
         }

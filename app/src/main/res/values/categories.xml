@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="event_categories">
-        <item>Music|Rock,Jazz,Metal,Hip-Hop,Country,Pop,Rap,R&amp;B,Classical,Dance,EDM,Trap,Disco,Alternative,Electronic,Blues,Concert,Indie,Instrumental,Orchestra,Choir,Techno,Dubstep,Chill,DJ</item>
         <item>Sports|Baseball,Lifting,E-Sports,Horse Racing,Fitness,Basketball,Soccer,Cricket,Golf,Rugby,Hockey,Skating,Surfing,Gymnastics,Boxing,Karate,MMA,Volleyball,Badminton,Skiing,Snowboarding,Polo,Marathon,Triathlon,Softball,Racing,Fencing,Bowling,Martial Arts,Judo,Track &amp; Field,Swimming,Curling,Winter Sport,Summer Sport,Archery,Running,Wrestling,Diving,Fishing,Climbing,Sailing,Shooting,Tennis,Cycling</item>
-        <item>Leisure|Knitting,Horse Riding,Card Games,Board Games,Chess,Crossword,Pool,Billiards,Table Tennis,Go-Karting,Puzzles,Sudoku,Snowball Fight,Fitness,Yoga,Health,Travel,Shopping,Meditation,Prayer,Beauty,Gardening,Home,Agriculture,Parkour,Charity</item>
-        <item>Drinking|Wine Testing,Beer</item>
+        <item>Leisure|Wine Tasting,Knitting,Horse Riding,Card Games,Board Games,Chess,Crossword,Pool,Billiards,Table Tennis,Go-Karting,Puzzles,Sudoku,Snowball Fight,Fitness,Yoga,Health,Travel,Shopping,Meditation,Prayer,Beauty,Gardening,Home,Agriculture,Parkour,Charity</item>
         <item>Party|Club,Rave,Pub,House Party,Birthdays,Festival,Wedding,Anniversary,Venue,Costume,Bachelor Party,Celebration,Parade,Masquerade</item>
         <item>Food|Social,Vegan,BBQ,Restaurants,Cafes,Pubs,Fast Food,Vegetarian,Taste Testing,Festival,Cooking Club,Cooking Class,Tutorial,Fine Dining,Free Food,Culinary Tours</item>
-        <item>Business|Career,Finance,Sales,Marketing,Investment,Banking,Law,Networking,Exhibition,Economics,Bitcoin,Software,Management,Small Business,Entrepreneurs,Technology,Charity,Show</item>
-        <item>Gaming|Diablo III,Rocket League,FIFA,Poker,Card Games,League of Legends,GTA V,Chess,CSGO,Hearthstone,DOTA2,World Of Warcraft,PUBG,Fortnite,H1Z1,Call of Duty,XBOX,PC,PlayStation,Indie,MarioKart,Street Fighter,Super Smash Bros,Tekken,Mortal Kombat,Counter Strike,Overwatch,Halo,Battlefield,Zombies,Shooter Games,Adventure Games,Story Games,Runescape,Racing Games,StarCraft,Warcraft,Smite,Heroes of the Storm,Clash Royale,Pokemon,Tetris,Pacman</item>
-        <item>Tech|IT,Computers,Virtual Reality,Video,Science,Engineering,Medical,AI,Mobile,Web Design,Blog,Tutorial,Blockchain,Machine Learning</item>
-        <item>Networking|Social,Business,Conference</item>
-        <item>Auto|Motorsport,Car Show,Go-Karting,Cars,Bikes,Supercars,Trucks,Tractors,Racing,Street,Burnout,Rally,Off-Road,Drag Racing,Drifting,Freestyle</item>
-        <item>Entertainment|Film,Festival,Opera,Movies,Live Show,Concert,Theatre,Play,Musical,Comedy,Photography,Open Mic,Puppet Shows,Ventriloquism,Museums,Exhibitions,Shows,Fairs,Theme Park,Fire Works,Magic,Parade,Dance,Circus,Acting,Performance,Podcast,Orchestra,Karaoke,Model,Fashion Show</item>
+        <item>Business|Corporate events,Career,Finance,Sales,Marketing,Investment,Banking,Law,Networking,Exhibition,Economics,Bitcoin,Software,Management,Small Business,Entrepreneurs,Technology,Charity,Show</item>
+        <item>Gaming|Virtual Reality,Diablo III,Rocket League,FIFA,NBA,Poker,Card Games,League of Legends,GTA V,Chess,CSGO,Hearthstone,DOTA2,World Of Warcraft,PUBG,Fortnite,H1Z1,Call of Duty,XBOX,PC,PlayStation,Indie,MarioKart,Street Fighter,Super Smash Bros,Tekken,Mortal Kombat,Counter Strike,Overwatch,Halo,Battlefield,Zombies,Shooter Games,Adventure Games,Story Games,Runescape,Racing Games,StarCraft,Warcraft,Smite,Heroes of the Storm,Clash Royale,Pokemon,Tetris,Pacman</item>
+        <item>Networking|Social,Convention,Business,Conference</item>
+        <item>Auto|Motorsport,Car Show,Go-Karting,Car Meet-ups,Bikes,Supercars,Trucks,Tractors,Racing,Street,Burnout,Rally,Off-Road,Drag Racing,Drifting,Freestyle</item>
+        <item>Entertainment|Music,Film,Festival,Opera,Movies,Live Show,Concert,Theatre,Play,Musical,Comedy,Open Mic,Puppet Shows,Ventriloquism,Museums,Exhibitions,Shows,Fairs,Theme Park,Fire Works,Magic,Parade,Dance,Circus,Performance,Orchestra,Karaoke,Fashion Show</item>
         <item>Adventure|Climbing,Trail Hiking,Hiking,Tours,Travel,Outdoors,Winter,Summer,Boating,Camping,Mountain Biking,Cycle Trails,Trekking,ZipLining,Canoeing,RV,Road Trip,Safari,Wildlife,Cruise,</item>
-        <item>Study|University,Library,Social,Group,Silent,Meet Up,Workshop,University,Cafe,School</item>
-        <item>Thrill|Surfing,Sky-Diving,Parachuting,Hot Air Balloon,Ice Swimming,Hang Glide,Cliff Diving,Racing,Diving,Ziplining,Rapid-Waters,Winged Suit,Flying,Cliff Walking,Roller Coaster,Edge Walk,Heights,Zorbing,Running With The Bulls</item>
-        <item>Film|Premiere,Festival,Classic,Action,Adventure,Animation,Biography,Comedy,Crime,Documentary,Drama,Family,Fantasy,Film Noir,History,Horror,Music,Musical,Mystery,Romance,Sci-Fi,Short,Sport,Superhero,Thriller,War,Western</item>
-        <item>Fashion|Fashion Show,Fashion Class,Shoes,Clothes,Swim,Dress,Summer,Winter,Shows,Events,Make-Up,Hair,Accessories,Shopping,Boutique,Museums,Nails,Designs,Beauty,Tailoring,High Fashion</item>
-        <item>Art|Art Classes,Cultural,Museums,Galleries,Architecture,Photography,Contemporary,Painting,Wood,Stone,Sculpture,Performing Arts,Creative,Graffiti,Ceramics,Film Arts,Literary,Poetry,Theatre,Handcrafts</item>
+        <item>Thrill|Surfing,Jet Skiing,Skydiving,Parachuting,Hot Air Balloon,Ice Swimming,Hang Glide,Cliff Diving,Racing,Diving,Rock Climbing,Zip Lining,Rapid-Waters,Winged Suit,Flying,Cliff Walking,Roller Coaster,Edge Walk,Heights,Zorbing,Running With The Bulls</item>
+        <item>Art|Art Classes,Museums,Galleries,Architecture,Photography,Painting,Sculpting,Pottery,Performing Arts,Graffiti,Ceramics,Film Arts,Literary,Poetry,Handcrafts</item>
         <item>Other</item>
     </string-array>
 </resources>

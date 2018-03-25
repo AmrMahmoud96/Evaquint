@@ -207,7 +207,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
             String[] catArray = getResources().getStringArray(R.array.event_categories);
             categories = new EventCategories(catArray).getCategories();
-
+            Log.i("cat:",categories.toString());
 
             android.support.v4.app.FragmentManager fm = getFragmentManager();
             googlePlacesSearchBarFrag = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
