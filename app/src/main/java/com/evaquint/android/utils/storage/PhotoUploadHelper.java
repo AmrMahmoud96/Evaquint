@@ -46,7 +46,7 @@ public class PhotoUploadHelper {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                            progressDialog.dismiss();
-//                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(HomeActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             Log.d("Image upload", "Success");
                         }
                     })
@@ -54,7 +54,7 @@ public class PhotoUploadHelper {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 //                            progressDialog.dismiss();
-//                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(HomeActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
                             Log.d("Image upload", "fail");
                         }
                     })
@@ -87,7 +87,7 @@ public class PhotoUploadHelper {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 //                            progressDialog.dismiss();
-//                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(HomeActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
                             Log.d("Image upload", "fail");
                         }
                     })
@@ -118,7 +118,7 @@ public class PhotoUploadHelper {
                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("details").child("pictures");
                             ref.child(""+index).setValue(taskSnapshot.getDownloadUrl().toString());
 //                            progressDialog.dismiss();
-//                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(HomeActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             Log.d("Image upload", "Success");
                         }
                     })
@@ -126,7 +126,7 @@ public class PhotoUploadHelper {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 //                            progressDialog.dismiss();
-//                            Toast.makeText(MainActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(HomeActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
                             Log.d("Image upload", "fail");
                         }
                     })

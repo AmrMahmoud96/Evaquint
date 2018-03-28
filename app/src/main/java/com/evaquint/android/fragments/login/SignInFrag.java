@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.evaquint.android.MainActivity;
+import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.utils.authenticator.EmailAuthenticator;
 import com.evaquint.android.utils.view.ViewAnimator;
@@ -210,11 +210,11 @@ public class SignInFrag extends Fragment implements LoaderManager.LoaderCallback
             // perform the user login attempt.
 //            showProgress(true);
 //            if (register)
-//                (new EmailAuthenticator(activity,new Intent(activity, MainActivity.class)
+//                (new EmailAuthenticator(activity,new Intent(activity, HomeActivity.class)
 //                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
 //                        )).createAccount(name, email, password);
 //            else
-                (new EmailAuthenticator(activity,new Intent(activity, MainActivity.class)
+                (new EmailAuthenticator(activity,new Intent(activity, HomeActivity.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY),
                         new Callable() {
                             @Override

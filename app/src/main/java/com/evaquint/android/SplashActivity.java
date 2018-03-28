@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         }
         
         if (FirebaseAuth.getInstance().getCurrentUser()!=null){
-            intent = new Intent(this, MainActivity.class);
+            intent = new Intent(this, HomeActivity.class);
         } else
             intent = new Intent(this, LoginActivity.class);
 

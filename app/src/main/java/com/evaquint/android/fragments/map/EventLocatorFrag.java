@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
@@ -92,11 +93,12 @@ import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMapLongClickListener {
     private Map<String, ArrayList<String>> categories;
+
     public String mTitle;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private View view;
-    private Activity a;
+    private Activity parentActivityInstance;
     private PlaceAutocompleteFragment googlePlacesSearchBarFrag;
     private Fragment popupFragment;
     private GeoQuery surroundingEvents;
@@ -112,7 +114,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
 
     final int REQUEST_LOCATION = 1;
-
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -187,14 +188,16 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ((HomeActivity)getActivity()).enableMenuButton();
+
         if (view != null) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (parent != null)
-                parent.removeView(view);
+            return view;
         }
+
         try {
             this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
-            this.a = getActivity();
+            this.parentActivityInstance = getActivity();
+
             currentMapMarkers = new ArrayList<Marker>();
 
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -228,7 +231,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     googlePlaceMarker.setTag("PlaceMarker");
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLocation));
-                    searchCircle.setCenter(placeLocation);
                     Log.i("place", "Place: " + place.getName());
 
                     Log.i("place", "Place: " + place.getAddress());
@@ -244,7 +246,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             });
 
             // ShakeDetector initialization
-            mSensorManager = (SensorManager) a.getSystemService(Context.SENSOR_SERVICE);
+            mSensorManager = (SensorManager) parentActivityInstance.getSystemService(Context.SENSOR_SERVICE);
             mAccelerometer = mSensorManager
                     .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             mShakeDetector = new ShakeDetector();
@@ -253,7 +255,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 @Override
                 public void onShake(int count) {
                     /*
-                     * The following method, "handleShakeEvent(count):" is a stub //
+                     * The following method, "handleShakeEvent(count):" is parentActivityInstance stub //
                      * method you would use to setup whatever you want done once the
                      * device has been shook.
                      */
@@ -285,6 +287,17 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         return this.view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeAllViews();
+            }
+        }
+    }
+
     public void handleShakeEvent(int count) {
         if (count >= 2) {
             mShakeDetector.setmShakeCount(0);
@@ -302,8 +315,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     @Override
     public void onPause() {
         // Add the following line to unregister the Sensor Manager onPause
-        mSensorManager.unregisterListener(mShakeDetector);
         super.onPause();
+        mSensorManager.unregisterListener(mShakeDetector);
     }
 
     @Override
@@ -352,7 +365,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 //                .title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-        if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(parentActivityInstance, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(parentActivityInstance, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             goToCurrentLocation();
         }
         initOverlay();
@@ -380,7 +393,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
     private void drawCircle(LatLng point) {
 
-        // Instantiating CircleOptions to draw a circle around the marker
+        // Instantiating CircleOptions to draw parentActivityInstance circle around the marker
         CircleOptions circleOptions = new CircleOptions();
 
         // Specifying the center of the circle
@@ -415,14 +428,14 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         //Log.d("this is cat array",Arrays.toString(musicSubCategories));
 
         LocationManager locationManager =
-                (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
+                (LocationManager) parentActivityInstance.getSystemService(Context.LOCATION_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(a,
+        if (ActivityCompat.checkSelfPermission(parentActivityInstance,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.
-                checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(a, "Permission denied to use location",
+                checkSelfPermission(parentActivityInstance, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(parentActivityInstance, "Permission denied to use location",
                     Toast.LENGTH_SHORT).show();
-            if (ActivityCompat.shouldShowRequestPermissionRationale(a,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(parentActivityInstance,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         REQUEST_LOCATION);
@@ -751,7 +764,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     goToCurrentLocation();
 
                 } else {
-                    Toast.makeText(a, "Permission denied to use location",
+                    Toast.makeText(parentActivityInstance, "Permission denied to use location",
                             Toast.LENGTH_SHORT).show();
                 }
                 return;
