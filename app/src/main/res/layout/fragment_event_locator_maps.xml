@@ -24,9 +24,9 @@
             android:layout_marginLeft="70dp"
             android:layout_marginTop="26dp"
             android:background="@color/white"
-            app:layout_heightPercent="10%"
+            app:layout_heightPercent="8%"
             app:layout_marginRightPercent="5%"
-            app:layout_marginTopPercent="5%">
+            app:layout_marginTopPercent="9%">
 
             <fragment
                 android:id="@+id/event_maps_searchbar"
@@ -34,20 +34,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </FrameLayout>
-
-
-
-        <!--<include-->
-            <!--android:id="@+id/event_maps_searchbar"-->
-            <!--layout="@layout/component_map_searchbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginLeft="70dp"-->
-            <!--android:layout_marginTop="26dp"-->
-            <!--app:layout_heightPercent="10%"-->
-            <!--app:layout_marginRightPercent="5%"-->
-            <!--app:layout_marginTopPercent="5%" />-->
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/current_location_button"
