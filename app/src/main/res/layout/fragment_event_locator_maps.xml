@@ -21,12 +21,11 @@
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="70dp"
-            android:layout_marginTop="26dp"
+            app:layout_marginLeftPercent="8%"
             android:background="@color/white"
-            app:layout_heightPercent="8%"
-            app:layout_marginRightPercent="5%"
-            app:layout_marginTopPercent="9%">
+            app:layout_heightPercent="7%"
+            app:layout_marginRightPercent="8%"
+            app:layout_marginTopPercent="15%">
 
             <fragment
                 android:id="@+id/event_maps_searchbar"

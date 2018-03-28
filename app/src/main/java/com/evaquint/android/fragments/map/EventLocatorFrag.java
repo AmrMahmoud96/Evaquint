@@ -104,10 +104,12 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private Circle searchCircle;
     private Marker marker;
     private Marker googlePlaceMarker;
+    private LatLng target = null;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
+
 
     final int REQUEST_LOCATION = 1;
 
@@ -422,9 +424,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     Toast.LENGTH_SHORT).show();
             if (ActivityCompat.shouldShowRequestPermissionRationale(a,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         REQUEST_LOCATION);
                 return;
@@ -433,9 +432,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                         REQUEST_LOCATION);
                 return;
             }
+        } else {
+            mMap.setMyLocationEnabled(true);
         }
 
-        Location selfLocation = locationManager
+        final Location selfLocation = locationManager
                 .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         if (selfLocation != null) {
             //Move the map to the user's location
@@ -452,6 +453,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     public void onKeyEntered(String key, GeoLocation location) {
                         Marker mapMarker;
                         mapMarker = getMarkerFromMap(key);
+                        searchCircle.setCenter(selfLoc);
                         if (mapMarker != null) {
                             mapMarker.setVisible(true);
                         } else {
@@ -574,7 +576,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
     private void initOverlay() {
 
-        LatLng target = mMap.getCameraPosition().target;
+        target = mMap.getCameraPosition().target;
 
         drawCircle(target);
 
@@ -591,21 +593,12 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
         LatLngBounds bounds = new LatLngBounds(new LatLng(y2, x2), new LatLng(y1, x1));
         googlePlacesSearchBarFrag.setBoundsBias(bounds);
-        //googlePlacesSearchBarFrag.setBoundsBias(new LatLngBounds.Builder().include(target).build());
-        //Log.i("bounds",new LatLngBounds.Builder().include(mMap.getCameraPosition().target).build().toString());
 
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.setOnMapLongClickListener(this);
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.setInfoWindowAdapter(new EventPreviewWindow());
-
-        if (ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(a, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-        }
 
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
@@ -617,7 +610,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
             public void onCameraMove() {
-                searchCircle.setCenter(mMap.getCameraPosition().target);
+//                searchCircle.setCenter(mMap.getCameraPosition().target);
             }
         });
 
@@ -755,22 +748,14 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initOverlay();
-                    mMap.setMyLocationEnabled(true);
-                    //Acquire a reference to the system Location Manager
                     goToCurrentLocation();
 
                 } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                     Toast.makeText(a, "Permission denied to use location",
                             Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
