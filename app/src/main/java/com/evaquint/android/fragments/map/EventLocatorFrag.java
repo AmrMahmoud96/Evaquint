@@ -109,6 +109,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
 
+    final int REQUEST_LOCATION = 1;
+
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -424,11 +426,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        1);
+                        REQUEST_LOCATION);
                 return;
             } else {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        1);
+                        REQUEST_LOCATION);
                 return;
             }
         }
@@ -749,7 +751,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case 1: {
+            case REQUEST_LOCATION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initOverlay();
