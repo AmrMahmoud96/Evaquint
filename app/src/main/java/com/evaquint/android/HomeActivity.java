@@ -35,10 +35,11 @@ import java.net.URLConnection;
 import static android.content.ContentValues.TAG;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
-public class MainActivity extends AppCompatActivity
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private FirebaseAuth mAuth;
+    private ImageButton mMenuBtn;
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -88,30 +89,14 @@ public class MainActivity extends AppCompatActivity
         initNavHeader(navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ImageButton menuButton = (ImageButton) findViewById(R.id.main_activity_menu_button);
-        menuButton.setOnClickListener(new View.OnClickListener(
+        mMenuBtn = (ImageButton) findViewById(R.id.main_activity_menu_button);
+        mMenuBtn.setOnClickListener(new View.OnClickListener(
         ) {
             @Override
             public void onClick(View view) {
                 drawer.openDrawer(GravityCompat.START);
             }
         });
-
-       /* BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
-            @Override
-            public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab_nearby) {
-                    setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
-                }
-                else if (tabId == R.id.tab_search) {
-                    setActiveFragment(getSupportFragmentManager(), new FeedFrag());
-                }
-                else if (tabId == R.id.tab_feed) {
-
-                }
-            }
-        });*/
 
         setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
     }
@@ -173,8 +158,15 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    public void enableMenuButton(){
+        mMenuBtn.setVisibility(View.VISIBLE);
+    }
 
+    public void disableMenuButton(){
+        mMenuBtn.setVisibility(View.GONE);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -199,7 +191,7 @@ public class MainActivity extends AppCompatActivity
                             } else {
                                 // User is signed out
                                 Log.d(TAG, "onAuthStateChanged:signed_out");
-                                startActivity(new Intent(MainActivity.this, LoginActivity.class)
+                                startActivity(new Intent(HomeActivity.this, LoginActivity.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                             }
                             // ...

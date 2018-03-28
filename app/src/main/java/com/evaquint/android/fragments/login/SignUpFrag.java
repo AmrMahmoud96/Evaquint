@@ -2,7 +2,6 @@ package com.evaquint.android.fragments.login;
 
 import android.app.Activity;
 import android.app.LoaderManager;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -17,14 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.evaquint.android.MainActivity;
+import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.utils.authenticator.EmailAuthenticator;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import org.w3c.dom.Text;
 
 import java.util.concurrent.Callable;
 
@@ -175,7 +169,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
             });
 
             EmailAuthenticator emailAuthenticator = new EmailAuthenticator(activity,
-                    new Intent(activity, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY),
+                    new Intent(activity, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY),
                     new Callable() {
                         @Override
                         public Object call() throws Exception {
@@ -205,7 +199,7 @@ public class SignUpFrag extends Fragment implements LoaderManager.LoaderCallback
 //
 //                        current_user_db.child("name").setValue(name);
 //                        current_user_db.child("image").setValue("default");
-//                        Intent mainIntent = new Intent(activity, MainActivity.class);
+//                        Intent mainIntent = new Intent(activity, HomeActivity.class);
 //                       startActivity(mainIntent);
 //
 //                    }

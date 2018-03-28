@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.evaquint.android.MainActivity;
+import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.utils.authenticator.FacebookAuthenticator;
 import com.evaquint.android.utils.authenticator.FirebaseAuthenticator;
@@ -52,7 +52,7 @@ public class LoginLandingFrag extends Fragment {
             @Override
             public void onClick(View view) {
                 authManager = new GoogleAuthenticator(LoginLandingFrag.this,
-                        new Intent(activity, MainActivity.class)
+                        new Intent(activity, HomeActivity.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 authManager.executeAuth();
             }
@@ -63,7 +63,7 @@ public class LoginLandingFrag extends Fragment {
             @Override
             public void onClick(View view) {
                 authManager = new FacebookAuthenticator(LoginLandingFrag.this,
-                        new Intent(activity, MainActivity.class)
+                        new Intent(activity, HomeActivity.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                 authManager.executeAuth();
             }

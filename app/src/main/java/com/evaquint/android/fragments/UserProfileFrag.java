@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.utils.dataStructures.UserDB;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +27,7 @@ import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
  * Created by henry on 9/10/2017.
  */
 
-public class UserProfileFrag extends Fragment{
+public class UserProfileFrag extends Fragment {
     private View view;
     private FirebaseAuth mAuth;
     UserDB user;
@@ -35,6 +36,9 @@ public class UserProfileFrag extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((HomeActivity)getActivity()).disableMenuButton();
+
         this.view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         this.mAuth = FirebaseAuth.getInstance();

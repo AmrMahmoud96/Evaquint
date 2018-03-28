@@ -12,7 +12,7 @@ public class MapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         Intent intent = getIntent();
-        intent = new Intent(this, MainActivity.class);
+        intent = new Intent(this, HomeActivity.class);
         setContentView(R.layout.activity_map);
     }
 
