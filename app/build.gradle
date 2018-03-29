@@ -26,6 +26,7 @@ android {
 }
 
 dependencies {
+    compile 'de.hdodenhof:circleimageview:2.2.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
