@@ -108,7 +108,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private Marker googlePlaceMarker;
     private LatLng target = null;
 
-    private SensorManager mSensorManager;
+    private SensorManager mSensorManager = null ;
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
 
@@ -245,23 +245,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 }
             });
 
-            // ShakeDetector initialization
-            mSensorManager = (SensorManager) parentActivityInstance.getSystemService(Context.SENSOR_SERVICE);
-            mAccelerometer = mSensorManager
-                    .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            mShakeDetector = new ShakeDetector();
-            mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
-
-                @Override
-                public void onShake(int count) {
-                    /*
-                     * The following method, "handleShakeEvent(count):" is parentActivityInstance stub //
-                     * method you would use to setup whatever you want done once the
-                     * device has been shook.
-                     */
-                    handleShakeEvent(count);
-                }
-            });
+            initShakeSensor();
 
 
             //        mGeoDataClient = Places.getGeoDataClient(this,null);
@@ -308,15 +292,14 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     @Override
     public void onResume() {
         super.onResume();
-        // Add the following line to register the Session Manager Listener onResume
         mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
     public void onPause() {
         // Add the following line to unregister the Sensor Manager onPause
-        super.onPause();
         mSensorManager.unregisterListener(mShakeDetector);
+        super.onPause();
     }
 
     @Override
@@ -585,6 +568,20 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 }
             });
         }
+    }
+
+    private void initShakeSensor() {
+        // ShakeDetector initialization
+        mSensorManager = (SensorManager) parentActivityInstance.getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeDetector();
+        mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+            @Override
+            public void onShake(int count) {
+                handleShakeEvent(count);
+            }
+        });
     }
 
     private void initOverlay() {

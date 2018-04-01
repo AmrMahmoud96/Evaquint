@@ -40,6 +40,7 @@ public class HomeActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private FirebaseAuth mAuth;
     private ImageButton mMenuBtn;
+    private int currentID = -1;
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -98,6 +99,8 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
+        currentID = R.id.nav_event_locator;
+        navigationView.setCheckedItem(currentID);
         setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
     }
 
@@ -172,31 +175,34 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_event_locator) {
-            setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
-        } else if (id == R.id.nav_gallery) {
-            setActiveFragment(getSupportFragmentManager(), new FeedFrag());
-        } else if (id == R.id.nav_slideshow) {
+        if (id != currentID) {
+            currentID = id;
+            if (id == R.id.nav_event_locator) {
+                setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
+            } else if (id == R.id.nav_gallery) {
+                setActiveFragment(getSupportFragmentManager(), new FeedFrag());
+            } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_logout) {
-            FirebaseAuth.getInstance().signOut();
-            FirebaseAuth.getInstance().addAuthStateListener(
-                    new FirebaseAuth.AuthStateListener() {
-                        @Override
-                        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            if (user != null) {
-                                // User is signed in
-                                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                            } else {
-                                // User is signed out
-                                Log.d(TAG, "onAuthStateChanged:signed_out");
-                                startActivity(new Intent(HomeActivity.this, LoginActivity.class)
-                                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+            } else if (id == R.id.nav_logout) {
+                FirebaseAuth.getInstance().signOut();
+                FirebaseAuth.getInstance().addAuthStateListener(
+                        new FirebaseAuth.AuthStateListener() {
+                            @Override
+                            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                                FirebaseUser user = firebaseAuth.getCurrentUser();
+                                if (user != null) {
+                                    // User is signed in
+                                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                                } else {
+                                    // User is signed out
+                                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                                    startActivity(new Intent(HomeActivity.this, LoginActivity.class)
+                                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                                }
+                                // ...
                             }
-                            // ...
-                        }
-                    });
+                        });
+            }
         }
 
         this.drawer.closeDrawer(GravityCompat.START);
