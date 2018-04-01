@@ -112,8 +112,8 @@
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
            // dismiss();
-            int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
-            int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+            int width = (int)(getResources().getDisplayMetrics().widthPixels*0.85);
+            int height = (int)(getResources().getDisplayMetrics().heightPixels*0.75);
 
             getDialog().getWindow().setLayout(width, height);
 

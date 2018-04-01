@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
+import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventCategories;
@@ -87,6 +88,7 @@ import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
+import static com.evaquint.android.utils.code.IntentValues.EVENT_SUGGESTION_FRAGMENT;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
 
@@ -114,6 +116,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
 
     final int REQUEST_LOCATION = 1;
+
+    private boolean isPopupOpen = false;
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -282,10 +286,24 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    public void handleShakeEvent(int count) {
-        if (count >= 2) {
+    public void setPopupOpen() {
+        isPopupOpen = true;
+    }
+
+    public void setPopupClosed() {
+        isPopupOpen = false;
+    }
+
+    public synchronized void handleShakeEvent(int count) {
+        if (count >= 2 && !isPopupOpen) {
+            Log.i(TAG, "Phone Shake Detected");
             mShakeDetector.setmShakeCount(0);
-            Log.i(TAG, "YAYAYAYA");
+            FragmentManager fm = getFragmentManager();
+            EventSuggestionFrag editNameDialogFragment = new EventSuggestionFrag();
+            popupFragment = editNameDialogFragment;
+
+            editNameDialogFragment.setTargetFragment(this, EVENT_SUGGESTION_FRAGMENT);
+            editNameDialogFragment.show(fm, "fragment_popup_quick_event");
         }
     }
 
@@ -745,7 +763,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 }
                 break;
             case PICK_IMAGE_REQUEST:
-                popupFragment.onActivityResult(requestCode, resultCode, data);
+                popupFragment.onActivityResult(requestCode,  resultCode, data);
+                break;
+            case EVENT_SUGGESTION_FRAGMENT:
+                isPopupOpen = false;
+                break;
         }
     }
 
