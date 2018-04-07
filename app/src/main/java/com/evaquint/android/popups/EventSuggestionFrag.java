@@ -20,6 +20,7 @@ public class EventSuggestionFrag extends DialogFragment {
     private TextView mRecommendation;
     private Button mRunAgain;
     private Button mContinue;
+    private String lastSuggestion;
     private Map<String, ArrayList<String>> categories;
     private View view;
     public EventSuggestionFrag() {
@@ -62,7 +63,8 @@ public class EventSuggestionFrag extends DialogFragment {
         mRunAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                suggestEvent();
+                int suggestionType = (int) Math.floor(Math.random()*5);
+                suggestEvent(suggestionType);
             }
         });
         init();
@@ -80,33 +82,74 @@ public class EventSuggestionFrag extends DialogFragment {
         String[] catArray = getResources().getStringArray(R.array.event_categories);
         categories = new EventCategories(catArray).getCategories();
         //Log.i("cat:",categories.toString());
-        suggestEvent();
+        int firstSuggestion = (int) Math.floor(Math.random()*5);
+        suggestEvent(firstSuggestion);
     }
 
-    public void suggestEvent(){
+    public void suggestEvent(int suggestionType){
                /*
         * Ways to recommend people evenets
-        *   1. Based off their interests
-        *   2. Based off their friends interests
+        *   1. Based off user's interests
+        *   2. Based off user's friends interests
         *   3. Based off surrounding peoples interests
         *   4. Randomly based off all event types
+        *
+        *Set the recommendation text specific to each type.
+        *
+        * Ways to better algorithm:
+        *  1. find the recommendations contained between recommendations 1-4
+        *
         * */
+        String recommendation = "";
 
+        //1. Based off user's interests
+        if(suggestionType == 1){
+            mRecText.setText("We saw that you are interested in:");
+            recommendation = "a";
+        }
+
+        //2. Based off user's friends interests
+        if(suggestionType == 2){
+            mRecText.setText("X, Y, and Z others are interested in:");
+            recommendation = "b";
+        }
+        //3. Based off surrounding peoples interests
+        if(suggestionType == 3){
+            mRecText.setText("X people near you are interested in:");
+            recommendation = "c";
+        }
 
         //4. Randomly based off all event types
-        ArrayList<String> cat = new ArrayList<>(categories.keySet());
-        int catSelect = (int) Math.floor(Math.random()*cat.size());
-        String category = cat.get(catSelect);
-        if(category.equalsIgnoreCase("other")){
-            suggestEvent();
-        }else{
-            ArrayList<String> subcat = categories.get(category);
-            if(subcat!=null){
-                String selection = subcat.get((int)Math.floor(Math.random()*subcat.size()));
-                mRecommendation.setText(selection);
+        if(suggestionType == 4){
+            mRecText.setText("How about trying:");
+            ArrayList<String> cat = new ArrayList<>(categories.keySet());
+            int catSelect = (int) Math.floor(Math.random()*cat.size());
+            String category = cat.get(catSelect);
+            if(category.equalsIgnoreCase("other")){
+                suggestEvent(suggestionType);
             }else{
-                mRecommendation.setText(category);
+                ArrayList<String> subcat = categories.get(category);
+                if(subcat!=null){
+                    String selection = subcat.get((int)Math.floor(Math.random()*subcat.size()));
+                    recommendation = selection;
+                }else{
+                    recommendation = category;
+                }
             }
         }
+
+        if(recommendation.isEmpty()){
+            // if nothing was returned, try again with type 4 suggestion.
+            suggestEvent(4);
+        }else{
+            if(recommendation.equalsIgnoreCase(lastSuggestion)){
+                // no re runs of the same type.
+                suggestEvent(4);
+            }else{
+                mRecommendation.setText(recommendation);
+                lastSuggestion = recommendation;
+            }
+        }
+
     }
 }

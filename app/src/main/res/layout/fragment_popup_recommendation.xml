@@ -55,7 +55,7 @@
         android:text="Try Again"
         app:layout_constraintRight_toLeftOf="@id/contButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recommendation" />
+        app:layout_constraintTop_toBottomOf="@+id/recContText" />
 
     <Button
         android:id="@+id/contButton"
@@ -67,6 +67,17 @@
         android:text="Continue"
         app:layout_constraintLeft_toRightOf="@id/reroll"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recommendation" />
+        app:layout_constraintTop_toBottomOf="@+id/recContText" />
+
+    <TextView
+        android:id="@+id/recContText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Would you like to continue with this event selection?"
+        app:layout_constraintTop_toBottomOf="@id/recommendation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="131dp"
+        tools:layout_editor_absoluteY="152dp" />
 
 </android.support.constraint.ConstraintLayout>
