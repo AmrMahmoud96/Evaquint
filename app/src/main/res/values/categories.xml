@@ -2,16 +2,16 @@
 <resources>
     <string-array name="event_categories">
         <item>Sports|Baseball,Lifting,E-Sports,Horse Racing,Fitness,Basketball,Soccer,Cricket,Golf,Rugby,Hockey,Skating,Surfing,Gymnastics,Boxing,Karate,MMA,Volleyball,Badminton,Skiing,Snowboarding,Polo,Marathon,Triathlon,Softball,Racing,Fencing,Bowling,Martial Arts,Judo,Track &amp; Field,Swimming,Curling,Winter Sport,Summer Sport,Archery,Running,Wrestling,Diving,Fishing,Climbing,Sailing,Shooting,Tennis,Cycling</item>
-        <item>Leisure|Wine Tasting,Knitting,Horse Riding,Fitness,Yoga,Health,Jogging,Meditation,Prayer,Beauty,Gardening,Home,Agriculture,Card Games,Board Games,Chess,Crossword,Pool,Billiards,Table Tennis,Go-Karting,Puzzles,Sudoku</item>
-        <item>Party|Nightlife,Club,Rave,Pub,House Party,Birthdays,Festival,Wedding,Anniversary,Venue,Costume,Bachelor Party,Celebration,Parade,Masquerade</item>
-        <item>Food|Social,Vegan,BBQ,Restaurants,Cafes,Pubs,Fast Food,Vegetarian,Taste Testing,Festival,Cooking Club,Cooking Class,Tutorial,Fine Dining,Free Food,Culinary Tours</item>
+        <item>Leisure|Wine Tasting,Knitting,Horse Riding,Fitness,Yoga,Health,Jogging,Meditation,Prayer,Gardening,Home,Agriculture,Card Games,Board Games,Chess,Crossword,Pool,Billiards,Table Tennis,Go-Karting,Puzzles,Sudoku</item>
+        <item>Party|Nightlife,Clubbing,Rave,Pub,House Party,Birthdays,Festival,Wedding,Costume,Bachelor Party,Parade</item>
+        <item>Food|Social,Vegan,BBQ,Restaurants,Cafes,Pubs,Fast Food,Vegetarian,Taste Testing,Festival,Cooking Club,Cooking Class,Tutorials,Fine Dining,Free Food,Culinary Tours</item>
         <item>Gaming|Virtual Reality,Card Games,Board Games,Chess,Crossword,Pool,Billiards,Table Tennis,Go-Karting,Puzzles,Sudoku,Diablo III,Rocket League,FIFA,NBA,Poker,Card Games,League of Legends,GTA V,Chess,CSGO,Hearthstone,DOTA2,World Of Warcraft,PUBG,Fortnite,H1Z1,Call of Duty,XBOX,PC,PlayStation,Indie,MarioKart,Street Fighter,Super Smash Bros,Tekken,Mortal Kombat,Counter Strike,Overwatch,Halo,Battlefield,Zombies,Shooter Games,Adventure Games,Story Games,Runescape,Racing Games,StarCraft,Warcraft,Smite,Heroes of the Storm,Clash Royale,Pokemon,Tetris,Pacman</item>
-        <item>Networking|Social,Hobby-Related,Convention,Business,Career,Conference</item>
-        <item>Auto|Motorsport,Car Show,Go-Karting,Car Meet-ups,Bikes,Supercars,Trucks,Tractors,Racing,Street,Burnout,Rally,Off-Road,Drag Racing,Drifting,Freestyle</item>
-        <item>Entertainment|Music,Film,Festival,Opera,Movies,Live Show,Concert,Theatre,Play,Musical,Comedy,Open Mic,Puppet Shows,Ventriloquism,Museums,Exhibitions,Shows,Fairs,Theme Park,Fire Works,Magic,Parade,Dance,Circus,Performance,Orchestra,Karaoke,Fashion Show</item>
-        <item>Adventure|Climbing,Trail Hiking,Hiking,Tours,Travel,Outdoors,Winter,Summer,Boating,Camping,Mountain Biking,Cycle Trails,Trekking,ZipLining,Canoeing,RV,Road Trip,Safari,Wildlife,Cruise,</item>
+        <item>Networking|Socializing,Conventions,Business,Career Networking,Conferences</item>
+        <item>Auto|Motorsport,Car Show,Go-Karting,Car Meet-ups,Motorcycle,Supercars,Trucks,Tractors,Racing,Burnout,Rally,Off-Road,Drag Racing,Drifting,Freestyle</item>
+        <item>Entertainment|Music,Film,Festival,Opera,Movies,Live Show,Concert,Theatre,Play,Musical,Comedy,Open Mic,Puppet Shows,Ventriloquism,Museums,Exhibitions,Shows,Fairs,Theme Park,Fire Works,Magic,Parade,Dance,Performance,Orchestra,Karaoke,Fashion Shows</item>
+        <item>Adventure|Climbing,Trail Hiking,Hiking,Tours,Travel,Outdoors,Winter Adventures,Summer Adventures,Boating,Camping,Mountain Biking,Cycle Trails,Trekking,ZipLining,Canoeing,RV,Road Trips,Safari,Wildlife,Cruise</item>
         <item>Thrill|Parkour,Surfing,Jet Skiing,Skydiving,Parachuting,Hot Air Balloon,Ice Swimming,Hang Glide,Cliff Diving,Racing,Diving,Rock Climbing,Zip Lining,Rapid-Waters,Winged Suit,Flying,Cliff Walking,Roller Coaster,Edge Walk,Heights,Zorbing,Running With The Bulls</item>
-        <item>Art|Art Classes,Museums,Galleries,Architecture,Photography,Painting,Sculpting,Pottery,Performing Arts,Graffiti,Ceramics,Film Arts,Literary,Poetry,Handcrafts</item>
+        <item>Art|Art Classes,Museums,Galleries,Architecture,Photography,Painting,Sculpting,Pottery,Performing Arts,Graffiti Arts,Ceramics,Film Arts,Literature,Poetry,Handcrafts</item>
         <item>Social (Movements)|Anime North,Conventions,Comicon,Fundraisers,Charity,</item>
         <item>Other</item>
 

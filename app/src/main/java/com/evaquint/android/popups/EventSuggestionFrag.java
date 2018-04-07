@@ -87,8 +87,8 @@ public class EventSuggestionFrag extends DialogFragment {
     }
 
     public void suggestEvent(int suggestionType){
-               /*
-        * Ways to recommend people evenets
+               /* Fundamentally different than recommending an event to go to (this recommends events to make)
+        * Ways to recommend people events
         *   1. Based off user's interests
         *   2. Based off user's friends interests
         *   3. Based off surrounding peoples interests
@@ -98,6 +98,7 @@ public class EventSuggestionFrag extends DialogFragment {
         *
         * Ways to better algorithm:
         *  1. find the recommendations contained between recommendations 1-4
+        *  2. add an arraylist of recommendations and check if the returned one is in that list + rerun
         *
         * */
         String recommendation = "";
