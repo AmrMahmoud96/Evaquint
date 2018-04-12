@@ -8,7 +8,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import static com.evaquint.android.utils.code.DatabaseValues.GEOFIRE_TABLE;
+import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_GEOFIRE_TABLE;
+import static com.evaquint.android.utils.code.DatabaseValues.USERS_GEOFIRE_TABLE;
 
 /**
  * Created by henry on 8/22/2017.
@@ -20,7 +21,7 @@ public class GeofireDBHelper {
     //SimpleDateFormat df;
 
     public GeofireDBHelper() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(GEOFIRE_TABLE.getName());
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_GEOFIRE_TABLE.getName());
          geoFire = new GeoFire(ref);
        // df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
     }
@@ -30,7 +31,11 @@ public class GeofireDBHelper {
     }
     public void removeEvent(String eventID){
         geoFire.removeLocation(eventID);
-
+    }
+    public void addUserToGeofire(String userID,LatLng location) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(USERS_GEOFIRE_TABLE.getName());
+        GeoFire UserGeoFire = new GeoFire(userRef);
+        UserGeoFire.setLocation(userID, new GeoLocation(location.latitude, location.longitude));
     }
 
     public GeoQuery queryAtLocation(LatLng location, int radius){

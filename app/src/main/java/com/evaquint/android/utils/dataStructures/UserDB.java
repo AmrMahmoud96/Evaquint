@@ -15,6 +15,8 @@ public class UserDB {
     private int age;
     private String email;
     private String phone;
+    private double lat;
+    private double lon;
     private String firstName;
     private String lastName;
     private String picture;
@@ -41,7 +43,7 @@ public class UserDB {
         this.raters = raters;
     }
 
-    public UserDB(String firstName, String lastName, int age, String picture, String email, String phone, List<String> interests, String dateCreated, Map<String,String> eventsAttending, Map<String,String>eventsHosted, List<String>friends, int hostRating, int raters) {
+    public UserDB(String firstName, String lastName, int age, String picture, String email, String phone, List<String> interests, String dateCreated, Map<String,String> eventsAttending, Map<String,String>eventsHosted, List<String>friends, int hostRating, int raters,double lat, double lon) {
         this.firstName =firstName;
         this.age = age;
         this.raters=raters;
@@ -56,6 +58,8 @@ public class UserDB {
         this.phone = phone;
         this.interests = interests;
         this.dateCreated = dateCreated;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     public UserDB(){
@@ -145,4 +149,19 @@ public class UserDB {
     }
 
 
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
 }
