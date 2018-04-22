@@ -20,8 +20,14 @@ public class GeofireDBHelper {
     //DBConnector dbConnector;
     //SimpleDateFormat df;
 
-    public GeofireDBHelper() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_GEOFIRE_TABLE.getName());
+    public GeofireDBHelper(String type) {
+        DatabaseReference ref = null;
+        if(type.equalsIgnoreCase("events")){
+           ref = FirebaseDatabase.getInstance().getReference(EVENTS_GEOFIRE_TABLE.getName());
+        }
+        if(type.equalsIgnoreCase("users")){
+           ref = FirebaseDatabase.getInstance().getReference(USERS_GEOFIRE_TABLE.getName());
+        }
          geoFire = new GeoFire(ref);
        // df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
     }
@@ -33,9 +39,7 @@ public class GeofireDBHelper {
         geoFire.removeLocation(eventID);
     }
     public void addUserToGeofire(String userID,LatLng location) {
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(USERS_GEOFIRE_TABLE.getName());
-        GeoFire UserGeoFire = new GeoFire(userRef);
-        UserGeoFire.setLocation(userID, new GeoLocation(location.latitude, location.longitude));
+        geoFire.setLocation(userID, new GeoLocation(location.latitude, location.longitude));
     }
 
     public GeoQuery queryAtLocation(LatLng location, int radius){

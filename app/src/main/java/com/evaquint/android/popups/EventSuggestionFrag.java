@@ -27,6 +27,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,19 +111,35 @@ public class EventSuggestionFrag extends DialogFragment {
 
         // need to init user + interests, friends interests, geofire query interests.
 
+      assignUser();
+    }
+    public void assignUser(){
+
+        Log.i("p1", "called ");
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Log.i("user", userID);
         if(!userID.isEmpty()&&userID!=null){
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID);
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
                     if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
                         Log.i("datasnapshot", dataSnapshot.toString());
                         user = dataSnapshot.getValue(UserDB.class);
-                        userInterests = new ArrayList<>(user.getInterests());
-                        friendsList = new ArrayList<>(user.getFriends());
+                        if(user.getInterests()!=null){
+                            userInterests = new ArrayList<>(user.getInterests());
+                        }
+                        if(user.getFriends()!=null){
+                            friendsInterests = new HashMap<String,ArrayList<String>>();
+                            friendsList = new ArrayList<>(user.getFriends());
+                        }
+                        nearbyInterests = new HashMap<String, Integer>();
                     }
 
+                    assignFriends();
+                    assignNearby();
                 }
 
                 @Override
@@ -131,91 +148,107 @@ public class EventSuggestionFrag extends DialogFragment {
                 }
             });
         }
-        for(String fuserID: friendsList){
-            if(!fuserID.isEmpty()&&fuserID!=null){
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(fuserID);
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
-                            Log.i("datasnapshot", dataSnapshot.toString());
-                            UserDB fuser = dataSnapshot.getValue(UserDB.class);
-                            friendsInterests.put(fuser.getFirstName(),new ArrayList<String>(fuser.getInterests()));
+    }
+    public void assignFriends(){
+
+        Log.i("p2", "called ");
+        if(friendsList!=null){
+            for(String fuserID: friendsList){
+                if(!fuserID.isEmpty()&&fuserID!=null){
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(fuserID);
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                                Log.i("datasnapshot", dataSnapshot.toString());
+                                UserDB fuser = dataSnapshot.getValue(UserDB.class);
+                                if(fuser.getInterests()!=null){
+                                    friendsInterests.put(fuser.getFirstName(),new ArrayList<String>(fuser.getInterests()));
+                                }
+                            }
+
                         }
 
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w("error: ", "onCancelled", databaseError.toException());
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w("error: ", "onCancelled", databaseError.toException());
+                        }
+                    });
+                }
             }
         }
-        if(user.getLat()!=0 && user.getLon()!=0){
-            GeofireDBHelper helper = new GeofireDBHelper();
-            final GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-            final GeoQuery surroundingUsers = helper.queryAtLocation(new LatLng(user.getLat(),user.getLon()),10);
-            surroundingUsers.addGeoQueryEventListener(new GeoQueryEventListener() {
-                @Override
-                public void onKeyEntered(String key, GeoLocation location) {
-                    String nuserID = key;
-                    if(!nuserID.isEmpty()&&nuserID!=null){
-                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(nuserID).child("interests");
-                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
-                                    Log.i("datasnapshot", dataSnapshot.toString());
-                                    List<String> interests = dataSnapshot.getValue(t);
-                                    for(String interest: interests){
-                                        if(nearbyInterests.get(interest)==null){
-                                            nearbyInterests.put(interest,1);
-                                        }else{
-                                            nearbyInterests.put(interest,nearbyInterests.get(interest)+1);
-                                        }
-                                    }
+    }
+    public void assignNearby(){
 
+        Log.i("p3", "called ");
+
+        Log.i("p3", " "+user.getLat());
+        Log.i("p3", " "+user.getLon());
+        if(user.getLat()!=0 && user.getLon()!=0){
+        GeofireDBHelper helper = new GeofireDBHelper("users");
+        final GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+        final GeoQuery surroundingUsers = helper.queryAtLocation(new LatLng(user.getLat(),user.getLon()),10);
+        surroundingUsers.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                String nuserID = key;
+
+                Log.i("key",nuserID);
+                if(!nuserID.isEmpty()&&nuserID!=null){
+
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(nuserID).child("interests");
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                                Log.i("datasnapshot", dataSnapshot.toString());
+                                List<String> interests = dataSnapshot.getValue(t);
+                                for(String interest: interests){
+                                    if(nearbyInterests.get(interest)==null){
+                                        nearbyInterests.put(interest,1);
+                                    }else{
+                                        nearbyInterests.put(interest,nearbyInterests.get(interest)+1);
+                                    }
                                 }
 
                             }
+                        }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                Log.w("error: ", "onCancelled", databaseError.toException());
-                            }
-                        });
-                    }
-
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w("error: ", "onCancelled", databaseError.toException());
+                        }
+                    });
                 }
 
-                @Override
-                public void onKeyExited(String key) {
+            }
 
-                }
+            @Override
+            public void onKeyExited(String key) {
 
-                @Override
-                public void onKeyMoved(String key, GeoLocation location) {
+            }
 
-                }
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
 
-                @Override
-                public void onGeoQueryReady() {
-                    surroundingUsers.removeAllListeners();
-                }
+            }
 
-                @Override
-                public void onGeoQueryError(DatabaseError error) {
+            @Override
+            public void onGeoQueryReady() {
+                surroundingUsers.removeAllListeners();
+                int firstSuggestion = (int) Math.floor(Math.random()*5);
+                suggestEvent(firstSuggestion);
+            }
 
-                }
-            });
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
 
-        }
+            }
+        });
 
-
-        int firstSuggestion = (int) Math.floor(Math.random()*5);
-        suggestEvent(firstSuggestion);
     }
+    }
+
 
     public void suggestEvent(int suggestionType){
                /* Fundamentally different than recommending an event to go to (this recommends events to make)
@@ -238,17 +271,52 @@ public class EventSuggestionFrag extends DialogFragment {
             //1. Based off user's interests
             if(suggestionType == 1 ){
                 mRecText.setText("We saw that you are interested in:");
-                recommendation = "a";
+                if(userInterests!=null){
+                    int suggestion = (int) Math.floor(Math.random()*userInterests.size());
+                    recommendation = userInterests.get(suggestion);
+                }
+                //recommendation = "a";
             }
             //2. Based off user's friends interests
             if(suggestionType == 2 && friendsInterests!=null){
+                // find most common interests from Hashmap
+                //map category to friends interestsed in it and find max.
+                Map<String,ArrayList<String>> total = new HashMap<String,ArrayList<String>>();
+                int m = 0;
+                for(String friend: friendsInterests.keySet()){
+                    for(String cat: friendsInterests.get(friend)){
+                        ArrayList<String> f = total.get(cat);
+                       if(f== null){
+                           f = new ArrayList<String>();
+                       }
+                        f.add(friend);
+                        total.put(cat,f);
+                        if(f.size()>m){
+                            recommendation = cat;
+                            m = f.size();
+                        }
+
+                    }
+                }
+
                 mRecText.setText("X, Y, and Z others are interested in:");
-                recommendation = "b";
+                //recommendation = "b";
             }
             //3. Based off surrounding peoples interests
-            if(suggestionType == 3 ){
-                mRecText.setText("X people near you are interested in:");
-                recommendation = "c";
+            if(suggestionType == 3 && nearbyInterests!=null){
+                int max = 0;
+                for(String c: nearbyInterests.keySet()){
+                    int n = nearbyInterests.get(c);
+                    if(n>max){
+                        max = n;
+                        recommendation = c;
+                    }
+                   // if(nearbyInterests){
+
+                //    }
+                }
+                mRecText.setText(max + " people near you are interested in:");
+              //  recommendation = "c";
             }
         }
 

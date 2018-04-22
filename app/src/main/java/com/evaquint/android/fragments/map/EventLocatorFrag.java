@@ -330,16 +330,18 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
         try {
             addresses = geocoder.getFromLocation(point.latitude, point.longitude, 1);
-            String address = addresses.get(0).getAddressLine(0);
-            Log.d("Address held", "Address: " + addresses.toString());
+            if(addresses.size()>0) {
+                String address = addresses.get(0).getAddressLine(0);
+                Log.d("Address held", "Address: " + addresses.toString());
 
-            FragmentManager fm = getFragmentManager();
-            QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, point, UUID.randomUUID().toString());
-            popupFragment = editNameDialogFragment;
+                FragmentManager fm = getFragmentManager();
+                QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, point, UUID.randomUUID().toString());
+                popupFragment = editNameDialogFragment;
 
-            editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
-            editNameDialogFragment.show(fm, "fragment_popup_quick_event");
+                editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
+                editNameDialogFragment.show(fm, "fragment_popup_quick_event");
 
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -460,7 +462,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             if (surroundingEvents != null) {
                 surroundingEvents.setCenter(new GeoLocation(selfLoc.latitude, selfLoc.longitude));
             } else {
-                GeofireDBHelper helper = new GeofireDBHelper();
+                GeofireDBHelper helper = new GeofireDBHelper("events");
                 surroundingEvents = helper.queryAtLocation(selfLoc, 1);
                 surroundingEvents.addGeoQueryEventListener(new GeoQueryEventListener() {
                     @Override
@@ -531,7 +533,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                                     long timeInMillis = dataSnapshot.child("timeInMillis").getValue(long.class);
                                     if (eventDate.getTimeInMillis() > timeInMillis + 3600000) {
                                         //remove event from geofire + don't show on map
-                                        GeofireDBHelper helper = new GeofireDBHelper();
+                                        GeofireDBHelper helper = new GeofireDBHelper("events");
                                         helper.removeEvent(eventID);
                                         // marker.remove();
                                         return;
@@ -739,7 +741,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     EventDB event = new EventDB(eventID, event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(), event_private, invited, Arrays.asList(""), details);
                     EventDBHelper eventDBHelper = new EventDBHelper();
-                    GeofireDBHelper geofireDBHelper = new GeofireDBHelper();
+                    GeofireDBHelper geofireDBHelper = new GeofireDBHelper("events");
                     UserDBHelper userDBHelper = new UserDBHelper();
                     Log.i("event to add: ", event.toString());
                     eventDBHelper.addEvent(event);
