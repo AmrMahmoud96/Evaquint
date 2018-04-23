@@ -1,13 +1,21 @@
 package com.evaquint.android.fragments;
 
-import android.app.Fragment;
+
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.evaquint.android.R;
 import com.evaquint.android.utils.dataStructures.EventDB;
+import com.evaquint.android.utils.dataStructures.UserDB;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Created by amrmahmoud on 2018-03-16.
@@ -15,9 +23,23 @@ import com.evaquint.android.utils.dataStructures.EventDB;
 
 public class EventPageFrag  extends Fragment{
     private View view;
-    //private FirebaseAuth mAuth;
-    //UserDB user;
     private EventDB event;
+
+    private TextView eventTitleField;
+    private TextView dateField;
+    private UserDB host;
+    private TextView hostName;
+    private RatingBar hostRating;
+    private TextView locationField;
+    private TextView attendeesField;
+    private TextView descriptionField;
+    private TextView capacityField;
+    private TextView ageRestrictionField;
+    private Button mEventPageBtn;
+    private ImageView hostPicture;
+
+
+    private SimpleDateFormat df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
 
     public static EventPageFrag newInstance(EventDB event) {
         EventPageFrag fragment = new EventPageFrag();
@@ -31,13 +53,41 @@ public class EventPageFrag  extends Fragment{
         super.onCreate(savedInstanceState);
         this.view = inflater.inflate(R.layout.fragment_event_page, container, false);
 
+        eventTitleField = view.findViewById(R.id.eventTitle);
+        dateField = view.findViewById(R.id.eventDateField);
+        hostName = view.findViewById(R.id.eventHostName);
+        hostPicture = view.findViewById(R.id.eventHostPicture);
+        hostRating = view.findViewById(R.id.eventHostRatingBar);
+        locationField = view.findViewById(R.id.eventLocField);
+        attendeesField = view.findViewById(R.id.eventAttField);
+        ageRestrictionField = view.findViewById(R.id.eventARField);
+        capacityField = view.findViewById(R.id.eventCapField);
+        descriptionField = view.findViewById(R.id.eventDescField);
+        mEventPageBtn = view.findViewById(R.id.eventPageBtn);
+
+
         this.event = (EventDB) getArguments().getSerializable("event");
         init_page();
         return view;
     }
 
     public void init_page(){
+    if(event!=null){
+        //get and set user.
+        eventTitleField.setText(event.eventTitle);
+        dateField.setText(df.format(event.timeInMillis));
+        locationField.setText(event.address);
+        attendeesField.setText(event.attendees.size());
 
+        //set logic for detailed description stuff
+
+        //set logic for if the event host is viewing the event.
+
+
+        //ageRestrictionField.setText(event);
+
+
+    }
 
 /*
         String userID = mAuth.getCurrentUser().getUid();

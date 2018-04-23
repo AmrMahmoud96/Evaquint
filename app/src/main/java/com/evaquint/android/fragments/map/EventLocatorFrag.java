@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
+import com.evaquint.android.fragments.EventPageFrag;
 import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
@@ -88,6 +89,7 @@ import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
+import static com.evaquint.android.utils.code.IntentValues.EVENT_PAGE_FRAGMENT;
 import static com.evaquint.android.utils.code.IntentValues.EVENT_SUGGESTION_FRAGMENT;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
@@ -605,6 +607,13 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     }
 
     private void initOverlay() {
+        /*String [] u = {"hWA6z2zZlabzlB1UnjZYheUFcsz2","toGErwcycwN9jCUvV936GQD8yiF2","vtEKNdiODFXmNkXa0HT5gMF66oq1","yR0EmwzUAxZ7VZZTEUaI6TJjD443"};
+        double[] la = {43.6573415,37.41571395227373,37.41571395227373,43.6573415};
+        double[] lo = {-79.6010352,-122.08525277674198,-122.08525277674198,-79.6010352};
+        GeofireDBHelper h = new GeofireDBHelper("users");
+        for (int i = 0; i < 4; i ++){
+            h.addUserToGeofire(u[i],new LatLng(la[i],lo[i]));
+        }*/
 
         target = mMap.getCameraPosition().target;
 
@@ -664,6 +673,24 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             public void onInfoWindowClick(Marker marker) {
                 if (marker.getTag() != null && marker.getTag().getClass() != String.class) {
                     EventDB event = (EventDB) marker.getTag();
+                    FragmentManager fm = getFragmentManager();
+                    EventPageFrag eventPageFragment = EventPageFrag.newInstance(event);
+                    popupFragment = eventPageFragment;
+
+                    eventPageFragment.setTargetFragment(getParentFragment(),EVENT_PAGE_FRAGMENT);
+                    //eventPageFragment.show();
+                   // eventPageFragment.
+
+
+                  /*  EventPageFrag eventPageFragment = new EventPageFrag(event);
+
+
+                    EventSuggestionFrag editNameDialogFragment = new EventSuggestionFrag();
+                    popupFragment = editNameDialogFragment;
+
+                    editNameDialogFragment.setTargetFragment(this, EVENT_SUGGESTION_FRAGMENT);
+                    editNameDialogFragment.show(fm, "fragment_popup_quick_event");*/
+
                     //Bundle bundle;
                     //bundle.put
                  /*   FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -769,6 +796,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 break;
             case EVENT_SUGGESTION_FRAGMENT:
                 isPopupOpen = false;
+                break;
+            case EVENT_PAGE_FRAGMENT:
                 break;
         }
     }
