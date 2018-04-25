@@ -33,7 +33,6 @@ public class EventPageFrag  extends Fragment{
     private TextView locationField;
     private TextView attendeesField;
     private TextView descriptionField;
-    private TextView capacityField;
     private TextView ageRestrictionField;
     private Button mEventPageBtn;
     private ImageView hostPicture;
@@ -61,7 +60,6 @@ public class EventPageFrag  extends Fragment{
         locationField = view.findViewById(R.id.eventLocField);
         attendeesField = view.findViewById(R.id.eventAttField);
         ageRestrictionField = view.findViewById(R.id.eventARField);
-        capacityField = view.findViewById(R.id.eventCapField);
         descriptionField = view.findViewById(R.id.eventDescField);
         mEventPageBtn = view.findViewById(R.id.eventPageBtn);
 
@@ -72,6 +70,7 @@ public class EventPageFrag  extends Fragment{
     }
 
     public void init_page(){
+        // note capacity will be attendees/cap and not there if it is 0
     if(event!=null){
         //get and set user.
         eventTitleField.setText(event.eventTitle);

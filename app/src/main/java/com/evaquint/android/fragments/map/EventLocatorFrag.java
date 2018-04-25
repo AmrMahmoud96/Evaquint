@@ -678,6 +678,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     popupFragment = eventPageFragment;
 
                     eventPageFragment.setTargetFragment(getParentFragment(),EVENT_PAGE_FRAGMENT);
+
+
                     //eventPageFragment.show();
                    // eventPageFragment.
 
