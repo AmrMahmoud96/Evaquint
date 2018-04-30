@@ -1,6 +1,8 @@
 package com.evaquint.android.utils.database;
 
 import com.evaquint.android.utils.dataStructures.EventDB;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 
@@ -26,7 +28,14 @@ public class EventDBHelper {
     public void addTestEvent(String id, EventDB event) {
         dbConnector.writeToDB(id,event);
     }
-
+    public void addAttendee(String eventID, String attendee){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("attendees");
+        ref.push().setValue(attendee);
+    }
+    public void removeAttendee(String eventID, String attendee){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("attendees").child(attendee);
+        ref.removeValue();
+    }
 /*
     public boolean addEntry(DatabaseValues subPath, String value){
         String path = EVENTS_TABLE.getName() + "/"

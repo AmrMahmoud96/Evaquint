@@ -33,7 +33,6 @@ import android.widget.Toast;
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.fragments.EventPageFrag;
-import com.evaquint.android.fragments.UserProfileFrag;
 import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
@@ -771,7 +770,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                         details = new DetailedEvent();
                     }
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    EventDB event = new EventDB(eventID, event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(), event_private, invited, Arrays.asList(""), details);
+                    EventDB event = new EventDB(eventID, event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(Arrays.asList(user.getUid())), event_private, invited, Arrays.asList(user.getUid()), details);
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper("events");
                     UserDBHelper userDBHelper = new UserDBHelper();

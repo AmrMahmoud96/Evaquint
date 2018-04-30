@@ -1,8 +1,10 @@
 package com.evaquint.android.fragments;
 
 
-import android.support.v4.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,19 @@ import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.dataStructures.UserDB;
+import com.evaquint.android.utils.database.EventDBHelper;
+import com.evaquint.android.utils.database.UserDBHelper;
+import com.evaquint.android.utils.storage.PhotoDownloadHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+
+import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
 /**
  * Created by amrmahmoud on 2018-03-16.
@@ -37,7 +50,7 @@ public class EventPageFrag  extends Fragment{
     private TextView ageRestrictionField;
     private Button mEventPageBtn;
     private ImageView hostPicture;
-
+    private EventDBHelper eventDBHelper;
 
     private SimpleDateFormat df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
 
@@ -65,9 +78,32 @@ public class EventPageFrag  extends Fragment{
         ageRestrictionField = view.findViewById(R.id.eventARField);
         descriptionField = view.findViewById(R.id.eventDescField);
         mEventPageBtn = view.findViewById(R.id.eventPageBtn);
-
+        eventDBHelper = new EventDBHelper();
 
         this.event = (EventDB) getArguments().getSerializable("event");
+        if(this.event !=null && this.event.eventHost!=null && !this.event.eventHost.isEmpty()){
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(this.event.eventHost);
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                        Log.i("event host", dataSnapshot.toString());
+                        host = dataSnapshot.getValue(UserDB.class);
+                        hostName.setText(host.getFirstName()+ " " +host.getLastName());
+                        hostRating.setStepSize((float)0.1);
+                        hostRating.setRating((float)host.getHostRating()/(float) host.getRaters());
+                        hostRating.setIsIndicator(true); // disabled the rating bar
+                        PhotoDownloadHelper pdh = new PhotoDownloadHelper();
+                        hostPicture.setImageBitmap(pdh.getImageBitmap(host.getPicture()));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w("error: ", "onCancelled", databaseError.toException());
+                }
+            });
+        }
         init_page();
         return view;
     }
@@ -79,6 +115,60 @@ public class EventPageFrag  extends Fragment{
         eventTitleField.setText(event.eventTitle);
         dateField.setText(df.format(event.timeInMillis));
         locationField.setText(event.address);
+        descriptionField.setText(event.details.getDescription());
+
+
+        if(event.details.getCapacity()==0){
+            attendeesField.setText(""+event.attendees.size());
+        }else{
+            attendeesField.setText(event.attendees.size()+"/"+event.details.getCapacity());
+        }
+        if(event.eventPrivate){
+            attendeesField.setText(event.attendees.size()+"/"+event.invited.size());
+        }
+
+
+        if(event.details.getAgeRestriction()==0){
+            ageRestrictionField.setVisibility(View.INVISIBLE);
+        }
+
+        final String currUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if( currUserID.equals(event.eventHost)){
+            mEventPageBtn.setText("Cancel Event");
+            mEventPageBtn.setBackgroundColor(Color.RED);
+        }else{
+            if(event.attendees.contains(currUserID)){
+                mEventPageBtn.setText("Unregister");
+                mEventPageBtn.setBackgroundColor(Color.RED);
+            }else{
+                mEventPageBtn.setText("Register");
+                mEventPageBtn.setBackgroundColor(Color.GREEN);
+            }
+
+
+        }
+        mEventPageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String buttonText = mEventPageBtn.getText().toString();
+                if(buttonText.equalsIgnoreCase("Register")){
+                    new UserDBHelper().addEventAttended(currUserID,event.eventID);
+                    eventDBHelper.addAttendee(event.eventID,currUserID);
+                    mEventPageBtn.setText("Unregister");
+                    mEventPageBtn.setBackgroundColor(Color.RED);
+                }else if(buttonText.equalsIgnoreCase("Unregister")){
+                    eventDBHelper.removeAttendee(event.eventID,currUserID);
+                    new UserDBHelper().removeEventAttended(currUserID,event.eventID);
+                    mEventPageBtn.setText("Register");
+                    mEventPageBtn.setBackgroundColor(Color.GREEN);
+                }else if(buttonText.equalsIgnoreCase("Cancel Event")){
+                    // confirm to cancel or not
+                    //delete event (what about people attending.)
+                }
+            }
+        });
+
+        //if(event.attendees)
 
         //TODO @Amr the following line is a null reference, check the names
 //        attendeesField.setText(event.attendees.size());

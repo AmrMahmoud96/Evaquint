@@ -38,7 +38,7 @@ public class DetailedEvent {
             this.description = "";
          //   this.mult_day = false;
           //  this.eventDates = null;
-            this.capacity= 9999;
+            this.capacity= 0;
             this.pictures = Arrays.asList("");
             this.QRCodes = null;
             this.ageRestriction = 0;
