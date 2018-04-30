@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="12dp">
 
     <TextView
         android:id="@+id/eventTitle"
@@ -59,11 +60,14 @@
 
     <TextView
         android:id="@+id/eventLocField"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
         android:text="Location"
-        app:layout_constraintStart_toEndOf="@+id/locLabel"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintLeft_toRightOf="@id/locLabel"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/locLabel"
         app:layout_constraintBottom_toBottomOf="@id/locLabel"/>
 
