@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.fragments.EventPageFrag;
+import com.evaquint.android.fragments.UserProfileFrag;
 import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
@@ -93,6 +94,7 @@ import static com.evaquint.android.utils.code.IntentValues.EVENT_PAGE_FRAGMENT;
 import static com.evaquint.android.utils.code.IntentValues.EVENT_SUGGESTION_FRAGMENT;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMapLongClickListener {
@@ -677,8 +679,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     EventPageFrag eventPageFragment = EventPageFrag.newInstance(event);
                     popupFragment = eventPageFragment;
 
-                    eventPageFragment.setTargetFragment(getParentFragment(),EVENT_PAGE_FRAGMENT);
-                    //eventPageFragment.show();
+                    setActiveFragment(fm, eventPageFragment);
+//                    eventPageFragment.setTargetFragment(getParentFragment(),EVENT_PAGE_FRAGMENT);
+//
+//                    setActiveFragment(getSupportFragmentManager(), new UserProfileFrag());
+//                    eventPageFragment.show();
                    // eventPageFragment.
 
 
