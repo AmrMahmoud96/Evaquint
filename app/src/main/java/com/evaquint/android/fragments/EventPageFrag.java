@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.dataStructures.UserDB;
@@ -52,6 +53,8 @@ public class EventPageFrag  extends Fragment{
         super.onCreate(savedInstanceState);
         this.view = inflater.inflate(R.layout.fragment_event_page, container, false);
 
+        ((HomeActivity)getActivity()).disableMenuButton();
+
         eventTitleField = view.findViewById(R.id.eventTitle);
         dateField = view.findViewById(R.id.eventDateField);
         hostName = view.findViewById(R.id.eventHostName);
@@ -76,7 +79,9 @@ public class EventPageFrag  extends Fragment{
         eventTitleField.setText(event.eventTitle);
         dateField.setText(df.format(event.timeInMillis));
         locationField.setText(event.address);
-        attendeesField.setText(event.attendees.size());
+
+        //TODO @Amr the following line is a null reference, check the names
+//        attendeesField.setText(event.attendees.size());
 
         //set logic for detailed description stuff
 
