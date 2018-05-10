@@ -1,6 +1,8 @@
 package com.evaquint.android.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
@@ -162,6 +165,17 @@ public class EventPageFrag  extends Fragment{
                     mEventPageBtn.setText("Register");
                     mEventPageBtn.setBackgroundColor(Color.GREEN);
                 }else if(buttonText.equalsIgnoreCase("Cancel Event")){
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Confirmation")
+                            .setMessage("Do you really want to cancel the event?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    Toast.makeText(getActivity(), "Event Deleted.",
+                                            Toast.LENGTH_SHORT).show();
+                                }})
+                            .setNegativeButton("No", null).show();
                     // confirm to cancel or not
                     //delete event (what about people attending.)
                 }
