@@ -48,6 +48,7 @@ public class EventSuggestionFrag extends DialogFragment {
     private View view;
     private ArrayList<String> nearbyUsers;
     private String userID;
+    public ArrayList<String> pastSuggested;
 
     final GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
 
@@ -112,6 +113,7 @@ public class EventSuggestionFrag extends DialogFragment {
         String[] catArray = getResources().getStringArray(R.array.event_categories);
         categories = new EventCategories(catArray).getCategories();
         nearbyUsers = new ArrayList<String>();
+        pastSuggested = new ArrayList<String>();
         //Log.i("cat:",categories.toString());
 
         // need to init user + interests, friends interests, geofire query interests.
@@ -282,21 +284,25 @@ public class EventSuggestionFrag extends DialogFragment {
         *
         * */
 
+        if(pastSuggested.size() <=20){
+
+
         String recommendation = "";
         if(user!=null){
             //1. Based off user's interests
             if(suggestionType == 1 ){
                 mRecText.setText("We saw that you are interested in:");
-                if(userInterests!=null){
+                if(userInterests!=null&&!userInterests.isEmpty()){
                     int suggestion = (int) Math.floor(Math.random()*userInterests.size());
                     recommendation = userInterests.get(suggestion);
+                    userInterests.remove(suggestion);
                 }
                 //recommendation = "a";
             }
             //2. Based off user's friends interests
             if(suggestionType == 2 && friendsInterests!=null){
                 // find most common interests from Hashmap
-                //map category to friends interestsed in it and find max.
+                // map category to friends interested in it and find max.
                 Map<String,ArrayList<String>> total = new HashMap<String,ArrayList<String>>();
                 int m = 0;
                 for(String friend: friendsInterests.keySet()){
@@ -305,9 +311,11 @@ public class EventSuggestionFrag extends DialogFragment {
                        if(f== null){
                            f = new ArrayList<String>();
                        }
-                        f.add(friend);
-                        total.put(cat,f);
-                        if(f.size()>m){
+                       if(!f.contains(friend)){
+                           f.add(friend);
+                           total.put(cat,f);
+                       }
+                        if(f.size()>m && !pastSuggested.contains(cat)){
                             recommendation = cat;
                             m = f.size();
                         }
@@ -327,7 +335,7 @@ public class EventSuggestionFrag extends DialogFragment {
                 int max = 0;
                 for(String c: nearbyInterests.keySet()){
                     int n = nearbyInterests.get(c);
-                    if(n>max){
+                    if(n>max && !pastSuggested.contains(c)){
                         max = n;
                         recommendation = c;
                     }
@@ -368,14 +376,16 @@ public class EventSuggestionFrag extends DialogFragment {
             // if nothing was returned, try again with type 4 suggestion.
             suggestEvent(4);
         }else{
-            if(recommendation.equalsIgnoreCase(lastSuggestion)){
+            if(recommendation.equalsIgnoreCase(lastSuggestion) || pastSuggested.contains(recommendation)){
                 // no re runs of the same type.
                 suggestEvent(4);
             }else{
+                pastSuggested.add(recommendation);
                 mRecommendation.setText(recommendation);
                 lastSuggestion = recommendation;
             }
         }
 
+    }
     }
 }
