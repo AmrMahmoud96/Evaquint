@@ -36,6 +36,10 @@ public class EventDBHelper {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("attendees").child(attendee);
         ref.removeValue();
     }
+    public void removeEvent(String eventID){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID);
+        ref.removeValue();
+    }
 /*
     public boolean addEntry(DatabaseValues subPath, String value){
         String path = EVENTS_TABLE.getName() + "/"

@@ -21,6 +21,7 @@ import com.evaquint.android.R;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.dataStructures.UserDB;
 import com.evaquint.android.utils.database.EventDBHelper;
+import com.evaquint.android.utils.database.GeofireDBHelper;
 import com.evaquint.android.utils.database.UserDBHelper;
 import com.evaquint.android.utils.storage.PhotoDownloadHelper;
 import com.google.firebase.auth.FirebaseAuth;
@@ -114,6 +115,7 @@ public class EventPageFrag  extends Fragment{
     public void init_page(){
         // note capacity will be attendees/cap and not there if it is 0
     if(event!=null){
+        Log.i("event",event.toString());
         //get and set user.
         eventTitleField.setText(event.eventTitle);
         dateField.setText(df.format(event.timeInMillis));
@@ -127,7 +129,9 @@ public class EventPageFrag  extends Fragment{
             attendeesField.setText(event.attendees.size()+"/"+event.details.getCapacity());
         }
         if(event.eventPrivate){
-            attendeesField.setText(event.attendees.size()+"/"+event.invited.size());
+            //change this
+            attendeesField.setText(event.attendees.size());
+           // attendeesField.setText(event.attendees.size()+"/"+event.invited.size());
         }
 
 
@@ -172,6 +176,10 @@ public class EventPageFrag  extends Fragment{
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
+                                    new UserDBHelper().removeEventHosted(currUserID,event.eventID);
+                                    new EventDBHelper().removeEvent(event.eventID);
+                                    new GeofireDBHelper("events").removeEvent(event.eventID);
+                                    getFragmentManager().popBackStack();
                                     Toast.makeText(getActivity(), "Event Deleted.",
                                             Toast.LENGTH_SHORT).show();
                                 }})
