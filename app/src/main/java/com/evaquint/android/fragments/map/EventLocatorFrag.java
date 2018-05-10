@@ -608,7 +608,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     }
 
     private void initOverlay() {
-        /*String [] u = {"hWA6z2zZlabzlB1UnjZYheUFcsz2","toGErwcycwN9jCUvV936GQD8yiF2","vtEKNdiODFXmNkXa0HT5gMF66oq1","yR0EmwzUAxZ7VZZTEUaI6TJjD443"};
+       /*String [] u = {"hWA6z2zZlabzlB1UnjZYheUFcsz2","toGErwcycwN9jCUvV936GQD8yiF2","vtEKNdiODFXmNkXa0HT5gMF66oq1","yR0EmwzUAxZ7VZZTEUaI6TJjD443"};
         double[] la = {43.6573415,37.41571395227373,37.41571395227373,43.6573415};
         double[] lo = {-79.6010352,-122.08525277674198,-122.08525277674198,-79.6010352};
         GeofireDBHelper h = new GeofireDBHelper("users");

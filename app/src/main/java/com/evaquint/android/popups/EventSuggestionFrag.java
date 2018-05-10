@@ -46,6 +46,10 @@ public class EventSuggestionFrag extends DialogFragment {
     private Map<String,Integer> nearbyInterests;
     private ArrayList<String> friendsList;
     private View view;
+    private ArrayList<String> nearbyUsers;
+    private String userID;
+
+    final GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
 
     public EventSuggestionFrag() {
         // Empty constructor is required for DialogFragment
@@ -107,6 +111,7 @@ public class EventSuggestionFrag extends DialogFragment {
     public void init(){
         String[] catArray = getResources().getStringArray(R.array.event_categories);
         categories = new EventCategories(catArray).getCategories();
+        nearbyUsers = new ArrayList<String>();
         //Log.i("cat:",categories.toString());
 
         // need to init user + interests, friends interests, geofire query interests.
@@ -116,7 +121,7 @@ public class EventSuggestionFrag extends DialogFragment {
     public void assignUser(){
 
         Log.i("p1", "called ");
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Log.i("user", userID);
         if(!userID.isEmpty()&&userID!=null){
@@ -186,7 +191,6 @@ public class EventSuggestionFrag extends DialogFragment {
         Log.i("p3", " "+user.getLon());
         if(user.getLat()!=0 && user.getLon()!=0){
         GeofireDBHelper helper = new GeofireDBHelper("users");
-        final GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
         final GeoQuery surroundingUsers = helper.queryAtLocation(new LatLng(user.getLat(),user.getLon()),10);
         surroundingUsers.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
@@ -194,31 +198,8 @@ public class EventSuggestionFrag extends DialogFragment {
                 String nuserID = key;
 
                 Log.i("key",nuserID);
-                if(!nuserID.isEmpty()&&nuserID!=null){
-
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(nuserID).child("interests");
-                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
-                                Log.i("datasnapshot", dataSnapshot.toString());
-                                List<String> interests = dataSnapshot.getValue(t);
-                                for(String interest: interests){
-                                    if(nearbyInterests.get(interest)==null){
-                                        nearbyInterests.put(interest,1);
-                                    }else{
-                                        nearbyInterests.put(interest,nearbyInterests.get(interest)+1);
-                                    }
-                                }
-
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.w("error: ", "onCancelled", databaseError.toException());
-                        }
-                    });
+                if(!nuserID.isEmpty()&&nuserID!=null&&nuserID!=userID){
+                    nearbyUsers.add(nuserID);
                 }
 
             }
@@ -236,8 +217,7 @@ public class EventSuggestionFrag extends DialogFragment {
             @Override
             public void onGeoQueryReady() {
                 surroundingUsers.removeAllListeners();
-                int firstSuggestion = (int) Math.floor(Math.random()*5);
-                suggestEvent(firstSuggestion);
+                getNearbyInterests();
             }
 
             @Override
@@ -247,6 +227,42 @@ public class EventSuggestionFrag extends DialogFragment {
         });
 
     }
+    }
+    public void getNearbyInterests(){
+        Log.i("p4","ay");
+        if(nearbyUsers!=null){
+
+            for(String userID : nearbyUsers){
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("interests");
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                            Log.i("datasnapshot", dataSnapshot.toString());
+                            List<String> interests = dataSnapshot.getValue(t);
+                            for(String interest: interests){
+                                if(nearbyInterests.get(interest)==null){
+                                    nearbyInterests.put(interest,1);
+                                }else{
+                                    nearbyInterests.put(interest,nearbyInterests.get(interest)+1);
+                                }
+                            }
+
+                            Log.i("nearby", nearbyInterests.toString());
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("error: ", "onCancelled", databaseError.toException());
+                    }
+                });
+            }
+        }
+        int firstSuggestion = (int) Math.floor(Math.random()*5);
+        suggestEvent(firstSuggestion);
+
     }
 
 
@@ -303,6 +319,10 @@ public class EventSuggestionFrag extends DialogFragment {
                 //recommendation = "b";
             }
             //3. Based off surrounding peoples interests
+          /*  if(suggestionType == 3){
+                Log.i("nearby people" , nearbyUsers.toString());
+                Log.i("nearby int",nearbyInterests.toString());
+            }*/
             if(suggestionType == 3 && nearbyInterests!=null){
                 int max = 0;
                 for(String c: nearbyInterests.keySet()){
@@ -315,7 +335,11 @@ public class EventSuggestionFrag extends DialogFragment {
 
                 //    }
                 }
-                mRecText.setText(max + " people near you are interested in:");
+                if(max == 1){
+                    mRecText.setText(max + " person near you is interested in:");
+                }else{
+                    mRecText.setText(max + " people near you are interested in:");
+                }
               //  recommendation = "c";
             }
         }
