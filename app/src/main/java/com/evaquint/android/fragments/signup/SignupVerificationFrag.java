@@ -7,12 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.evaquint.android.R;
 
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class SignupVerificationFrag extends Fragment {
+    private TextView mResendCodeText;
+    private EditText mVerificationCodeField;
+
 
     private View view;
     private Activity activity;
@@ -31,7 +36,15 @@ public class SignupVerificationFrag extends Fragment {
                         nextFrag();
                     }
                 });
+        mVerificationCodeField = view.findViewById(R.id.verificationCodeField);
+        mResendCodeText = view.findViewById(R.id.resendCodeText);
 
+        mResendCodeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //resend code
+            }
+        });
         return this.view;
     }
 

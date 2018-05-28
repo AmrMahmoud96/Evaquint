@@ -7,12 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.evaquint.android.R;
 
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class SignupMethodFrag extends Fragment {
+    private String phoneNumber;
+
+    private EditText mPhoneNumberField;
+
     private View view;
     private Activity activity;
 
@@ -30,6 +35,7 @@ public class SignupMethodFrag extends Fragment {
                 nextFrag();
             }
         });
+        mPhoneNumberField = view.findViewById(R.id.phoneNumberField);
 
         return this.view;
     }

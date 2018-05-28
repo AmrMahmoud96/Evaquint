@@ -461,6 +461,24 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             //Move the map to the user's location
             final LatLng selfLoc = new LatLng(selfLocation.getLatitude(), selfLocation.getLongitude());
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(selfLoc, 15);
+
+            target = mMap.getCameraPosition().target;
+
+            double lat = target.latitude;
+            double lon = target.longitude;
+            double earthR = 6371;  // earth radius in km
+
+            double radius = 500; // km
+
+            double x1 = lon - Math.toDegrees(radius / earthR / Math.cos(Math.toRadians(lat)));
+            double x2 = lon + Math.toDegrees(radius / earthR / Math.cos(Math.toRadians(lat)));
+            double y1 = lat + Math.toDegrees(radius / earthR);
+            double y2 = lat - Math.toDegrees(radius / earthR);
+
+            LatLngBounds bounds = new LatLngBounds(new LatLng(y2, x2), new LatLng(y1, x1));
+            googlePlacesSearchBarFrag.setBoundsBias(bounds);
+
+
             mMap.animateCamera(update);
             if (surroundingEvents != null) {
                 surroundingEvents.setCenter(new GeoLocation(selfLoc.latitude, selfLoc.longitude));
@@ -632,7 +650,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         double y2 = lat - Math.toDegrees(radius / earthR);
 
         LatLngBounds bounds = new LatLngBounds(new LatLng(y2, x2), new LatLng(y1, x1));
-        googlePlacesSearchBarFrag.setBoundsBias(bounds);
+        //googlePlacesSearchBarFrag.setBoundsBias(bounds);
 
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
