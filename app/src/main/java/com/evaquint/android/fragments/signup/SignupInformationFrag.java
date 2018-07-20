@@ -50,7 +50,9 @@ public class SignupInformationFrag extends Fragment {
     private void grabValues(){
         firstName = mFirstNameField.getText().toString().trim();
         lastName = mLastNameField.getText().toString().trim();
-        age = Integer.parseInt(mAgeField.getText().toString().trim());
+        if(!mAgeField.getText().toString().trim().isEmpty()){
+            age = Integer.parseInt(mAgeField.getText().toString().trim());
+        }
     }
 
     private boolean validateValues(){
@@ -64,6 +66,11 @@ public class SignupInformationFrag extends Fragment {
         if(lastName.isEmpty()){
             mLastNameField.setError("Please enter your last name.");
             focusView = mLastNameField;
+            cancel = true;
+        }
+        if(age<12 || age>99){
+            mAgeField.setError("You must be between 12 and 99 years of age");
+            focusView = mAgeField;
             cancel = true;
         }
         if(cancel){
