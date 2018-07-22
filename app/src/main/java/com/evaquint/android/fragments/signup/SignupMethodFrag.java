@@ -66,13 +66,6 @@ public class SignupMethodFrag extends Fragment {
     }
     private void sendVerificationCode(){
         if( PhoneAuthProvider.getInstance()!=null){
-            PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                    phoneNumber,        // Phone number to verify
-                    60,                 // Timeout duration
-                    TimeUnit.SECONDS,   // Unit of timeout
-                    this.activity,               // Activity (for callback binding)
-                    mCallbacks);        // OnVerificationStateChangedCallbacks
-
             mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
                 @Override
@@ -146,6 +139,15 @@ public class SignupMethodFrag extends Fragment {
                     // ...
                 }
             };
+
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                    "6476787608",        // Phone number to verify
+                    60,                 // Timeout duration
+                    TimeUnit.SECONDS,   // Unit of timeout
+                    this.activity,               // Activity (for callback binding)
+                    mCallbacks);        // OnVerificationStateChangedCallbacks
+
+
         }else{
             Log.i("null provider","");
         }
