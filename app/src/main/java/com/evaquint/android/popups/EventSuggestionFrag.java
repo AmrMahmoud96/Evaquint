@@ -110,8 +110,7 @@ public class EventSuggestionFrag extends DialogFragment {
 
 
     public void init(){
-        String[] catArray = getResources().getStringArray(R.array.event_categories);
-        categories = new EventCategories(catArray).getCategories();
+        categories = new EventCategories().getCategories();
         nearbyUsers = new ArrayList<String>();
         pastSuggested = new ArrayList<String>();
         //Log.i("cat:",categories.toString());

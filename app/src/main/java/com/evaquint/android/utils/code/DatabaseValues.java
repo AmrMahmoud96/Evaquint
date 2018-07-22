@@ -9,7 +9,8 @@ public enum DatabaseValues {
     CONTACTS_TABLE ("contacts", 2),
     EVENTS_TABLE ("events", 3),
     EVENTS_GEOFIRE_TABLE("eventsGeofire", 4),
-    USERS_GEOFIRE_TABLE("usersGeofire", 5);
+    USERS_GEOFIRE_TABLE("usersGeofire", 5),
+    CATEGORIES_TABLE("categories", 6);
 
     private final String name;
     private final int code;

@@ -218,8 +218,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             //searchCircle = new Circle();
 
 
-            String[] catArray = getResources().getStringArray(R.array.event_categories);
-            categories = new EventCategories(catArray).getCategories();
+            categories = new EventCategories().getCategories();
             Log.i("cat:",categories.toString());
 
             android.support.v4.app.FragmentManager fm = getFragmentManager();
