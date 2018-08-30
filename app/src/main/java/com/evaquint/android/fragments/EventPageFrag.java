@@ -30,8 +30,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
@@ -56,6 +58,8 @@ public class EventPageFrag  extends Fragment{
     private ImageView hostPicture;
     private EventDBHelper eventDBHelper;
 
+    private ImageView eventPicture;
+
     private SimpleDateFormat df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
 
     public static EventPageFrag newInstance(EventDB event) {
@@ -68,7 +72,7 @@ public class EventPageFrag  extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.view = inflater.inflate(R.layout.fragment_event_page, container, false);
+        this.view = inflater.inflate(R.layout.fragment_temp_event_page, container, false);
 
         ((HomeActivity)getActivity()).disableMenuButton();
 
@@ -84,7 +88,23 @@ public class EventPageFrag  extends Fragment{
         mEventPageBtn = view.findViewById(R.id.eventPageBtn);
         eventDBHelper = new EventDBHelper();
 
+        eventPicture = view.findViewById(R.id.eventPicture);
+
+
         this.event = (EventDB) getArguments().getSerializable("event");
+        List<String> pictures = event.details.getPictures();
+        if(pictures!=null){
+            try {
+                String picURL = pictures.get(0);
+                if (picURL != null && !picURL.isEmpty()) {
+                    //  eventPic.setImageBitmap(getImageBitmap(picURL));
+                    Picasso.with(view.getContext()).load(event.details.getPictures().get(0)).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(eventPicture);
+                }
+                Log.i("downloaded", "true");
+            } catch (Exception e) {
+                Log.e("event image error", e.getMessage());
+            }
+        }
         if(this.event !=null && this.event.eventHost!=null && !this.event.eventHost.isEmpty()){
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(this.event.eventHost);
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
