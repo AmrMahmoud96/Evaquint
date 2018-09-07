@@ -1,6 +1,7 @@
 package com.evaquint.android.fragments.signup;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.utils.database.UserDBHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -85,59 +87,60 @@ public class SignupVerificationFrag extends Fragment {
         //Log.i("resendToken",mResendToken.toString());
         return this.view;
     }
-    //    signInWithPhoneAuthCredential(credential);
-                private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-    mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.i("status", "signInWithCredential:success");
 
-                        FirebaseUser user = task.getResult().getUser();
-                        UserDBHelper userDBHelper = new UserDBHelper();
-                        String userID = user.getUid();
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.i("status", "signInWithCredential:success");
 
-                        if(!userID.isEmpty()&&userID!=null){
-                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID);
-                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
-                                        Log.i("datasnapshot", dataSnapshot.toString());
-                                        Log.i("result;","user in database already exists");
+                            FirebaseUser user = task.getResult().getUser();
+                            UserDBHelper userDBHelper = new UserDBHelper();
+                            String userID = user.getUid();
+                            //String userID = "cQMFSkXx6zZqNC4WSUmsUSSAUhj2";
+                            if(!userID.isEmpty()&&userID!=null){
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID);
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
+                                            Log.i("datasnapshot", dataSnapshot.toString());
+                                            Log.i("result;","user in database already exists");
+                                            signInExistingUser();
+                                        }
+                                        else{
+                                            Log.i("result;","user in database doesn't exist");
+                                            nextFrag();
+                                        }
+
                                     }
-                                    else{
-                                        Log.i("result;","user in database doesn't exist");
-                                        nextFrag();
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.w("error: ", "onCancelled", databaseError.toException());
+
                                     }
+                                });
+                            }
+                            Log.i("userid", user.getUid());
+                            Log.i("user", user.toString());
 
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    Log.w("error: ", "onCancelled", databaseError.toException());
-
-                                }
-                            });
-                        }
-                        Log.i("userid", user.getUid());
-                        Log.i("user", user.toString());
-
-                        // ...
-                    } else {
-                        // Sign in failed, display a message and update the UI
-                        Log.i("status", "signInWithCredential:failure", task.getException());
-                        mVerificationCodeField.setError("Verification code incorrect. Please try again.");
-                        mVerificationCodeField.requestFocus();
-                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                            // The verification code entered was invalid
+                            // ...
+                        } else {
+                            // Sign in failed, display a message and update the UI
+                            Log.i("status", "signInWithCredential:failure", task.getException());
+                            mVerificationCodeField.setError("Verification code incorrect. Please try again.");
+                            mVerificationCodeField.requestFocus();
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                // The verification code entered was invalid
+                            }
                         }
                     }
-                }
-            });
-}
+                });
+    }
 
     private void validateValues(){
         String verificationCode = mVerificationCodeField.getText().toString();
@@ -164,7 +167,6 @@ public class SignupVerificationFrag extends Fragment {
                     //     detect the incoming verification SMS and perform verification without
                     //     user action.
                     Log.d("cred", "onVerificationCompleted:" + credential);
-
                         signInWithPhoneAuthCredential(credential);
                 }
 
@@ -219,6 +221,10 @@ public class SignupVerificationFrag extends Fragment {
     }
     private void nextFrag(){
         setActiveFragment(SignupVerificationFrag.this, new SignupInformationFrag());
+    }
+    private void signInExistingUser(){
+       Intent myIntent = new Intent(getActivity(), HomeActivity.class);
+        startActivity(myIntent);
     }
 }
 

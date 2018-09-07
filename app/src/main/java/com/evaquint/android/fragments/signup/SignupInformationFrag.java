@@ -27,7 +27,6 @@ public class SignupInformationFrag extends Fragment {
 
     private EditText mFirstNameField;
     private EditText mLastNameField;
-    private EditText mAgeField;
     private TextView mDOBTextField;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -52,7 +51,6 @@ public class SignupInformationFrag extends Fragment {
                 });
         mFirstNameField = view.findViewById(R.id.firstNameField);
         mLastNameField = view.findViewById(R.id.lastNameField);
-        mAgeField = view.findViewById(R.id.ageField);
         mDOBTextField = view.findViewById(R.id.DOBText);
         mDOBTextField.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,9 +79,9 @@ public class SignupInformationFrag extends Fragment {
     private void grabValues(){
         firstName = mFirstNameField.getText().toString().trim();
         lastName = mLastNameField.getText().toString().trim();
-        if(!mAgeField.getText().toString().trim().isEmpty()){
+      /*  if(!mAgeField.getText().toString().trim().isEmpty()){
             age = Integer.parseInt(mAgeField.getText().toString().trim());
-        }
+        }*/
     }
 
     private boolean validateValues(){
@@ -99,11 +97,11 @@ public class SignupInformationFrag extends Fragment {
             focusView = mLastNameField;
             cancel = true;
         }
-        if(age<12 || age>99){
+       /* if(age<12 || age>99){
             mAgeField.setError("You must be between 12 and 99 years of age");
             focusView = mAgeField;
             cancel = true;
-        }
+        }*/
         if(cancel){
             focusView.requestFocus();
             return false;
