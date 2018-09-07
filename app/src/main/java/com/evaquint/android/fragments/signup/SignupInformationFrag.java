@@ -1,15 +1,22 @@
 package com.evaquint.android.fragments.signup;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.evaquint.android.R;
+
+import java.util.Calendar;
 
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
@@ -21,6 +28,9 @@ public class SignupInformationFrag extends Fragment {
     private EditText mFirstNameField;
     private EditText mLastNameField;
     private EditText mAgeField;
+    private TextView mDOBTextField;
+
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     private View view;
     private Activity activity;
@@ -43,7 +53,28 @@ public class SignupInformationFrag extends Fragment {
         mFirstNameField = view.findViewById(R.id.firstNameField);
         mLastNameField = view.findViewById(R.id.lastNameField);
         mAgeField = view.findViewById(R.id.ageField);
+        mDOBTextField = view.findViewById(R.id.DOBText);
+        mDOBTextField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
 
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),android.R.style.Theme_Holo_Light_Dialog_MinWidth,mDateSetListener,year,month,day);
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.show();
+            }
+        });
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month = month+1;
+                String date = dayOfMonth+"/"+month+"/"+year;
+                mDOBTextField.setText(date);
+            }
+        };
         return this.view;
     }
 

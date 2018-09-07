@@ -47,7 +47,7 @@ public class SignupMethodFrag extends Fragment {
             public void onClick(View view) {
                 if(validateValues()){
                     sendVerificationCode();
-                    nextFrag();
+                   // nextFrag();
                 }
             }
         });
@@ -58,6 +58,7 @@ public class SignupMethodFrag extends Fragment {
 
     private boolean validateValues(){
         phoneNumber = mPhoneNumberField.getText().toString().trim();
+        Log.i("phone:",phoneNumber);
         if(phoneNumber.isEmpty()){
             mPhoneNumberField.setError("Please enter your phone number.");
             mPhoneNumberField.requestFocus();
@@ -134,6 +135,7 @@ public class SignupMethodFrag extends Fragment {
                     mVerificationId = verificationId;
                     mResendToken = token;
 
+                    nextFrag();
                     //  PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
 
                     // ...
@@ -141,7 +143,7 @@ public class SignupMethodFrag extends Fragment {
             };
 
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                    "6476787608",        // Phone number to verify
+                    phoneNumber,        // Phone number to verify
                     60,                 // Timeout duration
                     TimeUnit.SECONDS,   // Unit of timeout
                     this.activity,               // Activity (for callback binding)
@@ -155,6 +157,12 @@ public class SignupMethodFrag extends Fragment {
     }
 
     private void nextFrag(){
-        setActiveFragment(SignupMethodFrag.this, new SignupVerificationFrag());
+        SignupVerificationFrag signupVerificationFrag = new SignupVerificationFrag();
+        Bundle verificationData = new Bundle();
+        verificationData.putString("phoneNumber",phoneNumber);
+        verificationData.putString("verificationID",mVerificationId);
+        verificationData.putParcelable("resendToken", mResendToken);
+        signupVerificationFrag.setArguments(verificationData);
+        setActiveFragment(SignupMethodFrag.this, signupVerificationFrag);
     }
 }
