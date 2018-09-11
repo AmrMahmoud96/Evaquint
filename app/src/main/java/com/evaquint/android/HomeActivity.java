@@ -54,7 +54,7 @@ public class HomeActivity extends AppCompatActivity
             bis.close();
             is.close();
         } catch (IOException e) {
-            Log.e(TAG, "Error getting bitmap", e);
+            Log.println(Log.ERROR, TAG, "Error getting bitmap " + e);
         }
         return bm;
     }

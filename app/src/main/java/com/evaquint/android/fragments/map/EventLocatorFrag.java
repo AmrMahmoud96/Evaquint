@@ -21,11 +21,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -104,7 +107,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private GoogleApiClient mGoogleApiClient;
     private View view;
     private Activity parentActivityInstance;
-    private PlaceAutocompleteFragment googlePlacesSearchBarFrag;
+    private SupportPlaceAutocompleteFragment googlePlacesSearchBarFrag;
     private Fragment popupFragment;
     private GeoQuery surroundingEvents;
     private List<Marker> currentMapMarkers;
@@ -177,7 +180,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     Log.e("event image error", e.getMessage());
                 }
 
-
                 if (event == null) {
                     Log.i("event: ", "null");
                     title.setText("");
@@ -189,91 +191,14 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         }
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ((HomeActivity)getActivity()).enableMenuButton();
-
-        if (view != null) {
-            return view;
-        }
-
-        try {
-            this.view = inflater.inflate(R.layout.fragment_event_locator_maps, container, false);
-            this.parentActivityInstance = getActivity();
-
-            currentMapMarkers = new ArrayList<Marker>();
-
-            int SDK_INT = android.os.Build.VERSION.SDK_INT;
-            if (SDK_INT > 8) {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                        .permitAll().build();
-                StrictMode.setThreadPolicy(policy);
-                //your codes here
-
-            }
-            //searchCircle = new Circle();
-
-
-            categories = new EventCategories().getCategories();
-//            Log.i("cat:",categories.toString());
-
-            android.support.v4.app.FragmentManager fm = getFragmentManager();
-            googlePlacesSearchBarFrag = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.event_maps_searchbar);
-
-            googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                @Override
-                public void onPlaceSelected(Place place) {
-                    if (googlePlaceMarker != null) {
-                        googlePlaceMarker.remove();
-                    }
-                    LatLng placeLocation = place.getLatLng();
-                    googlePlaceMarker = mMap.addMarker(new MarkerOptions()
-                            .position(placeLocation)
-                            .title(place.getName().toString())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                    googlePlaceMarker.setTag("PlaceMarker");
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLocation));
-                    Log.i("place", "Place: " + place.getName());
-
-                    Log.i("place", "Place: " + place.getAddress());
-                    Log.i("place", "Place: " + place.getRating());
-                    Log.i("place", "Place: " + place.getAttributions());
-                    //   Log.i("place","Place: " + place.get);
-                }
-
-                @Override
-                public void onError(Status status) {
-                    Log.i(TAG, "error: " + status);
-                }
-            });
-
-            initShakeSensor();
-
-
-            //        mGeoDataClient = Places.getGeoDataClient(this,null);
-//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this,null);
-//        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//        googlePlacesSearchBarFrag = new SupportPlaceAutocompleteFragment();
-//        android.support.v4.app.FragmentManager fm = getFragmentManager();
-//        FragmentTransaction ft = fm.beginTransaction();
-//        ft.add(R.id.map_searchbar_container, googlePlacesSearchBarFrag).commit();
-
-            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-            mapFragment.getMapAsync(this);
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.map_container, mapFragment)
-                    .commit();
-
-        } catch (InflateException e) {
-            /* map is already there, just return view as it is */
-        }
-
-
+        this.view = this.view == null ?
+                inflater.inflate(R.layout.fragment_event_locator_maps, container, false)
+                : this.view;
+        initView();
         return this.view;
     }
 
@@ -312,12 +237,15 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     @Override
     public void onResume() {
         super.onResume();
+        initView();
+        System.out.println(mShakeDetector);
+        System.out.println(mAccelerometer);
         mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
     public void onPause() {
-        // Add the following line to unregister the Sensor Manager onPause
+        // Add the following line to unregister the Sensor Manager
         mSensorManager.unregisterListener(mShakeDetector);
         super.onPause();
     }
@@ -374,6 +302,76 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             goToCurrentLocation();
         }
         initOverlay();
+    }
+
+    private void initView(){
+        this.parentActivityInstance = getActivity();
+        ((HomeActivity)getActivity()).enableMenuButton();
+        try{
+            currentMapMarkers = new ArrayList<Marker>();
+
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+            if (SDK_INT > 8) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                //your codes here
+
+            }
+            //searchCircle = new Circle();
+
+
+            categories = new EventCategories().getCategories();
+//            Log.i("cat:",categories.toString());
+//            android.support.v4.app.FragmentManager fm = getFragmentManager();
+//            googlePlacesSearchBarFrag = (SupportPlaceAutocompleteFragment) fm.findFragmentById(R.id.event_maps_searchbar);
+//            googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//                @Override
+//                public void onPlaceSelected(Place place) {
+//                    if (googlePlaceMarker != null) {
+//                        googlePlaceMarker.remove();
+//                    }
+//                    LatLng placeLocation = place.getLatLng();
+//                    googlePlaceMarker = mMap.addMarker(new MarkerOptions()
+//                            .position(placeLocation)
+//                            .title(place.getName().toString())
+//                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+//                    googlePlaceMarker.setTag("PlaceMarker");
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLocation));
+//                    Log.i("place", "Place: " + place.getName());
+//
+//                    Log.i("place", "Place: " + place.getAddress());
+//                    Log.i("place", "Place: " + place.getRating());
+//                    Log.i("place", "Place: " + place.getAttributions());
+//                    //   Log.i("place","Place: " + place.get);
+//                }
+//
+//                @Override
+//                public void onError(Status status) {
+//                    Log.i(TAG, "error: " + status);
+//                }
+//            });
+
+            initShakeSensor();
+
+            //        mGeoDataClient = Places.getGeoDataClient(this,null);
+//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this,null);
+//        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+//        googlePlacesSearchBarFrag = new SupportPlaceAutocompleteFragment();
+//        android.support.v4.app.FragmentManager fm = getFragmentManager();
+//        FragmentTransaction ft = fm.beginTransaction();
+//        ft.add(R.id.map_searchbar_container, googlePlacesSearchBarFrag).commit();
+
+            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+            mapFragment.getMapAsync(this);
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.map_container, mapFragment)
+                    .commit();
+
+        } catch (InflateException e) {
+            /* map is already there, just return view as it is */
+        }
     }
 
     public Marker getMarkerFromMap(String eventID) {
@@ -661,7 +659,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             @Override
             public void onCameraMoveStarted(int i) {
                 view.findViewById(R.id.event_maps_searchbar).setVisibility(View.INVISIBLE);
-                view.findViewById(R.id.event_searchbar_frame).setVisibility(View.INVISIBLE);
+//                view.findViewById(R.id.event_searchbar_frame).setVisibility(View.INVISIBLE);
             }
         });
         mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
@@ -682,7 +680,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     surroundingEvents.setCenter(new GeoLocation(loc.latitude,loc.longitude));
                 }
                 view.findViewById(R.id.event_maps_searchbar).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.event_searchbar_frame).setVisibility(View.VISIBLE);
+//                view.findViewById(R.id.event_searchbar_frame).setVisibility(View.VISIBLE);
             }
         });
 
