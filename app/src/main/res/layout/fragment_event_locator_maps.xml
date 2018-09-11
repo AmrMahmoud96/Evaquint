@@ -17,7 +17,7 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/event_searchbar_frame"
+            android:id="@+id/event_maps_searchbar"
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
@@ -30,11 +30,11 @@
             app:cardPreventCornerOverlap="false"
             app:contentPadding="0dp">
 
-            <fragment
-                android:id="@+id/event_maps_searchbar"
-                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            <!--<fragment-->
+                <!--android:id="@+id/event_maps_searchbar"-->
+                <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent" />-->
 
         </android.support.v7.widget.CardView>
 
