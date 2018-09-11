@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:11.4.0'
     implementation 'com.google.firebase:firebase-crash:11.4.0'
     implementation 'com.google.firebase:firebase-auth:11.4.0'
+    implementation 'com.google.firebase:firebase-invites:11.4.0'
     implementation 'com.google.firebase:firebase-core:11.4.0'
     implementation 'com.firebaseui:firebase-ui-storage:2.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'

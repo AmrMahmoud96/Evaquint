@@ -67,7 +67,14 @@ public class SignupInformationFrag extends Fragment {
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),android.R.style.Theme_Holo_Light_Dialog_MinWidth,mDateSetListener,year,month,day);
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                today.add(Calendar.YEAR, -12);
+
+                datePickerDialog.getDatePicker().setMaxDate(today.getTimeInMillis());
+                today.add(Calendar.YEAR, -88);
+                datePickerDialog.getDatePicker().setMinDate(today.getTimeInMillis());
                 datePickerDialog.show();
+                today.add(Calendar.YEAR, 100);
             }
         });
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {

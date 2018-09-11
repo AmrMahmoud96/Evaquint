@@ -22,6 +22,11 @@
     <string name="photos">Photos</string>
     <string name="title_activity_login">Sign in</string>
 
+    <!-- Strings related to sign up-->
+    <string name="invitation_title">EventLite Invitation</string>
+    <string name="invitation_message">Check out this cool new app!</string>
+    <string name="invitation_cta">Continue</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_display_name">Name</string>
@@ -48,7 +53,7 @@
         completions."
     </string>
     <string name="terms_and_conditions">By tapping Continue, Register, or Logging in, you agree to
-        the Evaquint Terms of Service and Privacy Policy
+        the EventLite Terms of Service and Privacy Policy.
     </string>
     <string name="slogan">Carpe Diem</string>
 
