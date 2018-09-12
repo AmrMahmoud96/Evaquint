@@ -53,18 +53,18 @@ public class SignupInterestsFrag extends Fragment {
             public void onUpdate(Object data){
                 HashMap<String, ArrayList<String>> categories = (HashMap<String, ArrayList<String>>) data;
                 System.out.println(categories.toString());
-//                for (Object name: categories.){
-//                    String key =name.toString();
-//                    String value = categories.get(name).toString();
-//                    System.out.println(key + " " + value);
-//
-//
-//                }
-//                final List<String> top_level_categories = new ArrayList<String>(categories.keySet());
-//                final ArrayAdapter<String> gridViewArrayAdapter = new ArrayAdapter<String>
-//                        (getActivity(),android.R.layout.simple_list_item_1, top_level_categories);
-//                GridView gv = (GridView) this.view.findViewById(R.id.event_categories);
-//                gv.setAdapter(gridViewArrayAdapter);
+                for (Object name: categories.keySet()){
+                    String key =name.toString();
+                    String value = categories.get(name).toString();
+                    System.out.println(key + " " + value);
+
+
+                }
+                final List<String> top_level_categories = new ArrayList<String>(categories.keySet());
+                final ArrayAdapter<String> gridViewArrayAdapter = new ArrayAdapter<String>
+                        (getActivity(),android.R.layout.simple_list_item_1, top_level_categories);
+                GridView gv = (GridView) getActivity().findViewById(R.id.event_categories);
+                gv.setAdapter(gridViewArrayAdapter);
             }
 
             @Override
