@@ -18,28 +18,23 @@ import static com.evaquint.android.utils.code.DatabaseValues.CATEGORIES_TABLE;
  */
 
 public class EventCategories {
-    private HashMap<String,ArrayList<String>> categories;
-    public EventCategories(){
+    public static void getEventCategories(final firebase_listener listener) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(CATEGORIES_TABLE.getName());
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
-                    categories =( HashMap<String,ArrayList<String>>)  dataSnapshot.getValue();
-                    Log.i("categories",categories.toString());
+                if(dataSnapshot!=null&&dataSnapshot.getValue()!=null && listener !=null){
+                    listener.onUpdate((Object) dataSnapshot.getValue());
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                if(listener !=null){
+                    listener.onCancel();
+                }
             }
         });
-
-    }
-
-    public HashMap<String, ArrayList<String>> getCategories() {
-        return categories;
     }
 }

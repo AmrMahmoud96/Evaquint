@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
+import com.evaquint.android.fragments.signup.SignupInterestsFrag;
 import com.evaquint.android.fragments.signup.SignupMethodFrag;
+import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.utils.authenticator.FacebookAuthenticator;
 import com.evaquint.android.utils.authenticator.FirebaseAuthenticator;
 import com.evaquint.android.utils.authenticator.GoogleAuthenticator;
@@ -53,8 +55,7 @@ public class LoginLandingFrag extends Fragment {
             @Override
             public void onClick(View view) {
                 authManager = new GoogleAuthenticator(LoginLandingFrag.this,
-                        new Intent(activity, HomeActivity.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                        new Intent(activity, HomeActivity.class));
                 authManager.executeAuth();
             }
         });
@@ -64,8 +65,7 @@ public class LoginLandingFrag extends Fragment {
             @Override
             public void onClick(View view) {
                 authManager = new FacebookAuthenticator(LoginLandingFrag.this,
-                        new Intent(activity, HomeActivity.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                        new Intent(activity, HomeActivity.class));
                 authManager.executeAuth();
             }
         });
@@ -74,7 +74,8 @@ public class LoginLandingFrag extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setActiveFragment(LoginLandingFrag.this, new SignupMethodFrag());
+//                setActiveFragment(LoginLandingFrag.this, new SignupMethodFrag());
+                setActiveFragment(LoginLandingFrag.this, new SignupInterestsFrag());
             }
         });
 
