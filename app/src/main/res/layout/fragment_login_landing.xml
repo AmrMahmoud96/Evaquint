@@ -51,6 +51,15 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+       <!--  <Button
+           android:id="@+id/login_phone"
+           android:layout_above="@id/terms_and_conditions"
+           android:layout_width="wrap_content"
+             android:padding="6dp"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true"
+             android:background="@color/whatsapp"
+           android:text="Continue with SMS"/>!-->
 
         <TextView
             android:id="@+id/more_options_btn"

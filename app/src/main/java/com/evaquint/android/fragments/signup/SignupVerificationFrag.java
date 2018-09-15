@@ -220,7 +220,11 @@ public class SignupVerificationFrag extends Fragment {
         }
     }
     private void nextFrag(){
-        setActiveFragment(SignupVerificationFrag.this, new SignupInformationFrag());
+        SignupInformationFrag signupInformationFrag = new SignupInformationFrag();
+        Bundle storedData = new Bundle();
+        storedData.putString("phoneNumber",mPhoneNumer);
+        signupInformationFrag.setArguments(storedData);
+        setActiveFragment(SignupVerificationFrag.this, signupInformationFrag);
     }
     private void signInExistingUser(){
        Intent myIntent = new Intent(getActivity(), HomeActivity.class);

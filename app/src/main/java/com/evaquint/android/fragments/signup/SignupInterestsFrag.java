@@ -39,6 +39,7 @@ public class SignupInterestsFrag extends Fragment {
     }
 
     private void nextFrag(){
+
         setActiveFragment(SignupInterestsFrag.this, new SignupInviteFrag());
     }
 }

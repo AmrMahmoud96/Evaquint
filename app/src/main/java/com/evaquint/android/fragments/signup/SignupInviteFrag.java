@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 
 import static android.app.Activity.RESULT_OK;
-import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class SignupInviteFrag extends Fragment {
     private View view;
@@ -85,7 +85,8 @@ public class SignupInviteFrag extends Fragment {
     }
 
     private void nextFrag(){
-        setActiveFragment(SignupInviteFrag.this, new SignupInviteFrag());
+        Intent myIntent = new Intent(getActivity(), HomeActivity.class);
+        startActivity(myIntent);
     }
 }
 
