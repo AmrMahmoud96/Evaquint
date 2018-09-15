@@ -134,7 +134,7 @@ public class EmailAuthenticator implements FirebaseAuthenticator {
                          //   userDatabaseHandler.addUser(fUser.getUid(),new UserDB());
                             userDatabaseHandler.addUser(fUser.getUid(),
 
-                                    new UserDB(firstName,lastName,20,"default",email,"", Arrays.asList(""),df.format(Calendar.getInstance().getTime()),new HashMap<String, String>(), new HashMap<String, String>(), Arrays.asList(""),0,0,0,0));
+                                    new UserDB(firstName,lastName,"","default",email,"", Arrays.asList(""),df.format(Calendar.getInstance().getTime()),new HashMap<String, String>(), new HashMap<String, String>(), Arrays.asList(""),0,0,0,0));
                           //  sendVerificationEmail();
                             activity.startActivity(nextActivity);
 //                            updateUI(user);

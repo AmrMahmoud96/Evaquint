@@ -12,7 +12,7 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class UserDB {
     private List<String> friends;
-    private int age;
+    private String dob;
     private String email;
     private String phone;
     private double lat;
@@ -43,9 +43,9 @@ public class UserDB {
         this.raters = raters;
     }
 
-    public UserDB(String firstName, String lastName, int age, String picture, String email, String phone, List<String> interests, String dateCreated, Map<String,String> eventsAttending, Map<String,String>eventsHosted, List<String>friends, int hostRating, int raters,double lat, double lon) {
+    public UserDB(String firstName, String lastName, String dob, String picture, String email, String phone, List<String> interests, String dateCreated, Map<String,String> eventsAttending, Map<String,String>eventsHosted, List<String>friends, int hostRating, int raters,double lat, double lon) {
         this.firstName =firstName;
-        this.age = age;
+        this.dob = dob;
         this.raters=raters;
         this.hostRating = hostRating;
 
@@ -66,8 +66,8 @@ public class UserDB {
 
     }
 
-    public int getAge(){return age;}
-    public void setAge(int age){this.age=age;}
+    public String getDob(){return dob;}
+    public void setDob(String dob){this.dob=dob;}
     public List<String> getFriends() {
         return friends;
     }
