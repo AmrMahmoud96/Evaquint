@@ -26,7 +26,7 @@ public class SignupInformationFrag extends Fragment {
     private String firstName;
     private String lastName;
     private int age;
-    private String dob;
+    private long dob;
 
     private EditText mFirstNameField;
     private EditText mLastNameField;
@@ -82,7 +82,9 @@ public class SignupInformationFrag extends Fragment {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month = month+1;
                 String date = dayOfMonth+"/"+month+"/"+year;
-                dob = date;
+                Calendar temp = Calendar.getInstance();
+                temp.set(year,month,dayOfMonth);
+                dob = temp.getTimeInMillis();
                 mDOBTextField.setText(date);
 
 
@@ -159,7 +161,7 @@ public class SignupInformationFrag extends Fragment {
         storedData.putString("phoneNumber",getArguments().getString("phoneNumber"));
         storedData.putString("firstName",firstName);
         storedData.putString("lastName",lastName);
-        storedData.putString("dob", dob);
+        storedData.putLong("dob", dob);
         signupInterestsFrag.setArguments(storedData);
         setActiveFragment(SignupInformationFrag.this, signupInterestsFrag);
     }

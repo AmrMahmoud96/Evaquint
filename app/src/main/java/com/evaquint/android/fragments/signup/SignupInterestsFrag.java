@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -65,9 +64,8 @@ public class SignupInterestsFrag extends Fragment {
             //   userDatabaseHandler.addUser(fUser.getUid(),new UserDB());
             UserDBHelper userDBHelper = new UserDBHelper();
             Bundle userInfo = getArguments();
-            SimpleDateFormat df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
             userDBHelper.addUser(fUser.getUid(),
-                    new UserDB(userInfo.getString("firstName"),userInfo.getString("lastName"),userInfo.getString("dob"),"default","",userInfo.getString("phoneNumber"), Arrays.asList(""),df.format(Calendar.getInstance().getTime()),new HashMap<String, String>(), new HashMap<String, String>(), Arrays.asList(""),0,0,0,0));
+                    new UserDB(userInfo.getString("firstName"),userInfo.getString("lastName"),userInfo.getLong("dob"),"default","",userInfo.getString("phoneNumber"), Arrays.asList(""),Calendar.getInstance().getTimeInMillis(),new HashMap<String, String>(), new HashMap<String, String>(), Arrays.asList(""),0,0,0,0));
 
         }
 

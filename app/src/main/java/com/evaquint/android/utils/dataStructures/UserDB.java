@@ -12,7 +12,7 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class UserDB {
     private List<String> friends;
-    private String dob;
+    private long dob;
     private String email;
     private String phone;
     private double lat;
@@ -25,7 +25,7 @@ public class UserDB {
     private List<String> interests;
     private Map<String,String> eventsHosted;
     private Map<String,String> eventsAttending;
-    private String dateCreated;
+    private long dateCreated;
 
     public int getHostRating() {
         return hostRating;
@@ -43,7 +43,7 @@ public class UserDB {
         this.raters = raters;
     }
 
-    public UserDB(String firstName, String lastName, String dob, String picture, String email, String phone, List<String> interests, String dateCreated, Map<String,String> eventsAttending, Map<String,String>eventsHosted, List<String>friends, int hostRating, int raters,double lat, double lon) {
+    public UserDB(String firstName, String lastName, long dob, String picture, String email, String phone, List<String> interests, long dateCreated, Map<String,String> eventsAttending, Map<String,String>eventsHosted, List<String>friends, int hostRating, int raters,double lat, double lon) {
         this.firstName =firstName;
         this.dob = dob;
         this.raters=raters;
@@ -66,8 +66,8 @@ public class UserDB {
 
     }
 
-    public String getDob(){return dob;}
-    public void setDob(String dob){this.dob=dob;}
+    public long getDob(){return dob;}
+    public void setDob(long dob){this.dob=dob;}
     public List<String> getFriends() {
         return friends;
     }
@@ -140,11 +140,11 @@ public class UserDB {
         this.eventsAttending = eventsAttending;
     }
 
-    public String getDateCreated() {
+    public long getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(long dateCreated) {
         this.dateCreated = dateCreated;
     }
 
