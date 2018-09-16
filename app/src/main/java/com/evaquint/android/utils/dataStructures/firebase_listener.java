@@ -1,6 +1,5 @@
 package com.evaquint.android.utils.dataStructures;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 
 /**

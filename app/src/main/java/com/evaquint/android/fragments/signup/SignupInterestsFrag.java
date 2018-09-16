@@ -1,11 +1,9 @@
 package com.evaquint.android.fragments.signup;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,27 +13,20 @@ import android.widget.Button;
 import android.widget.GridView;
 
 import com.evaquint.android.R;
+import com.evaquint.android.popups.InterestsSubCategoriesFrag;
 import com.evaquint.android.utils.dataStructures.UserDB;
+import com.evaquint.android.utils.dataStructures.firebase_listener;
 import com.evaquint.android.utils.database.UserDBHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import com.evaquint.android.popups.EventSuggestionFrag;
-import com.evaquint.android.popups.InterestsSubCategoriesFrag;
-import com.evaquint.android.utils.dataStructures.EventCategories;
-import com.evaquint.android.utils.dataStructures.firebase_listener;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
-import static com.evaquint.android.utils.code.IntentValues.EVENT_SUGGESTION_FRAGMENT;
 import static com.evaquint.android.utils.dataStructures.EventCategories.getEventCategories;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
