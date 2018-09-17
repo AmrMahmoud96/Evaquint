@@ -2,6 +2,7 @@ package com.evaquint.android.fragments.signup;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,34 +16,39 @@ import android.widget.Button;
 import android.widget.GridView;
 
 import com.evaquint.android.R;
+import com.evaquint.android.modules.CheckboxAdapter;
 import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.popups.InterestsSubCategoriesFrag;
+import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventCategories;
+import com.evaquint.android.utils.dataStructures.EventDB;
+import com.evaquint.android.utils.dataStructures.ImageData;
 import com.evaquint.android.utils.dataStructures.firebase_listener;
+import com.evaquint.android.utils.database.EventDBHelper;
+import com.evaquint.android.utils.database.GeofireDBHelper;
+import com.evaquint.android.utils.database.UserDBHelper;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
-import static com.evaquint.android.utils.code.IntentValues.EVENT_SUGGESTION_FRAGMENT;
+import static com.evaquint.android.utils.code.IntentValues.PICK_SUBCATEGORIES;
 import static com.evaquint.android.utils.dataStructures.EventCategories.getEventCategories;
-import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
-
 public class SignupInterestsFrag extends Fragment {
     private View view;
     private Activity activity;
 
-    public HashMap getCategories() {
-        return categories;
-    }
-
-    public void setCategories(HashMap categories) {
-        this.categories = categories;
-    }
-
     private HashMap<String, ArrayList<String>> categories;
+
+    private HashMap<String, ArrayAdapter> arrayAdapterHashMap;
     private Fragment popupFragment;
 
     @Override
@@ -51,6 +57,7 @@ public class SignupInterestsFrag extends Fragment {
         super.onCreate(savedInstanceState);
         this.view = inflater.inflate(R.layout.fragment_signup_interests, container, false);
         this.activity = getActivity();
+        arrayAdapterHashMap = new HashMap<String, ArrayAdapter>();
 
         ((Button) view.findViewById(R.id.signup_interests_next_button)).setOnClickListener(
                 new View.OnClickListener() {
@@ -65,32 +72,41 @@ public class SignupInterestsFrag extends Fragment {
         return this.view;
     }
 
-    private void openPopup(ArrayList<String> subCategories){
+    public HashMap<String, ArrayAdapter> getArrayAdapterHashMap() {
+        return arrayAdapterHashMap;
+    }
+
+    public void setArrayAdapterHashMap(HashMap<String, ArrayAdapter> arrayAdapterHashMap) {
+        this.arrayAdapterHashMap = arrayAdapterHashMap;
+    }
+
+    private void openPopup(String subcategory){
         final FragmentManager fm = getFragmentManager();
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList("SUBCATEGORIES", subCategories);
+        bundle.putString("SUBCATEGORIES", subcategory);
         InterestsSubCategoriesFrag subcategories_frag = new InterestsSubCategoriesFrag();
         popupFragment = subcategories_frag;
-        System.out.println(bundle.toString());
         subcategories_frag.setArguments(bundle);
-//        subcategories_frag.setTargetFragment(this, EVENT_SUGGESTION_FRAGMENT);
+        subcategories_frag.setTargetFragment(this, PICK_SUBCATEGORIES);
         subcategories_frag.show(fm, "fragment_popup_interests_sub_categories");
     }
 
-
+    private CheckboxAdapter getCheckboxAdapter(ArrayList<String> subcategories){
+        return new CheckboxAdapter(getActivity(), subcategories);
+    }
 
     private void initInterests(){
         getEventCategories(new firebase_listener(){
             @Override
             public void onUpdate(Object data, Fragment fragment){
                 categories = (HashMap<String, ArrayList<String>>) data;
-//                ((SignupInterestsFrag) fragment).setCategories((HashMap<String, ArrayList<String>>) data);
-//                HashMap<String, ArrayList<String>> categories = ;
-                for (Object name: categories.keySet()){
-                    String key = name.toString();
-                    String value = categories.get(name).toString();
-                    System.out.println(key + " " + value);
+                for (Map.Entry<String, ArrayList<String>> entry :
+                        (categories).entrySet()) {
+                    String key = entry.getKey();
+                    ArrayList<String> value = entry.getValue();
+                    arrayAdapterHashMap.put(key,getCheckboxAdapter(value));
                 }
+
                 final List<String> top_level_categories = new ArrayList<String>(categories.keySet());
                 final ArrayAdapter<String> gridViewArrayAdapter = new ArrayAdapter<String>
                         (getActivity(),android.R.layout.simple_list_item_1, top_level_categories);
@@ -99,7 +115,7 @@ public class SignupInterestsFrag extends Fragment {
                 gv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        openPopup(categories.get(top_level_categories.get(i)));
+                        openPopup(top_level_categories.get(i));
                     }
                 });
             }
@@ -109,15 +125,19 @@ public class SignupInterestsFrag extends Fragment {
                 //Do something when cancel
             }
         }, this);
-
     }
 
-    private boolean validateValues(){
-        return false;
-    }
-
-    private void nextFrag(){
-        setActiveFragment(SignupInterestsFrag.this, new SignupInviteFrag());
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case PICK_SUBCATEGORIES:
+//                if (resultCode == Activity.RESULT_OK) {
+//                    Bundle bundle = data.getExtras();
+//                    List selected = bundle.getStringArrayList("selected");
+//                    System.out.println(selected.toString());
+//                }
+                break;
+        }
     }
 }
 

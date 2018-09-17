@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.evaquint.android.R;
@@ -21,9 +22,11 @@ import java.util.List;
  */
 
 public class CheckboxAdapter extends ArrayAdapter {
-    Context context;
-    List<Boolean> checkboxState;
-    List<String> checkboxItems;
+    private Context context;
+    private List<Boolean> checkboxState;
+    private List<String> checkboxItems;
+    private ArrayList<String> selectedStrings = new ArrayList<String>();
+
 
     public CheckboxAdapter(Context context, List<String> resource) {
         super(context, R.layout.checkbox, resource);
@@ -33,20 +36,32 @@ public class CheckboxAdapter extends ArrayAdapter {
         this.checkboxState = new ArrayList<Boolean>(Collections.nCopies(resource.size(), false));
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         convertView = inflater.inflate(R.layout.checkbox, parent, false);
-        TextView textView = (TextView) convertView.findViewById(R.id.subcategory);
-        CheckBox cb = (CheckBox) convertView.findViewById(R.id.subcategory_checkbox);
-
+        final TextView textView = (TextView) convertView.findViewById(R.id.subcategory);
+        final CheckBox cb = (CheckBox) convertView.findViewById(R.id.subcategory_checkbox);
         textView.setText(checkboxItems.get(position));
         cb.setChecked(checkboxState.get(position));
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    selectedStrings.add(textView.getText().toString());
+                    checkboxState.set(position, true);
+                }else{
+                    selectedStrings.remove(textView.getText().toString());
+                    checkboxState.set(position, false);
+                }
+
+            }
+        });
+
         return convertView;
     }
 
-    void setChecked(boolean state, int position)
-    {
-        checkboxState.set(position, state);
+    public ArrayList<String> getSelectedString(){
+        return selectedStrings;
     }
 }
