@@ -74,8 +74,8 @@ public class LoginLandingFrag extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                setActiveFragment(LoginLandingFrag.this, new SignupMethodFrag());
-                setActiveFragment(LoginLandingFrag.this, new SignupInterestsFrag());
+                setActiveFragment(LoginLandingFrag.this, new SignupMethodFrag());
+//                setActiveFragment(LoginLandingFrag.this, new SignupInterestsFrag());
             }
         });
 

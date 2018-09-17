@@ -17,25 +17,9 @@ import android.widget.GridView;
 
 import com.evaquint.android.R;
 import com.evaquint.android.modules.CheckboxAdapter;
-import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.popups.InterestsSubCategoriesFrag;
-import com.evaquint.android.utils.dataStructures.DetailedEvent;
-import com.evaquint.android.utils.dataStructures.EventCategories;
-import com.evaquint.android.utils.dataStructures.EventDB;
-import com.evaquint.android.utils.dataStructures.ImageData;
 import com.evaquint.android.utils.dataStructures.firebase_listener;
-import com.evaquint.android.utils.database.EventDBHelper;
-import com.evaquint.android.utils.database.GeofireDBHelper;
-import com.evaquint.android.utils.database.UserDBHelper;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +31,7 @@ public class SignupInterestsFrag extends Fragment {
     private Activity activity;
 
     private HashMap<String, ArrayList<String>> categories;
-
+    private Set<String> selected_categories;
     private HashMap<String, ArrayAdapter> arrayAdapterHashMap;
     private Fragment popupFragment;
 
@@ -131,11 +115,11 @@ public class SignupInterestsFrag extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case PICK_SUBCATEGORIES:
-//                if (resultCode == Activity.RESULT_OK) {
-//                    Bundle bundle = data.getExtras();
-//                    List selected = bundle.getStringArrayList("selected");
-//                    System.out.println(selected.toString());
-//                }
+                if (resultCode == Activity.RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    List selected = bundle.getStringArrayList("selected");
+                    System.out.println(selected.toString());
+                }
                 break;
         }
     }

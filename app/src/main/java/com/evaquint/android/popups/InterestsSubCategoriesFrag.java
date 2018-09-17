@@ -64,8 +64,8 @@ public class InterestsSubCategoriesFrag extends DialogFragment {
 
     @Override
     public void onDismiss(final DialogInterface dialog){
-//        Intent i = new Intent().putExtra("selected", checkboxAdapter.getSelectedString());
-//        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
+        Intent i = new Intent().putExtra("selected", checkboxAdapter.getSelectedString());
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
         callerFragment.setArrayAdapterHashMap(arrayAdapterHashMap);
         super.onDismiss(dialog);
 
