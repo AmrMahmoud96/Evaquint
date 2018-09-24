@@ -29,7 +29,7 @@
             app:cardElevation="7dp"
             app:cardPreventCornerOverlap="false"
             app:contentPadding="0dp">
-
+            <include layout="@layout/component_map_searchbar"></include>
             <!--<fragment-->
                 <!--android:id="@+id/event_maps_searchbar"-->
                 <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->

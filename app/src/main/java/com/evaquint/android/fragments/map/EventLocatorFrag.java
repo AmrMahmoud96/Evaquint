@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -45,6 +46,7 @@ import com.evaquint.android.utils.database.EventDBHelper;
 import com.evaquint.android.utils.database.GeofireDBHelper;
 import com.evaquint.android.utils.database.UserDBHelper;
 import com.evaquint.android.utils.listeners.ShakeDetector;
+import com.evaquint.android.utils.places.NearbyPlacesData;
 import com.evaquint.android.utils.storage.PhotoUploadHelper;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -729,7 +731,20 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 goToCurrentLocation();
             }
         });
-
+        ((TextView) view.findViewById(R.id.map_searchbar_input)).setOnClickListener(new View.OnClickListener(
+        ) {
+            @Override
+            public void onClick(View view) {
+                mMap.clear();
+                String url = getUrl("Restaurant");
+                Object[] DataTransfer = new Object[2];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                Log.d("onClick", url);
+                NearbyPlacesData getNearbyPlacesData = new NearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+            }
+        });
 //        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 //            @Override
 //            public void onPlaceSelected(Place place) {
@@ -743,6 +758,19 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 //                Log.i(TAG, "An error occurred: " + status);
 //            }
 //        });
+    }
+
+    private String getUrl(/*double latitude, double longitude,*/ String nearbyPlace) {
+        String latitude = "43.6595877";
+        String longitude = "-79.3886365";
+        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlacesUrl.append("location=" + latitude + "," + longitude);
+        googlePlacesUrl.append("&radius=" + 10000);
+        googlePlacesUrl.append("&type=" + nearbyPlace);
+        googlePlacesUrl.append("&sensor=true");
+        googlePlacesUrl.append("&key=" + "AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0");
+        Log.d("getUrl", googlePlacesUrl.toString());
+        return (googlePlacesUrl.toString());
     }
 
     public void uploadData(String eventID, ArrayList<ImageData> images) {
