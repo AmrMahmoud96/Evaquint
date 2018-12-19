@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class SignupInterestsFrag extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.view = inflater.inflate(R.layout.fragment_signup_interests, container, false);
+        this.mAuth = FirebaseAuth.getInstance();
         this.activity = getActivity();
         arrayAdapterHashMap = new HashMap<String, ArrayAdapter>();
 
@@ -151,6 +153,7 @@ public class SignupInterestsFrag extends Fragment {
     }
     private void createPhoneUser(){
         FirebaseUser fUser = mAuth.getCurrentUser();
+        Log.w("user", fUser.toString());
         if(fUser!=null){
             UserProfileChangeRequest updateProfile = new UserProfileChangeRequest.Builder()
                     .setDisplayName(getArguments().getString("firstName") +" "+ getArguments().getString("lastName"))

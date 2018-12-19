@@ -18,17 +18,14 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +36,6 @@ import com.evaquint.android.fragments.EventPageFrag;
 import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
-import com.evaquint.android.utils.dataStructures.EventCategories;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.dataStructures.ImageData;
 import com.evaquint.android.utils.database.EventDBHelper;
@@ -52,10 +48,6 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -475,7 +467,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             double y2 = lat - Math.toDegrees(radius / earthR);
 
             LatLngBounds bounds = new LatLngBounds(new LatLng(y2, x2), new LatLng(y1, x1));
-            googlePlacesSearchBarFrag.setBoundsBias(bounds);
+//            googlePlacesSearchBarFrag.setBoundsBias(bounds);
 
 
             mMap.animateCamera(update);
