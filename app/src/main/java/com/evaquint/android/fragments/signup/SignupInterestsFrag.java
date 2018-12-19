@@ -1,6 +1,7 @@
 package com.evaquint.android.fragments.signup;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,9 +28,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
 import java.util.Map;
 import java.util.Set;
+
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
+
 import static com.evaquint.android.utils.code.IntentValues.PICK_SUBCATEGORIES;
 import static com.evaquint.android.utils.dataStructures.EventCategories.getEventCategories;
 public class SignupInterestsFrag extends Fragment {
@@ -137,6 +140,7 @@ public class SignupInterestsFrag extends Fragment {
                 }
                 break;
         }
+    }
     private boolean validateValues(){
         return false;
     }
