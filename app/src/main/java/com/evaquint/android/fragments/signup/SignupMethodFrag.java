@@ -62,6 +62,7 @@ public class SignupMethodFrag extends Fragment {
         if(phoneNumber.isEmpty()){
             mPhoneNumberField.setError("Please enter your phone number.");
             mPhoneNumberField.requestFocus();
+            return false;
         }
         return true;
     }

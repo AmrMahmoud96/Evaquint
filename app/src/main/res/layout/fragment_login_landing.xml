@@ -45,46 +45,55 @@
         <in.championswimmer.libsocialbuttons.buttons.BtnFacebook
             android:id="@+id/login_facebook"
             style="@style/SocialButton"
-            android:layout_above="@+id/more_options_btn"
-            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/login_phone"
+            android:layout_alignStart="@+id/login_google"
             android:text="Continue With Facebook"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-       <!--  <Button
-           android:id="@+id/login_phone"
-           android:layout_above="@id/terms_and_conditions"
-           android:layout_width="wrap_content"
-             android:padding="6dp"
-           android:layout_height="wrap_content"
-           android:layout_centerHorizontal="true"
-             android:background="@color/whatsapp"
-           android:text="Continue with SMS"/>!-->
-
-        <TextView
-            android:id="@+id/more_options_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <in.championswimmer.libsocialbuttons.buttons.BtnWhatsapp
+            android:id="@+id/login_phone"
+            style="@style/SocialButton"
             android:layout_above="@+id/terms_and_conditions"
-            android:layout_marginBottom="13dp"
-            android:layout_toStartOf="@+id/to_login"
-            android:text="More Options"
-            android:textColor="@android:color/white"
-            app:layout_marginLeftPercent="8%"
-            app:layout_marginTopPercent="1%" />
+            android:layout_alignStart="@+id/login_google"
+            android:text="Continue With Phone"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/to_login"
+        <!--  <Button
+            android:id="@+id/login_phone"
+            android:layout_above="@id/terms_and_conditions"
             android:layout_width="wrap_content"
+              android:padding="6dp"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/more_options_btn"
-            android:layout_alignBottom="@+id/more_options_btn"
-            android:layout_alignEnd="@+id/login_facebook"
-            android:layout_marginEnd="22dp"
-            android:text="@string/register_or_sign_in"
-            android:textColor="@android:color/white"
-            app:layout_marginLeftPercent="8%"
-            app:layout_marginTopPercent="2%" />
+            android:layout_centerHorizontal="true"
+              android:background="@color/whatsapp"
+            android:text="Continue with SMS"/>!-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/more_options_btn"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_above="@+id/terms_and_conditions"-->
+            <!--android:layout_marginBottom="13dp"-->
+            <!--android:layout_toStartOf="@+id/to_login"-->
+            <!--android:text="More Options"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--app:layout_marginLeftPercent="8%"-->
+            <!--app:layout_marginTopPercent="1%" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/to_login"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignBaseline="@+id/more_options_btn"-->
+            <!--android:layout_alignBottom="@+id/more_options_btn"-->
+            <!--android:layout_alignEnd="@+id/login_facebook"-->
+            <!--android:layout_marginEnd="22dp"-->
+            <!--android:text="@string/register_or_sign_in"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--app:layout_marginLeftPercent="8%"-->
+            <!--app:layout_marginTopPercent="2%" />-->
 
         <!--<TextView-->
         <!--android:id="@+id/to_register"-->

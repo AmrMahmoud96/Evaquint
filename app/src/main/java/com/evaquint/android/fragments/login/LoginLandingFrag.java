@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
@@ -24,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import in.championswimmer.libsocialbuttons.buttons.BtnFacebook;
 import in.championswimmer.libsocialbuttons.buttons.BtnGoogleplus;
+import in.championswimmer.libsocialbuttons.buttons.BtnWhatsapp;
 
 import static com.evaquint.android.utils.code.IntentValues.GOOGLE_SIGN_IN;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
@@ -67,14 +67,22 @@ public class LoginLandingFrag extends Fragment {
             }
         });
 
-        TextView loginButton = (TextView) view.findViewById(R.id.to_login);
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        BtnWhatsapp mPhoneSignInButton = (BtnWhatsapp) view.findViewById(R.id.login_phone);
+        mPhoneSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setActiveFragment(LoginLandingFrag.this, new SignupMethodFrag());
-//                setActiveFragment(LoginLandingFrag.this, new SignupInterestsFrag());
             }
         });
+
+//        TextView loginButton = (TextView) view.findViewById(R.id.to_login);
+//        loginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setActiveFragment(LoginLandingFrag.this, new SignupMethodFrag());
+////                setActiveFragment(LoginLandingFrag.this, new SignupInterestsFrag());
+//            }
+//        });
 
         return this.view;
     }
