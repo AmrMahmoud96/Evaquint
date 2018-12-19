@@ -117,8 +117,10 @@ public class EventPageFrag  extends Fragment{
                         hostRating.setStepSize((float)0.1);
                         hostRating.setRating((float)host.getHostRating()/(float) host.getRaters());
                         hostRating.setIsIndicator(true); // disabled the rating bar
-                        PhotoDownloadHelper pdh = new PhotoDownloadHelper();
-                        hostPicture.setImageBitmap(pdh.getImageBitmap(host.getPicture()));
+                        if(!host.getPicture().equals("default")){
+                            PhotoDownloadHelper pdh = new PhotoDownloadHelper();
+                            hostPicture.setImageBitmap(pdh.getImageBitmap(host.getPicture()));
+                        }
                     }
                 }
 
