@@ -60,7 +60,7 @@ public class EventPageFrag  extends Fragment{
 
     private ImageView eventPicture;
 
-    private SimpleDateFormat df = new SimpleDateFormat("E, MMM d, yyyy hh:mm aa");
+    private SimpleDateFormat df = new SimpleDateFormat("EEEE, MMM d, yyyy hh:mm aa");
 
     public static EventPageFrag newInstance(EventDB event) {
         EventPageFrag fragment = new EventPageFrag();
@@ -143,6 +143,12 @@ public class EventPageFrag  extends Fragment{
         dateField.setText(df.format(event.timeInMillis));
         locationField.setText(event.address);
         descriptionField.setText(event.details.getDescription());
+        if(event.details.getDescription().trim().isEmpty()){
+            descriptionField.setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.descLabel).setVisibility(View.INVISIBLE);
+
+        }
+
 
 
         if(event.details.getCapacity()==0){
@@ -159,6 +165,7 @@ public class EventPageFrag  extends Fragment{
 
         if(event.details.getAgeRestriction()==0){
             ageRestrictionField.setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.ARLabel).setVisibility(View.INVISIBLE);
         }
 
         final String currUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();

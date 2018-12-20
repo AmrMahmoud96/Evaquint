@@ -33,7 +33,7 @@
         android:layout_marginStart="8dp"
         android:src="@drawable/ic_date_range_black_24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventTitle" />
+        app:layout_constraintTop_toBottomOf="@id/eventHostName" />
     <!--<TextView-->
     <!--android:id="@+id/dateLabel"-->
     <!--android:layout_width="wrap_content"-->
@@ -148,7 +148,7 @@
         android:layout_height="80dp"
         android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventLocField"
+        app:layout_constraintTop_toBottomOf="@+id/eventTitle"
         app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
 
@@ -181,7 +181,7 @@
         android:layout_marginTop="8dp"
         android:text="Attendees:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventHostName" />
+        app:layout_constraintTop_toBottomOf="@+id/locLabel" />
 
     <TextView
         android:id="@+id/descLabel"
