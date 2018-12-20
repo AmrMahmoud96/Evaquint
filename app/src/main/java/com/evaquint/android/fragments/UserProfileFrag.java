@@ -106,14 +106,14 @@ user.updateProfile(profileUpdates)
                             hostRating.setRating(user.getHostRating()/user.getRaters());
                         }
 
-                        ((ImageView) view.findViewById(R.id.user_profile_edit_name)).setOnClickListener(
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                }
-                        );
+//                        ((ImageView) view.findViewById(R.id.user_profile_edit_name)).setOnClickListener(
+//                                new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View view) {
+//
+//                                    }
+//                                }
+//                        );
                        // user[0] = dataSnapshot.getValue(UserDB.class);
                     }
 
