@@ -8,11 +8,13 @@
 
     <TextView
         android:id="@+id/recLabel"
+        style="@style/Text.Large"
         android:layout_width="wrap_content"
-        android:layout_height="19dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
+        android:textColor="@color/black"
         android:text="Recommendation"
         android:ems="10"
         android:textAlignment="center"
@@ -36,6 +38,9 @@
         android:id="@+id/recommendation"
         android:layout_width="191dp"
         android:layout_height="88dp"
+        android:textColor="@color/black"
+        style="@style/Text.Large"
+        android:textStyle="bold"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
@@ -52,6 +57,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
         android:text="Try Again"
         app:layout_constraintRight_toLeftOf="@id/contButton"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +70,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="50dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
         android:text="Continue"
         app:layout_constraintLeft_toRightOf="@id/reroll"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,13 +78,12 @@
 
     <TextView
         android:id="@+id/recContText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:text="Would you like to continue with this event selection?"
         app:layout_constraintTop_toBottomOf="@id/recommendation"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteX="131dp"
-        tools:layout_editor_absoluteY="152dp" />
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

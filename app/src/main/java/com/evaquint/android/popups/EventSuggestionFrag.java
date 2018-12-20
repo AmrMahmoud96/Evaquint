@@ -2,6 +2,7 @@ package com.evaquint.android.popups;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,8 @@ import android.widget.TextView;
 
 import com.evaquint.android.R;
 import com.evaquint.android.fragments.map.EventLocatorFrag;
-import com.evaquint.android.utils.dataStructures.EventCategories;
 import com.evaquint.android.utils.dataStructures.UserDB;
+import com.evaquint.android.utils.dataStructures.firebase_listener;
 import com.evaquint.android.utils.database.GeofireDBHelper;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
+import static com.evaquint.android.utils.dataStructures.EventCategories.getEventCategories;
 
 public class EventSuggestionFrag extends DialogFragment {
     private TextView mRecText;
@@ -77,7 +79,10 @@ public class EventSuggestionFrag extends DialogFragment {
         int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.75);
 
         getDialog().getWindow().setLayout(width, height);
+        getDialog().setCanceledOnTouchOutside(true);
+
         this.view =  inflater.inflate(R.layout.fragment_popup_recommendation, container);
+        view.setPadding(50,0,50,50);
         mRecText =  (TextView) view.findViewById(R.id.recText);
         mRecommendation = (TextView) view.findViewById(R.id.recommendation);
         mContinue = (Button) view.findViewById(R.id.contButton);
@@ -110,14 +115,28 @@ public class EventSuggestionFrag extends DialogFragment {
 
 
     public void init(){
+        getEventCategories(new firebase_listener(){
+            @Override
+            public void onUpdate(Object data, Fragment fragment){
+                categories = (HashMap<String, ArrayList<String>>) data;
+                Log.i("cat",categories.toString());
+                // need to init user + interests, friends interests, geofire query interests.
+                assignUser();
+                suggestEvent(4);
+            }
+
+            @Override
+            public void onCancel(){
+                //Do something when cancel
+            }
+        }, this);
+//        Log.i("cat",categories.toString());
 //        categories = new EventCategories().getCategories();
         nearbyUsers = new ArrayList<String>();
         pastSuggested = new ArrayList<String>();
         //Log.i("cat:",categories.toString());
 
-        // need to init user + interests, friends interests, geofire query interests.
 
-      assignUser();
     }
     public void assignUser(){
 
@@ -282,6 +301,7 @@ public class EventSuggestionFrag extends DialogFragment {
         *  2. add an arraylist of already shown recommendations and check if the returned one is in that list and run again
         *
         * */
+        Log.i("suggestion",""+suggestionType);
 
         if(pastSuggested.size() <=20){
 
