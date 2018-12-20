@@ -9,8 +9,11 @@
 
     <TextView
         android:id="@+id/eventTitle"
+        style="@style/Text.Large"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -42,6 +45,8 @@
 
     <TextView
         android:id="@+id/eventDateField"
+
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
@@ -52,6 +57,8 @@
 
     <TextView
         android:id="@+id/eventHostName"
+
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginTop="8dp"
@@ -72,6 +79,8 @@
     <TextView
         android:id="@+id/eventLocField"
         android:layout_width="0dp"
+
+        android:textColor="@color/black"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:text="Location"
@@ -85,6 +94,8 @@
     <TextView
         android:id="@+id/eventAttField"
         android:layout_width="wrap_content"
+
+        android:textColor="@color/black"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:text="Attendees"
@@ -94,6 +105,8 @@
 
     <TextView
         android:id="@+id/eventDescField"
+
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
@@ -104,6 +117,8 @@
 
     <TextView
         android:id="@+id/eventARField"
+
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
@@ -114,6 +129,7 @@
 
     <Button
         android:id="@+id/eventPageBtn"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
@@ -157,6 +173,8 @@
     <TextView
         android:id="@+id/attLabel"
         android:layout_width="wrap_content"
+
+        android:textColor="@color/black"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -166,6 +184,8 @@
 
     <TextView
         android:id="@+id/descLabel"
+
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
@@ -177,6 +197,8 @@
     <TextView
         android:id="@+id/ARLabel"
         android:layout_width="wrap_content"
+
+        android:textColor="@color/black"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
