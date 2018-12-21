@@ -569,11 +569,14 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-
+//                                            String name = "ic_location_black_50dp";
+//                                            final int id= getResources().getIdentifier(name,"drawable",getContext().getPackageName());
                                             marker = mMap.addMarker(new MarkerOptions()
                                                     .position(new LatLng(event.location.latitude, event.location.longitude))
                                                     .title(event.eventTitle)
                                                     .snippet(event.eventID)
+//                                                    .icon(getBitmapDescriptor(id)));
+
                                                     //  .icon(BitmapDescriptorFactory.fromResource(R.mipmap.soccerball)));
                                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                                             marker.setTag(event);
@@ -601,6 +604,25 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             });
         }
     }
+//    private BitmapDescriptor getBitmapDescriptor(int id) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            VectorDrawable vectorDrawable = (VectorDrawable) getResources().getDrawable(id,null);
+//
+//            int h = vectorDrawable.getIntrinsicHeight();
+//            int w = vectorDrawable.getIntrinsicWidth();
+//
+//            vectorDrawable.setBounds(0, 0, w, h);
+//
+//            Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+//            Canvas canvas = new Canvas(bm);
+//            vectorDrawable.draw(canvas);
+//
+//            return BitmapDescriptorFactory.fromBitmap(bm);
+//
+//        } else {
+//            return BitmapDescriptorFactory.fromResource(id);
+//        }
+//    }
 
     private void initShakeSensor() {
         // ShakeDetector initialization
