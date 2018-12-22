@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Evaquint.iml" filepath="$PROJECT_DIR$/Evaquint.iml" />
       <module fileurl="file://$PROJECT_DIR$/Evaquint_Android.iml" filepath="$PROJECT_DIR$/Evaquint_Android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Eventlite.iml" filepath="$PROJECT_DIR$/.idea/Eventlite.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
