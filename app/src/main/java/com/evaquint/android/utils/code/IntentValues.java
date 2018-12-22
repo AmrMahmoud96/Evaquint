@@ -15,4 +15,6 @@ public class IntentValues {
     public static final int EVENT_SUGGESTION_FRAGMENT = 0252;
     public static final int PICK_IMAGE_REQUEST = 0253;
     public static final int EVENT_PAGE_FRAGMENT = 0254;
+    public static final int EVENT_ATTENDEES_FRAGMENT = 0255;
+
 }

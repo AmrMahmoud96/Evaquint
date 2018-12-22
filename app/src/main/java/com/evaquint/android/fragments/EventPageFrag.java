@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
+import com.evaquint.android.popups.EventAttendeesFrag;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.dataStructures.UserDB;
 import com.evaquint.android.utils.database.EventDBHelper;
@@ -36,6 +38,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
+import static com.evaquint.android.utils.code.IntentValues.EVENT_ATTENDEES_FRAGMENT;
+
 
 /**
  * Created by amrmahmoud on 2018-03-16.
@@ -93,6 +97,16 @@ public class EventPageFrag  extends Fragment{
 
         this.event = (EventDB) getArguments().getSerializable("event");
         List<String> pictures = event.details.getPictures();
+        attendeesField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                EventAttendeesFrag editNameDialogFragment = new EventAttendeesFrag().newInstance(event.attendees);
+
+                editNameDialogFragment.setTargetFragment(getParentFragment(), EVENT_ATTENDEES_FRAGMENT);
+                editNameDialogFragment.show(fm, "fragment_attendees_popup");
+            }
+        });
         if(pictures!=null){
             try {
                 String picURL = pictures.get(0);
