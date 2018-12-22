@@ -31,7 +31,16 @@ public class UserProfileFrag extends Fragment {
     private View view;
     private FirebaseAuth mAuth;
     UserDB user;
-
+    private String uID="";
+    public UserProfileFrag(){
+    }
+    public static UserProfileFrag newInstance(String userID) {
+        UserProfileFrag frag = new UserProfileFrag();
+        Bundle args = new Bundle();
+        args.putString("user", userID);
+        frag.setArguments(args);
+        return frag;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,7 +51,7 @@ public class UserProfileFrag extends Fragment {
         this.view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         this.mAuth = FirebaseAuth.getInstance();
-
+        this.uID = getArguments().getString("user");
         init_page();
         return view;
     }
@@ -67,8 +76,14 @@ user.updateProfile(profileUpdates)
     * */
 
     public void init_page(){
+        String userID = "";
+        if(uID ==null||uID.isEmpty()){
+             userID = mAuth.getCurrentUser().getUid();
+        }else{
+            userID=uID;
+        }
 
-        String userID = mAuth.getCurrentUser().getUid();
+
         if(!userID.isEmpty()&&userID!=null){
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID);
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
