@@ -138,7 +138,7 @@ public class SignupInterestsFrag extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
                     List selected = bundle.getStringArrayList("selected");
-                    System.out.println(selected.toString());
+                    selected_categories.addAll(selected);
                 }
                 break;
         }
