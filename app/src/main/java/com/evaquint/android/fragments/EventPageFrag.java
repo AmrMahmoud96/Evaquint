@@ -181,7 +181,7 @@ public class EventPageFrag  extends Fragment{
         }
         if(event.eventPrivate){
             //change this
-            attendeesField.setText(event.attendees.size());
+            attendeesField.setText(""+event.attendees.size());
            // attendeesField.setText(event.attendees.size()+"/"+event.invited.size());
         }
 
