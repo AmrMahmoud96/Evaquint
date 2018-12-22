@@ -51,7 +51,9 @@ public class UserProfileFrag extends Fragment {
         this.view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         this.mAuth = FirebaseAuth.getInstance();
-        this.uID = getArguments().getString("user");
+        if(getArguments()!=null) {
+            this.uID = getArguments().getString("user");
+        }
         init_page();
         return view;
     }

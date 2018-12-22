@@ -154,44 +154,44 @@
 
     <TextView
         android:id="@+id/userLocation"
-        android:fontFamily="@font/raleway"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="@string/location"
+
+        android:fontFamily="@font/raleway"
+        android:text="N/A"
+        android:textColor="@color/black"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/userLocationLabel"
         app:layout_constraintStart_toEndOf="@+id/userLocationLabel"
         app:layout_constraintTop_toTopOf="@+id/userLocationLabel" />
 
     <TextView
         android:id="@+id/userEmail"
-        android:fontFamily="@font/raleway"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="@string/label_email"
+
+        android:fontFamily="@font/raleway"
+        android:text="N/A"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/userEmailLabel"
         app:layout_constraintStart_toEndOf="@+id/userEmailLabel"
-        app:layout_constraintTop_toTopOf="@+id/userEmailLabel"
-        app:layout_constraintBottom_toBottomOf="@+id/userEmailLabel"/>
+        app:layout_constraintTop_toTopOf="@+id/userEmailLabel" />
 
     <TextView
         android:id="@+id/userPhone"
-        android:fontFamily="@font/raleway"
-        android:textColor="@color/black"
-        android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="@string/label_phone_number"
+        android:fontFamily="@font/raleway"
+        android:text="N/A"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/userPhoneLabel"
         app:layout_constraintStart_toEndOf="@+id/userPhoneLabel"
-        app:layout_constraintTop_toTopOf="@+id/userPhoneLabel"
-        app:layout_constraintBottom_toBottomOf="@+id/userPhoneLabel"/>
+        app:layout_constraintTop_toTopOf="@+id/userPhoneLabel" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline4"

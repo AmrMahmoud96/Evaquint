@@ -1,7 +1,6 @@
 package com.evaquint.android.utils.Adapter;
 
 import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.evaquint.android.R;
 import com.evaquint.android.fragments.UserProfileFrag;
+import com.evaquint.android.popups.EventAttendeesFrag;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +28,7 @@ import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private String[] mDataset;
+    private EventAttendeesFrag frag;
 
 
     // Provide a reference to the views for each data item
@@ -47,7 +48,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(String[] myDataset) {
+    public MyAdapter(String[] myDataset,EventAttendeesFrag f) {
+        frag=f;
         mDataset = myDataset;
     }
 
@@ -82,9 +84,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            UserProfileFrag userProfileFrag = new UserProfileFrag().newInstance(holder.itemView.getTag().toString());
+                            frag.dismiss();
+                            setActiveFragment(frag, userProfileFrag);
 
-                            setActiveFragment(((FragmentActivity)v.getContext()).getSupportFragmentManager(), new UserProfileFrag().newInstance(holder.itemView.getTag().toString()));
-                            Log.i("clicked",holder.itemView.getTag().toString());
+//                            Log.i("clicked",holder.itemView.getTag().toString());
                         }
                     });
                     if(!dataSnapshot.child("picture").getValue(String.class).equals("default")){

@@ -60,7 +60,7 @@ public class EventAttendeesFrag extends DialogFragment {
 
         // specify an adapter (see also next example)
 //        String[] arr = {"test","test2"};
-        mAdapter = new MyAdapter(attendees);
+        mAdapter = new MyAdapter(attendees,EventAttendeesFrag.this);
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }

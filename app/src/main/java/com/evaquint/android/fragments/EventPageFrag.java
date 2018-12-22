@@ -39,6 +39,7 @@ import java.util.List;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.EVENT_ATTENDEES_FRAGMENT;
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 
 /**
@@ -97,6 +98,14 @@ public class EventPageFrag  extends Fragment{
 
         this.event = (EventDB) getArguments().getSerializable("event");
         List<String> pictures = event.details.getPictures();
+        hostPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserProfileFrag userProfileFrag = new UserProfileFrag().newInstance(event.eventHost);
+                setActiveFragment(EventPageFrag.this, userProfileFrag);
+            }
+        });
+
         attendeesField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
