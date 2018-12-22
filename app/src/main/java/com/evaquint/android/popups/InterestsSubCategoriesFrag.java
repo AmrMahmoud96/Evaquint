@@ -56,7 +56,7 @@ public class InterestsSubCategoriesFrag extends DialogFragment {
         view.findViewById(R.id.popup_interests_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onDismiss((DialogInterface) InterestsSubCategoriesFrag.this);
+                InterestsSubCategoriesFrag.this.dismiss();
             }
         });
         return view;

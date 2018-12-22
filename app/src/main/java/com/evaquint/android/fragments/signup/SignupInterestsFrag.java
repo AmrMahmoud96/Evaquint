@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,7 +52,7 @@ public class SignupInterestsFrag extends Fragment {
     }
 
     private HashMap<String, ArrayList<String>> categories;
-    private Set<String> selected_categories;
+    private Set<String> selected_categories = new HashSet<String>();
     private HashMap<String, ArrayAdapter> arrayAdapterHashMap;
     private Fragment popupFragment;
 
@@ -139,6 +140,7 @@ public class SignupInterestsFrag extends Fragment {
                     Bundle bundle = data.getExtras();
                     List selected = bundle.getStringArrayList("selected");
                     selected_categories.addAll(selected);
+                    System.out.println(selected_categories.toString());
                 }
                 break;
         }
