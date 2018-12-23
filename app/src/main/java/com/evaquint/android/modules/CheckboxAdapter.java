@@ -64,4 +64,10 @@ public class CheckboxAdapter extends ArrayAdapter {
     public ArrayList<String> getSelectedString(){
         return selectedStrings;
     }
+
+    public ArrayList<String> getUnselectedString(){
+        ArrayList<String> copy_all = (ArrayList<String>) ((ArrayList<String>) checkboxItems).clone();
+        copy_all.removeAll(selectedStrings);
+        return copy_all;
+    }
 }

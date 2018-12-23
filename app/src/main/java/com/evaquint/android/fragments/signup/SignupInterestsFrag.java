@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import com.evaquint.android.R;
 import com.evaquint.android.modules.CheckboxAdapter;
+import com.evaquint.android.modules.TextBoxAdapter;
 import com.evaquint.android.popups.InterestsSubCategoriesFrag;
 import com.evaquint.android.utils.dataStructures.UserDB;
 import com.evaquint.android.utils.dataStructures.firebase_listener;
@@ -52,7 +55,7 @@ public class SignupInterestsFrag extends Fragment {
     }
 
     private HashMap<String, ArrayList<String>> categories;
-    private Set<String> selected_categories = new HashSet<String>();
+    private Set<String> selected_categories = new HashSet();
     private HashMap<String, ArrayAdapter> arrayAdapterHashMap;
     private Fragment popupFragment;
 
@@ -100,6 +103,15 @@ public class SignupInterestsFrag extends Fragment {
         return new CheckboxAdapter(getActivity(), subcategories);
     }
 
+    private TextBoxAdapter getSelectedCategories(ArrayList<String> subcategories){
+        return new TextBoxAdapter(getActivity(), subcategories);
+    }
+
+    private void setSelectedCategories(ArrayList<String> subcategories){
+        TextBoxAdapter selectedCategoriesAdapter = getSelectedCategories(subcategories);
+        ((GridView) view.findViewById(R.id.selected_interests)).setAdapter(selectedCategoriesAdapter);
+    }
+
     private void initInterests(){
         getEventCategories(new firebase_listener(){
             @Override
@@ -139,8 +151,10 @@ public class SignupInterestsFrag extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
                     List selected = bundle.getStringArrayList("selected");
+                    List unselected = bundle.getStringArrayList("unselected");
                     selected_categories.addAll(selected);
-                    System.out.println(selected_categories.toString());
+                    selected_categories.removeAll(unselected);
+                    setSelectedCategories(new ArrayList(selected_categories));
                 }
                 break;
         }

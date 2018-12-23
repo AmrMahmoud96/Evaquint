@@ -39,7 +39,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="14dp"
         android:columnWidth="90dp"
-        android:gravity="center"
+        android:gravity="top"
         android:horizontalSpacing="10dp"
         android:numColumns="2"
         android:stretchMode="columnWidth"
@@ -49,6 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
+    <!--android:numColumns="4"-->
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/selected_interests"
         android:layout_width="match_parent"
@@ -56,13 +57,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:columnWidth="90dp"
-        android:gravity="center"
-        android:horizontalSpacing="10dp"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp"
+        android:gravity="bottom"
+        android:numColumns="3"
         app:layout_constraintBottom_toTopOf="@id/signup_interests_next_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/event_categories" />
+        app:layout_constraintTop_toBottomOf="@id/event_categories"/>
 </android.support.constraint.ConstraintLayout>
