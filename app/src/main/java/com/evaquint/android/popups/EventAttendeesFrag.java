@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.evaquint.android.R;
 import com.evaquint.android.utils.Adapter.MyAdapter;
 
-import java.util.List;
+import java.util.HashMap;
 
 public class EventAttendeesFrag extends DialogFragment {
     private View view;
@@ -27,10 +27,10 @@ public class EventAttendeesFrag extends DialogFragment {
         // Use `newInstance` instead as shown below
     }
 
-    public static EventAttendeesFrag newInstance(List<String> attendees) {
+    public static EventAttendeesFrag newInstance(HashMap<String,String> attendees) {
          EventAttendeesFrag frag = new EventAttendeesFrag();
          Bundle args = new Bundle();
-         String[] ASA = attendees.toArray(new String[0]);
+         String[] ASA = attendees.values().toArray(new String[0]);
          args.putStringArray("attendees", ASA);
          frag.setArguments(args);
          return frag;

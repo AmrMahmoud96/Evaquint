@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
-import com.evaquint.android.fragments.signup.SignupInterestsFrag;
 import com.evaquint.android.fragments.signup.SignupMethodFrag;
 import com.evaquint.android.utils.authenticator.FacebookAuthenticator;
 import com.evaquint.android.utils.authenticator.FirebaseAuthenticator;
@@ -73,7 +72,7 @@ public class LoginLandingFrag extends Fragment {
             @Override
             public void onClick(View view) {
 //                setActiveFragment(LoginLandingFrag.this, new SignupMethodFrag());
-                setActiveFragment(LoginLandingFrag.this, new SignupInterestsFrag());
+                setActiveFragment(LoginLandingFrag.this, new SignupMethodFrag());
             }
         });
 

@@ -60,7 +60,7 @@ public class UserDBHelper {
         ref.removeValue();
     }
     public void removeEventHosted(String userID, String eventID){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("eventsAttended").child(eventID);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child("eventsHosted").child(eventID);
         ref.removeValue();
     }
     public boolean deleteEntry(DatabaseValues subPath, String value){

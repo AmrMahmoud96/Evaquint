@@ -3,6 +3,7 @@ package com.evaquint.android.utils.dataStructures;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class EventDB implements Serializable{
     public long timeInMillis;
     public boolean eventPrivate;
     public Map<String, String> invited;
-    public List<String> attendees;
+    public HashMap<String,String> attendees;
     public DetailedEvent details;
 
     public EventDB(
@@ -33,7 +34,7 @@ public class EventDB implements Serializable{
                    List<String> categorizations,
                    boolean eventPrivate,
                    Map<String, String> invited,
-                   List<String> attendees,
+                   HashMap<String,String> attendees,
                    DetailedEvent details) {
         this.eventID  = eventID;
         this.categorizations=categorizations;

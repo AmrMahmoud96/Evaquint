@@ -560,7 +560,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                                     GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {
                                     };
                                     HashMap<String, String> invited = (HashMap<String, String>) dataSnapshot.child("invited").getValue();
-                                    List<String> attendees = dataSnapshot.child("attendees").getValue(t);
+                                    HashMap<String,String> attendees = (HashMap<String, String>)dataSnapshot.child("attendees").getValue();
                                     DetailedEvent details = dataSnapshot.child("details").getValue(DetailedEvent.class);
                                     List<String> categorizations = dataSnapshot.child("categorizations").getValue(t);
 
@@ -826,8 +826,11 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     } else {
                         details = new DetailedEvent();
                     }
+
                     com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    EventDB event = new EventDB(eventID, event_title, user.getUid(), event_date.getTimeInMillis(), address, location, new ArrayList<String>(Arrays.asList(user.getUid())), event_private, invited, Arrays.asList(user.getUid()), details);
+                    HashMap<String, String> attendees = new HashMap<String, String>();
+                    attendees.put(user.getUid(),user.getUid());
+                    EventDB event = new EventDB(eventID, event_title, user.getUid(), event_date.getTimeInMillis(), address, location, Arrays.asList(""), event_private, invited, attendees, details);
                     EventDBHelper eventDBHelper = new EventDBHelper();
                     GeofireDBHelper geofireDBHelper = new GeofireDBHelper("events");
                     UserDBHelper userDBHelper = new UserDBHelper();

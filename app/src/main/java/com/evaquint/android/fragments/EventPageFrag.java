@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -62,6 +64,10 @@ public class EventPageFrag  extends Fragment{
     private Button mEventPageBtn;
     private ImageView hostPicture;
     private EventDBHelper eventDBHelper;
+    private UserDBHelper userDBHelper;
+
+    private Button inviteBtn;
+    private boolean hideBtn=true;
 
     private ImageView eventPicture;
 
@@ -92,6 +98,7 @@ public class EventPageFrag  extends Fragment{
         descriptionField = view.findViewById(R.id.eventDescField);
         mEventPageBtn = view.findViewById(R.id.eventPageBtn);
         eventDBHelper = new EventDBHelper();
+        userDBHelper = new UserDBHelper();
 
         eventPicture = view.findViewById(R.id.eventPicture);
 
@@ -116,6 +123,10 @@ public class EventPageFrag  extends Fragment{
                 editNameDialogFragment.show(fm, "fragment_attendees_popup");
             }
         });
+
+
+
+
         if(pictures!=null){
             try {
                 String picURL = pictures.get(0);
@@ -156,7 +167,40 @@ public class EventPageFrag  extends Fragment{
         init_page();
         return view;
     }
+    public void addInviteBtn(){
+        Log.i("btn is there",inviteBtn==null?"ye":"no");
+        if(hideBtn){
+            if(inviteBtn!=null){
+                inviteBtn.setVisibility(View.INVISIBLE);
+            }
+            return;
+        }
+//        if (inviteBtn==null){
+            ConstraintLayout layout = (ConstraintLayout) view.findViewById(R.id.eventPageLayout);
+            ConstraintSet set = new ConstraintSet();
+            set.clone(layout);
 
+            //Invite Button
+            inviteBtn = new Button(this.getContext());
+            inviteBtn.setText("Invite");
+            inviteBtn.setId(android.R.id.button1);
+            layout.addView(inviteBtn);
+            set.connect(inviteBtn.getId(), ConstraintSet.BOTTOM, mEventPageBtn.getId(), ConstraintSet.TOP, 15);
+            set.connect(inviteBtn.getId(),ConstraintSet.RIGHT,ConstraintSet.PARENT_ID,ConstraintSet.RIGHT,0);
+            set.connect(inviteBtn.getId(),ConstraintSet.LEFT,ConstraintSet.PARENT_ID,ConstraintSet.LEFT,0);
+            set.constrainHeight(inviteBtn.getId(), ConstraintSet.WRAP_CONTENT);
+            set.constrainWidth(inviteBtn.getId(),ConstraintSet.WRAP_CONTENT);
+            set.applyTo(layout);
+            inviteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("hello","clicked to invite");
+                }
+            });
+//        }else{
+            inviteBtn.setVisibility(View.VISIBLE);
+//        }
+    }
     public void init_page(){
         // note capacity will be attendees/cap and not there if it is 0
     if(event!=null){
@@ -195,31 +239,37 @@ public class EventPageFrag  extends Fragment{
         if( currUserID.equals(event.eventHost)){
             mEventPageBtn.setText("Cancel Event");
             mEventPageBtn.setBackgroundColor(Color.RED);
+            hideBtn=false;
         }else{
-            if(event.attendees.contains(currUserID)){
+            if(event.attendees.get(currUserID)!=null){
                 mEventPageBtn.setText("Unregister");
                 mEventPageBtn.setBackgroundColor(Color.RED);
+                hideBtn=false;
             }else{
                 mEventPageBtn.setText("Register");
                 mEventPageBtn.setBackgroundColor(Color.GREEN);
+                hideBtn=true;
+
             }
-
-
         }
+        addInviteBtn();
+
         mEventPageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String buttonText = mEventPageBtn.getText().toString();
                 if(buttonText.equalsIgnoreCase("Register")){
-                    new UserDBHelper().addEventAttended(currUserID,event.eventID);
+                    userDBHelper.addEventAttended(currUserID,event.eventID);
                     eventDBHelper.addAttendee(event.eventID,currUserID);
                     mEventPageBtn.setText("Unregister");
                     mEventPageBtn.setBackgroundColor(Color.RED);
+                    hideBtn=false;
                 }else if(buttonText.equalsIgnoreCase("Unregister")){
                     eventDBHelper.removeAttendee(event.eventID,currUserID);
-                    new UserDBHelper().removeEventAttended(currUserID,event.eventID);
+                    userDBHelper.removeEventAttended(currUserID,event.eventID);
                     mEventPageBtn.setText("Register");
                     mEventPageBtn.setBackgroundColor(Color.GREEN);
+                    hideBtn=true;
                 }else if(buttonText.equalsIgnoreCase("Cancel Event")){
                     new AlertDialog.Builder(getContext())
                             .setTitle("Confirmation")
@@ -228,8 +278,13 @@ public class EventPageFrag  extends Fragment{
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    new UserDBHelper().removeEventHosted(currUserID,event.eventID);
-                                    new EventDBHelper().removeEvent(event.eventID);
+                                    //delete event (and recursively remove event attended for each person)
+                                    userDBHelper.removeEventHosted(currUserID,event.eventID);
+                                    for(String a : event.attendees.values()){
+                                        Log.i("d-attend",a);
+                                        userDBHelper.removeEventAttended(a,event.eventID);
+                                    }
+                                    eventDBHelper.removeEvent(event.eventID);
                                     new GeofireDBHelper("events").removeEvent(event.eventID);
                                     getFragmentManager().popBackStack();
                                     Toast.makeText(getActivity(), "Event Deleted.",
@@ -237,84 +292,15 @@ public class EventPageFrag  extends Fragment{
                                 }})
                             .setNegativeButton("No", null).show();
                     // confirm to cancel or not
-                    //delete event (what about people attending.)
                 }
+
+                addInviteBtn();
             }
         });
-
-        //if(event.attendees)
-
-        //TODO @Amr the following line is a null reference, check the names
-//        attendeesField.setText(event.attendees.size());
-
-        //set logic for detailed description stuff
-
-        //set logic for if the event host is viewing the event.
-
-
-        //ageRestrictionField.setText(event);
 
 
     }
 
-/*
-        String userID = mAuth.getCurrentUser().getUid();
-        if(!userID.isEmpty()&&userID!=null){
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID);
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot!=null&&dataSnapshot.getValue()!=null){
-                        Log.i("datasnapshot", dataSnapshot.toString());
-                        user = dataSnapshot.getValue(UserDB.class);
-                        ((TextView) view.findViewById(R.id.user_profile_name)).setText(mAuth.getCurrentUser().getDisplayName());
-                        if(mAuth.getCurrentUser().getPhotoUrl()!=null && !mAuth.getCurrentUser().getPhotoUrl().toString().isEmpty()){
-                            Picasso.with(getActivity()).load(mAuth.getCurrentUser().getPhotoUrl())
-                                    .into(((ImageView) view.findViewById(R.id.user_profile_image)));
-                        }
-                        ((TextView) view.findViewById(R.id.user_profile_name)).setText(user.getFirstName()+" "+user.getLastName());
-                        ((TextView) view.findViewById(R.id.userEmail)).setText(user.getEmail());
-                        ((TextView) view.findViewById(R.id.userPhone)).setText(user.getPhone());
-                        /*RecyclerView friends = ((RecyclerView)view.findViewById(R.id.friendsListV));
-                        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
-                        friends.setLayoutManager(layoutManager);
-                        GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                        List<String> friendsList =  dataSnapshot.child("friends").getValue(t);
-
-                        Log.i("datasnapshot", friendsList.toArray(new String[0])[0]);
-                        FriendsListAdapter f = new FriendsListAdapter(friendsList.toArray(new String[0]));
-                        friends.setAdapter(f);
-                        //friends.set
-                        //dataSnapshot.getValue();
-                        RatingBar hostRating =(RatingBar) view.findViewById(R.id.hostRating);
-
-                        hostRating.setNumStars(5);
-                        if(user.getHostRating() ==0 || user.getRaters()==0){
-                            hostRating.setRating(0);
-                        }else{
-                            hostRating.setRating(user.getHostRating()/user.getRaters());
-                        }
-
-                        ((ImageView) view.findViewById(R.id.user_profile_edit_name)).setOnClickListener(
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                }
-                        );
-                        // user[0] = dataSnapshot.getValue(UserDB.class);
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w("error: ", "onCancelled", databaseError.toException());
-                }
-            });
-        }
-*/
 
     }
 }

@@ -29,8 +29,8 @@ public class EventDBHelper {
         dbConnector.writeToDB(id,event);
     }
     public void addAttendee(String eventID, String attendee){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("attendees");
-        ref.push().setValue(attendee);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("attendees").child(attendee);
+        ref.setValue(attendee);
     }
     public void removeAttendee(String eventID, String attendee){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("attendees").child(attendee);
