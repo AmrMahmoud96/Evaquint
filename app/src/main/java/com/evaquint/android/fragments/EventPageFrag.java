@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.evaquint.android.HomeActivity;
 import com.evaquint.android.R;
 import com.evaquint.android.popups.EventAttendeesFrag;
+import com.evaquint.android.popups.EventInviteFrag;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.dataStructures.UserDB;
 import com.evaquint.android.utils.database.EventDBHelper;
@@ -41,6 +42,7 @@ import java.util.List;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.EVENT_ATTENDEES_FRAGMENT;
+import static com.evaquint.android.utils.code.IntentValues.EVENT_INVITES_FRAGMENT;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 
@@ -65,6 +67,7 @@ public class EventPageFrag  extends Fragment{
     private ImageView hostPicture;
     private EventDBHelper eventDBHelper;
     private UserDBHelper userDBHelper;
+    private String currUserID;
 
     private Button inviteBtn;
     private boolean hideBtn=true;
@@ -104,6 +107,7 @@ public class EventPageFrag  extends Fragment{
 
 
         this.event = (EventDB) getArguments().getSerializable("event");
+        currUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         List<String> pictures = event.details.getPictures();
         hostPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,14 +172,13 @@ public class EventPageFrag  extends Fragment{
         return view;
     }
     public void addInviteBtn(){
-        Log.i("btn is there",inviteBtn==null?"ye":"no");
-        if(hideBtn){
-            if(inviteBtn!=null){
-                inviteBtn.setVisibility(View.INVISIBLE);
+        if(!event.eventPrivate || event.eventHost==currUserID){
+            if(hideBtn){
+                if(inviteBtn!=null){
+                    inviteBtn.setVisibility(View.INVISIBLE);
+                }
+                return;
             }
-            return;
-        }
-//        if (inviteBtn==null){
             ConstraintLayout layout = (ConstraintLayout) view.findViewById(R.id.eventPageLayout);
             ConstraintSet set = new ConstraintSet();
             set.clone(layout);
@@ -194,12 +197,16 @@ public class EventPageFrag  extends Fragment{
             inviteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("hello","clicked to invite");
+                    FragmentManager fm = getFragmentManager();
+                    EventInviteFrag editNameDialogFragment = new EventInviteFrag().newInstance(currUserID);
+
+                    editNameDialogFragment.setTargetFragment(getParentFragment(), EVENT_INVITES_FRAGMENT);
+                    editNameDialogFragment.show(fm, "fragment_invite_popup");
+
                 }
             });
-//        }else{
             inviteBtn.setVisibility(View.VISIBLE);
-//        }
+        }
     }
     public void init_page(){
         // note capacity will be attendees/cap and not there if it is 0
@@ -213,7 +220,6 @@ public class EventPageFrag  extends Fragment{
         if(event.details.getDescription().trim().isEmpty()){
             descriptionField.setVisibility(View.INVISIBLE);
             view.findViewById(R.id.descLabel).setVisibility(View.INVISIBLE);
-
         }
 
 
@@ -235,7 +241,6 @@ public class EventPageFrag  extends Fragment{
             view.findViewById(R.id.ARLabel).setVisibility(View.INVISIBLE);
         }
 
-        final String currUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if( currUserID.equals(event.eventHost)){
             mEventPageBtn.setText("Cancel Event");
             mEventPageBtn.setBackgroundColor(Color.RED);

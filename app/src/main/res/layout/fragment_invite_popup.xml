@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<TextView
+    android:id="@+id/invTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="30dp"
+    android:text="Invite Friends"
+    android:fontFamily="@font/raleway"
+    android:textStyle="bold"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    style="@style/Text.Large"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/friendsInviteList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="left"
+        app:layout_constraintTop_toBottomOf="@+id/invTitle"
+        layout_constraintLeft_toLeftOf="parent"
+        layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/border_test"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invite"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/friendsInviteList"/>
+</android.support.constraint.ConstraintLayout>
