@@ -203,7 +203,7 @@ public class EventPageFrag  extends Fragment{
                     FragmentManager fm = getFragmentManager();
                     EventInviteFrag editNameDialogFragment = new EventInviteFrag().newInstance(currUserID);
 
-                    editNameDialogFragment.setTargetFragment(getParentFragment(), EVENT_INVITES_FRAGMENT);
+                    editNameDialogFragment.setTargetFragment(EventPageFrag.this, EVENT_INVITES_FRAGMENT);
                     editNameDialogFragment.show(fm, "fragment_invite_popup");
 
                 }
@@ -317,9 +317,11 @@ public class EventPageFrag  extends Fragment{
         switch (requestCode) {
             case EVENT_INVITES_FRAGMENT:
                 if (resultCode == Activity.RESULT_OK) {
+
                     Bundle bundle = data.getExtras();
                     Map<String, String> invited = (Map<String, String>) bundle.getSerializable("invited");
                     Log.i("invited",invited.toString());
+                    eventDBHelper.addInvite(event.eventID,invited);
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     //do nothing
                 }

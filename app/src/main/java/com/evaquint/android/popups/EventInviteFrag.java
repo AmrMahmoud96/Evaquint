@@ -63,7 +63,7 @@ public class EventInviteFrag extends DialogFragment {
 
         this.view =  inflater.inflate(R.layout.fragment_invite_popup, container);
         this.userID =getArguments().getString("user");
-
+        mInviteBtn = (Button) view.findViewById(R.id.invBtn);
 
         final RecyclerView friends = ((RecyclerView)view.findViewById(R.id.friendsInviteList));
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();

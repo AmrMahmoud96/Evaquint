@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
 
@@ -40,6 +41,18 @@ public class EventDBHelper {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID);
         ref.removeValue();
     }
+    public void addInvite(String eventID, String invite){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("invited").child(invite);
+        ref.setValue(invite);
+    }
+    public void addInvite(String eventID, Map<String,String> invite){
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName()).child(eventID).child("invited");
+        for(String i : invite.keySet()) {
+            ref.child(i).setValue(i);
+        }
+    }
+
 /*
     public boolean addEntry(DatabaseValues subPath, String value){
         String path = EVENTS_TABLE.getName() + "/"
