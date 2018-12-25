@@ -1,8 +1,10 @@
 package com.evaquint.android.fragments;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -39,6 +41,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.EVENT_ATTENDEES_FRAGMENT;
@@ -308,4 +311,20 @@ public class EventPageFrag  extends Fragment{
 
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case EVENT_INVITES_FRAGMENT:
+                if (resultCode == Activity.RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    Map<String, String> invited = (Map<String, String>) bundle.getSerializable("invited");
+                    Log.i("invited",invited.toString());
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    //do nothing
+                }
+                break;
+        }
+    }
+
 }

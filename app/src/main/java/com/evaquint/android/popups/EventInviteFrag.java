@@ -1,5 +1,6 @@
 package com.evaquint.android.popups;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.evaquint.android.R;
 import com.evaquint.android.utils.Adapter.FriendsListAdapter;
@@ -23,12 +25,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 
 public class EventInviteFrag extends DialogFragment {
     private View view;
     private String userID;
     private HashMap<String,String> invited;
+    private Button mInviteBtn;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -81,13 +85,13 @@ public class EventInviteFrag extends DialogFragment {
                                     @Override
                                     public void onItemClick(View v, int position) {
                                         String userID = friendsList.get(position);
-                                        Log.i("invite friend",userID);
+//                                        Log.i("invite friend",userID);
                                         if(invited.get(userID)!=null){
                                             invited.remove(userID);
                                         }else{
                                             invited.put(userID,userID);
                                         }
-                                        Log.i("invites",invited.toString());
+//                                        Log.i("invites",invited.toString());
                                         //   Log.i("invited",invited.toString());
                                     }
                                 });
@@ -108,6 +112,16 @@ public class EventInviteFrag extends DialogFragment {
 
             }
         }.start();
+        mInviteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.putExtra("invited",invited);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
+                dismiss();
+            }
+        });
+
 
         return view;
     }
