@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.evaquint.evaquint", appContext.getPackageName());
+        assertEquals("com.evaquint.android", appContext.getPackageName());
     }
 }

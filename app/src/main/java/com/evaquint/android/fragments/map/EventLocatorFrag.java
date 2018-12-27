@@ -14,6 +14,7 @@ import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -23,9 +24,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.InflateException;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,8 @@ import com.evaquint.android.R;
 import com.evaquint.android.fragments.EventPageFrag;
 import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.popups.QuickEventFrag;
+import com.evaquint.android.utils.GPS.GPSTracker;
+import com.evaquint.android.utils.Network.GooglePlacesQueue;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.dataStructures.ImageData;
@@ -85,6 +90,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.LOCATION_SERVICE;
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
 import static com.evaquint.android.utils.code.IntentValues.EVENT_PAGE_FRAGMENT;
 import static com.evaquint.android.utils.code.IntentValues.EVENT_SUGGESTION_FRAGMENT;
@@ -109,6 +115,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private Marker marker;
     private Marker googlePlaceMarker;
     private LatLng target = null;
+    private LatLng start = null; //currentLocation
+    private GPSTracker gpsTracker;
 
     private SensorManager mSensorManager = null ;
     private Sensor mAccelerometer;
@@ -192,7 +200,40 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         this.view = this.view == null ?
                 inflater.inflate(R.layout.fragment_event_locator_maps, container, false)
                 : this.view;
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        LocationListener mLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                start = new LatLng(location.getLatitude(), location.getLongitude());
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+
+        LocationManager mLocationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000,
+                    10, mLocationListener);
+        }
+
         initView();
+
         return this.view;
     }
 
@@ -231,6 +272,15 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     @Override
     public void onResume() {
         super.onResume();
+        if (checkLocationPermission()) {
+            gpsTracker = new GPSTracker(getActivity());
+            if (gpsTracker.canGetLocation) {
+                start = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+            } else {
+                Toast.makeText(getActivity(), "Permission to use location denied", Toast.LENGTH_SHORT).show();
+            }
+
+        }
         initView();
         System.out.println(mShakeDetector);
         System.out.println(mAccelerometer);
@@ -348,6 +398,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
             initShakeSensor();
 
+
             //        mGeoDataClient = Places.getGeoDataClient(this,null);
 //        mPlaceDetectionClient = Places.getPlaceDetectionClient(this,null);
 //        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -366,6 +417,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         } catch (InflateException e) {
             /* map is already there, just return view as it is */
         }
+
     }
 
     public Marker getMarkerFromMap(String eventID) {
@@ -425,7 +477,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         //Log.d("this is cat array",Arrays.toString(musicSubCategories));
 
         LocationManager locationManager =
-                (LocationManager) parentActivityInstance.getSystemService(Context.LOCATION_SERVICE);
+                (LocationManager) parentActivityInstance.getSystemService(LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(parentActivityInstance,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.
@@ -772,6 +824,18 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 //                Log.i(TAG, "An error occurred: " + status);
 //            }
 //        });
+        final EditText searchText = view.findViewById(R.id.map_searchbar_input);
+        searchText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    GooglePlacesQueue googlePlacesQueue = GooglePlacesQueue.getInstance(getActivity());
+                    googlePlacesQueue.sendPlacesRequest(start, null, 1500, searchText.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private String getUrl(/*double latitude, double longitude,*/ String nearbyPlace) {
@@ -866,6 +930,12 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    public boolean checkLocationPermission() {
+        String permission = "android.permission.ACCESS_FINE_LOCATION";
+        int res = getActivity().checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
+
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -874,11 +944,15 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             case REQUEST_LOCATION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    gpsTracker = new GPSTracker(getActivity());
+                    if (gpsTracker.canGetLocation) {
+                        start = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+                    }
                     initOverlay();
                     goToCurrentLocation();
 
                 } else {
-                    Toast.makeText(parentActivityInstance, "Permission denied to use location",
+                    Toast.makeText(parentActivityInstance, "Permission to use location denied",
                             Toast.LENGTH_SHORT).show();
                 }
                 return;
