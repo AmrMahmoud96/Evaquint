@@ -28,6 +28,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -797,20 +798,20 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 goToCurrentLocation();
             }
         });
-        ((TextView) view.findViewById(R.id.map_searchbar_input)).setOnClickListener(new View.OnClickListener(
-        ) {
-            @Override
-            public void onClick(View view) {
-                mMap.clear();
-                String url = getUrl("Restaurant");
-                Object[] DataTransfer = new Object[2];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                Log.d("onClick", url);
-                NearbyPlacesData getNearbyPlacesData = new NearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
-            }
-        });
+//        ((TextView) view.findViewById(R.id.map_searchbar_input)).setOnClickListener(new View.OnClickListener(
+//        ) {
+//            @Override
+//            public void onClick(View view) {
+//                mMap.clear();
+//                String url = getUrl("Restaurant");
+//                Object[] DataTransfer = new Object[2];
+//                DataTransfer[0] = mMap;
+//                DataTransfer[1] = url;
+//                Log.d("onClick", url);
+//                NearbyPlacesData getNearbyPlacesData = new NearbyPlacesData();
+//                getNearbyPlacesData.execute(DataTransfer);
+//            }
+//        });
 //        googlePlacesSearchBarFrag.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 //            @Override
 //            public void onPlaceSelected(Place place) {
@@ -824,13 +825,13 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 //                Log.i(TAG, "An error occurred: " + status);
 //            }
 //        });
-        final EditText searchText = view.findViewById(R.id.map_searchbar_input);
-        searchText.setOnKeyListener(new View.OnKeyListener() {
+        EditText searchText = view.findViewById(R.id.map_searchbar_input);
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     GooglePlacesQueue googlePlacesQueue = GooglePlacesQueue.getInstance(getActivity());
-                    googlePlacesQueue.sendPlacesRequest(start, null, 1500, searchText.getText().toString());
+                    googlePlacesQueue.sendPlacesRequest(start, null, 1500, v.getText().toString());
                     return true;
                 }
                 return false;

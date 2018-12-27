@@ -21,8 +21,8 @@ public class GooglePlacesQueue {
     private static GooglePlacesQueue mInstance;
     private static Context mCtx;
     private static String tag = "GooglePlacesQueue";
-    private static String placesNearbyUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/output";
-    private static String urlFormat = "%s?location=%2f,%2f&radius=&d&type=%s&type=%s&keyword%s&key=&s";
+    private static String placesNearbyUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
+    private static String urlFormat = "%s?location=%2f,%2f&radius=%d&type=%s&keyword=%s&key=%s";
     private RequestQueue mRequestQueue;
 
     private GooglePlacesQueue(Context context) {
@@ -54,8 +54,8 @@ public class GooglePlacesQueue {
         return mInstance;
     }
 
-    public void sendPlacesRequest(LatLng location, String type, Integer radius, String keyword) {
-        String url = String.format(urlFormat, location.latitude, location.longitude,
+    public void sendPlacesRequest(LatLng location, String type, int radius, String keyword) {
+        String url = String.format(urlFormat, placesNearbyUrl, location.latitude, location.longitude,
                 radius, type==null?"":type, keyword, mCtx.getString(R.string.google_places_key));
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
