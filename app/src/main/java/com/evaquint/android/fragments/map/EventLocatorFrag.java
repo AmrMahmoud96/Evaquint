@@ -41,6 +41,7 @@ import com.evaquint.android.popups.EventSuggestionFrag;
 import com.evaquint.android.popups.QuickEventFrag;
 import com.evaquint.android.utils.GPS.GPSTracker;
 import com.evaquint.android.utils.Network.GooglePlacesQueue;
+import com.evaquint.android.utils.Network.JSONPopulate;
 import com.evaquint.android.utils.dataStructures.DetailedEvent;
 import com.evaquint.android.utils.dataStructures.EventDB;
 import com.evaquint.android.utils.dataStructures.ImageData;
@@ -76,6 +77,9 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -100,7 +104,7 @@ import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
-        GoogleMap.OnMapLongClickListener {
+        GoogleMap.OnMapLongClickListener, JSONPopulate {
     private Map<String, ArrayList<String>> categories;
 
     public String mTitle;
@@ -122,7 +126,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     private SensorManager mSensorManager = null ;
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
-
+    private final String tag = "EVENT_LOCATOR";
 
     final int REQUEST_LOCATION = 1;
 
@@ -143,6 +147,26 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             Log.e(TAG, "Error getting bitmap", e);
         }
         return bm;
+    }
+
+    @Override
+    public synchronized void populateJSON(JSONArray async_results) {
+        if(mMap == null) {
+            Log.e(tag, "Map is not loaded, cannot load markers");
+        } else if(async_results == null){
+            Log.e(tag, "Results do not exist");
+        } else if (async_results.length()==0){
+            Log.e(tag, "Results do not exist");
+        }
+        for(int i=0; i<async_results.length(); i++){
+            Object array = null;
+            try {
+                array = async_results.get(i);
+            } catch (JSONException e) {
+                Log.e(tag, "Problem parsing JSON response");
+            }
+            System.out.println(array.toString());
+        }
     }
 
     //    private GeoDataClient mGeoDataClient;
@@ -831,7 +855,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     GooglePlacesQueue googlePlacesQueue = GooglePlacesQueue.getInstance(getActivity());
-                    googlePlacesQueue.sendPlacesRequest(start, null, 1500, v.getText().toString());
+                    googlePlacesQueue.sendPlacesRequest(EventLocatorFrag.this, start, null, 1500, v.getText().toString());
                     return true;
                 }
                 return false;

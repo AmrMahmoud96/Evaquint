@@ -16,6 +16,17 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.evaquint.android.R;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.Map;
+
 
 public class GooglePlacesQueue {
     private static GooglePlacesQueue mInstance;
@@ -54,14 +65,21 @@ public class GooglePlacesQueue {
         return mInstance;
     }
 
-    public void sendPlacesRequest(LatLng location, String type, int radius, String keyword) {
+    public void sendPlacesRequest(final JSONPopulate callback_instance, LatLng location, String type, int radius, String keyword) {
         String url = String.format(urlFormat, placesNearbyUrl, location.latitude, location.longitude,
                 radius, type==null?"":type, keyword, mCtx.getString(R.string.google_places_key));
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println(response);
+                        Type type = new TypeToken<Map<String, String>>(){}.getType();
+                        JSONArray res_array = null;
+                        try {
+                            res_array = (JSONArray) (new JSONObject(response)).get("results");
+                        } catch (JSONException e) {
+                            Log.e(tag, "Invalid JSON response");
+                        }
+                        callback_instance.populateJSON(res_array);
                     }
                 },
                 new Response.ErrorListener() {
