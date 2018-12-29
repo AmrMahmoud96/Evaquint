@@ -75,10 +75,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -159,13 +161,22 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             Log.e(tag, "Results do not exist");
         }
         for(int i=0; i<async_results.length(); i++){
-            Object array = null;
+            JSONObject array = null;
+            LatLng location;
+            String title;
             try {
-                array = async_results.get(i);
+                array = (JSONObject) async_results.get(i);
+                JSONObject coords = (JSONObject) ((JSONObject)array.get("geometry")).get("location");
+                location = new LatLng((double) coords.get("lat"),
+                        (double) coords.get("lng"));
+                title = (String) array.get("name");
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                                .position(location)
+                                .title(title));
+                currentMapMarkers.add(marker);
             } catch (JSONException e) {
                 Log.e(tag, "Problem parsing JSON response");
             }
-            System.out.println(array.toString());
         }
     }
 
