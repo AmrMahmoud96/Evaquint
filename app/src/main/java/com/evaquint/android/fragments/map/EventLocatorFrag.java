@@ -173,6 +173,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 Marker marker = mMap.addMarker(new MarkerOptions()
                                 .position(location)
                                 .title(title));
+                marker.setTag("PlaceMarker");
                 currentMapMarkers.add(marker);
             } catch (JSONException e) {
                 Log.e(tag, "Problem parsing JSON response");
