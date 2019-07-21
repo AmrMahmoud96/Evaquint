@@ -11,6 +11,8 @@
     import android.os.Bundle;
     import android.provider.MediaStore;
     import android.support.annotation.Nullable;
+    import android.support.constraint.ConstraintLayout;
+    import android.support.constraint.ConstraintSet;
     import android.support.v4.app.ActivityCompat;
     import android.support.v4.app.DialogFragment;
     import android.support.v7.widget.LinearLayoutManager;
@@ -80,6 +82,8 @@
         private Button mCreateEventButton;
         private Calendar dateSelected;
         private ArrayList<ImageData> images;
+        private ConstraintLayout layout;
+        private ConstraintSet set;
         private boolean moreDetails=false;
         private TextView mMoreDetails;
 
@@ -111,6 +115,7 @@
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
            // dismiss();
             int width = (int)(getResources().getDisplayMetrics().widthPixels*0.85);
             int height = (int)(getResources().getDisplayMetrics().heightPixels*0.75);
@@ -174,22 +179,28 @@
             eventAgeRestriction = (EditText) view.findViewById(R.id.eventAgeRestriction);
             eventDescription= (EditText) view.findViewById(R.id.eventDescription);
             capacity =  (EditText) view.findViewById(R.id.capacity);
+            layout = view.findViewById(R.id.quickEventPage);
+            set = new ConstraintSet();
+            set.clone(layout);
+
 
             mMoreDetails.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    eventAgeRestriction.setVisibility(View.INVISIBLE);
                     int visibility;
                     if(!moreDetails){
                         moreDetails = true;
                         mMoreDetails.setText("Remove extra details");
                         visibility = View.VISIBLE;
-                        eventAgeRestriction.setVisibility(mAgeRestriction.isChecked()? View.VISIBLE:View.INVISIBLE);
+                        set.connect(mCreateEventButton.getId(), ConstraintSet.TOP,mAgeRestriction.getId(),ConstraintSet.BOTTOM,20);
+                        set.connect(mCreateEventButton.getId(), ConstraintSet.BOTTOM,ConstraintSet.PARENT_ID,ConstraintSet.BOTTOM,40);
                     }else{
                         moreDetails = false;
                         mMoreDetails.setText("Add more details");
-                        visibility = View.INVISIBLE;
+                        visibility = View.GONE;
+                        set.connect(mCreateEventButton.getId(), ConstraintSet.TOP,mMoreDetails.getId(),ConstraintSet.BOTTOM,20);
                     }
+                    set.applyTo(layout);
                     mAgeRestriction.setVisibility(visibility);
                     mQRCodes.setVisibility(visibility);
                     mTournamentMode.setVisibility(visibility);
@@ -197,9 +208,19 @@
                     capacity.setVisibility(visibility);
                     mEventPicture.setVisibility(visibility);
                     mGalleryView.setVisibility(visibility);
+                    if(moreDetails){
+                        if(mAgeRestriction.isChecked()){
+                            eventAgeRestriction.setVisibility(view.VISIBLE);
+                        }else{
+                            eventAgeRestriction.setVisibility(view.GONE);
+                        }
+                    }else{
+                        eventAgeRestriction.setVisibility(view.GONE);
+                    }
+
                 }
             });
-            int visibility = View.INVISIBLE;
+            int visibility = View.GONE;
             mAgeRestriction.setVisibility(visibility);
             mQRCodes.setVisibility(visibility);
             mTournamentMode.setVisibility(visibility);
@@ -212,10 +233,10 @@
             mAgeRestriction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(eventAgeRestriction.getVisibility()==View.INVISIBLE){
+                    if(eventAgeRestriction.getVisibility()==View.GONE){
                         eventAgeRestriction.setVisibility(View.VISIBLE);
                     }else{
-                        eventAgeRestriction.setVisibility(View.INVISIBLE);
+                        eventAgeRestriction.setVisibility(View.GONE);
                     }
                 }
             });
