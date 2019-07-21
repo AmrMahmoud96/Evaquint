@@ -191,12 +191,15 @@ public class EventPageFrag  extends Fragment{
             inviteBtn.setText("Invite");
             inviteBtn.setId(android.R.id.button1);
             layout.addView(inviteBtn);
+
             set.connect(inviteBtn.getId(), ConstraintSet.BOTTOM, mEventPageBtn.getId(), ConstraintSet.TOP, 15);
             set.connect(inviteBtn.getId(),ConstraintSet.RIGHT,ConstraintSet.PARENT_ID,ConstraintSet.RIGHT,0);
             set.connect(inviteBtn.getId(),ConstraintSet.LEFT,ConstraintSet.PARENT_ID,ConstraintSet.LEFT,0);
+            set.connect(inviteBtn.getId(),ConstraintSet.TOP,descriptionField.getId(),ConstraintSet.BOTTOM);
             set.constrainHeight(inviteBtn.getId(), ConstraintSet.WRAP_CONTENT);
             set.constrainWidth(inviteBtn.getId(),ConstraintSet.WRAP_CONTENT);
             set.applyTo(layout);
+
             inviteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -242,6 +245,8 @@ public class EventPageFrag  extends Fragment{
         if(event.details.getAgeRestriction()==0){
             ageRestrictionField.setVisibility(View.INVISIBLE);
             view.findViewById(R.id.ARLabel).setVisibility(View.INVISIBLE);
+        }else{
+            ageRestrictionField.setText(String.valueOf(event.details.getAgeRestriction()));
         }
 
         if( currUserID.equals(event.eventHost)){
