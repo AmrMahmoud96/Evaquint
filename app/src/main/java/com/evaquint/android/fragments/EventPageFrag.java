@@ -66,11 +66,17 @@ public class EventPageFrag  extends Fragment{
     private TextView attendeesField;
     private TextView descriptionField;
     private TextView ageRestrictionField;
+    private TextView arlabel;
+    private TextView desclabel;
+    private ImageView attLabel;
     private Button mEventPageBtn;
     private ImageView hostPicture;
     private EventDBHelper eventDBHelper;
     private UserDBHelper userDBHelper;
     private String currUserID;
+    private ConstraintLayout layout;
+    private ConstraintSet set;
+
 
     private Button inviteBtn;
     private boolean hideBtn=true;
@@ -103,10 +109,17 @@ public class EventPageFrag  extends Fragment{
         ageRestrictionField = view.findViewById(R.id.eventARField);
         descriptionField = view.findViewById(R.id.eventDescField);
         mEventPageBtn = view.findViewById(R.id.eventPageBtn);
+        attLabel = view.findViewById(R.id.attLabel);
+        desclabel = view.findViewById(R.id.descLabel);
+        arlabel = view.findViewById(R.id.ARLabel);
         eventDBHelper = new EventDBHelper();
         userDBHelper = new UserDBHelper();
 
         eventPicture = view.findViewById(R.id.eventPicture);
+
+        layout = (ConstraintLayout) view.findViewById(R.id.eventPageLayout);
+        set = new ConstraintSet();
+        set.clone(layout);
 
 
         this.event = (EventDB) getArguments().getSerializable("event");
@@ -171,6 +184,7 @@ public class EventPageFrag  extends Fragment{
                 }
             });
         }
+//        System.out.println("initpage");
         init_page();
         return view;
     }
@@ -182,9 +196,6 @@ public class EventPageFrag  extends Fragment{
                 }
                 return;
             }
-            ConstraintLayout layout = (ConstraintLayout) view.findViewById(R.id.eventPageLayout);
-            ConstraintSet set = new ConstraintSet();
-            set.clone(layout);
 
             //Invite Button
             inviteBtn = new Button(this.getContext());
@@ -192,10 +203,12 @@ public class EventPageFrag  extends Fragment{
             inviteBtn.setId(android.R.id.button1);
             layout.addView(inviteBtn);
 
-            set.connect(inviteBtn.getId(), ConstraintSet.BOTTOM, mEventPageBtn.getId(), ConstraintSet.TOP, 15);
+
             set.connect(inviteBtn.getId(),ConstraintSet.RIGHT,ConstraintSet.PARENT_ID,ConstraintSet.RIGHT,0);
             set.connect(inviteBtn.getId(),ConstraintSet.LEFT,ConstraintSet.PARENT_ID,ConstraintSet.LEFT,0);
-            set.connect(inviteBtn.getId(),ConstraintSet.TOP,descriptionField.getId(),ConstraintSet.BOTTOM);
+            set.connect(inviteBtn.getId(),ConstraintSet.TOP,attLabel.getId(),ConstraintSet.BOTTOM,20);
+            set.connect(mEventPageBtn.getId(),ConstraintSet.TOP,inviteBtn.getId(),ConstraintSet.BOTTOM,15);
+
             set.constrainHeight(inviteBtn.getId(), ConstraintSet.WRAP_CONTENT);
             set.constrainWidth(inviteBtn.getId(),ConstraintSet.WRAP_CONTENT);
             set.applyTo(layout);
@@ -217,17 +230,12 @@ public class EventPageFrag  extends Fragment{
     public void init_page(){
         // note capacity will be attendees/cap and not there if it is 0
     if(event!=null){
-        Log.i("event",event.toString());
+//        Log.i("event",event.toString());
+
         //get and set user.
         eventTitleField.setText(event.eventTitle);
         dateField.setText(df.format(event.timeInMillis));
         locationField.setText(event.address);
-        descriptionField.setText(event.details.getDescription());
-        if(event.details.getDescription().trim().isEmpty()){
-            descriptionField.setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.descLabel).setVisibility(View.INVISIBLE);
-        }
-
 
 
         if(event.details.getCapacity()==0){
@@ -241,13 +249,6 @@ public class EventPageFrag  extends Fragment{
            // attendeesField.setText(event.attendees.size()+"/"+event.invited.size());
         }
 
-
-        if(event.details.getAgeRestriction()==0){
-            ageRestrictionField.setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.ARLabel).setVisibility(View.INVISIBLE);
-        }else{
-            ageRestrictionField.setText(String.valueOf(event.details.getAgeRestriction()));
-        }
 
         if( currUserID.equals(event.eventHost)){
             mEventPageBtn.setText("Cancel Event");
@@ -265,7 +266,42 @@ public class EventPageFrag  extends Fragment{
 
             }
         }
+
         addInviteBtn();
+
+        if(event.details.getAgeRestriction()==0){
+            ((ViewGroup) ageRestrictionField.getParent()).removeView(ageRestrictionField);
+            ((ViewGroup) arlabel.getParent()).removeView(arlabel);
+            set.connect(desclabel.getId(),ConstraintSet.TOP,attLabel.getId(),ConstraintSet.BOTTOM,20);
+            set.applyTo(layout);
+        }else{
+            ageRestrictionField.setText(String.valueOf(event.details.getAgeRestriction()));
+            if(inviteBtn !=null){
+                set.connect(inviteBtn.getId(),ConstraintSet.TOP,arlabel.getId(),ConstraintSet.BOTTOM,30);
+                set.applyTo(layout);
+            }
+            if(hideBtn || inviteBtn==null){
+                set.connect(mEventPageBtn.getId(),ConstraintSet.TOP,arlabel.getId(),ConstraintSet.BOTTOM,30);
+                set.applyTo(layout);
+            }
+
+        }
+
+        if(event.details.getDescription().trim().isEmpty()){
+            ((ViewGroup) descriptionField.getParent()).removeView(descriptionField);
+            ((ViewGroup) desclabel.getParent()).removeView(desclabel);
+        }else{
+            descriptionField.setText(event.details.getDescription());
+            if(inviteBtn !=null){
+                set.connect(inviteBtn.getId(),ConstraintSet.TOP,descriptionField.getId(),ConstraintSet.BOTTOM,0);
+                set.applyTo(layout);
+            }
+            if(hideBtn || inviteBtn==null){
+                set.connect(mEventPageBtn.getId(),ConstraintSet.TOP,descriptionField.getId(),ConstraintSet.BOTTOM,0);
+                set.applyTo(layout);
+            }
+        }
+
 
         mEventPageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
