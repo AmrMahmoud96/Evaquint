@@ -7,13 +7,13 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Events" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_events_hosting"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Schedule" />
+            android:title="Hosting" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_events_attending"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="History" />
+            android:title="Attending" />
     </group>
     <group android:checkableBehavior="single">
         <item

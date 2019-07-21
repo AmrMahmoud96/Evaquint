@@ -1,18 +1,33 @@
 package com.evaquint.android.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.evaquint.android.R;
-import com.evaquint.android.fragments.dummy.DummyContent;
 import com.evaquint.android.fragments.dummy.DummyContent.DummyItem;
+import com.evaquint.android.utils.Adapter.EventListAdapter;
+import com.evaquint.android.utils.dataStructures.EventDB;
+import com.evaquint.android.utils.listeners.CustomItemClickListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.List;
+
+import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 /**
  * A fragment representing activity list of Items.
@@ -22,10 +37,9 @@ import com.evaquint.android.fragments.dummy.DummyContent.DummyItem;
  */
 public class FeedFrag extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private boolean isHostView = false;
+    private boolean currVisible = true;
+    private boolean pastVisible = true;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -37,10 +51,10 @@ public class FeedFrag extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static FeedFrag newInstance(int columnCount) {
+    public static FeedFrag newInstance(boolean hosting) {
         FeedFrag fragment = new FeedFrag();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putBoolean("hosting", hosting);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,9 +62,8 @@ public class FeedFrag extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            isHostView = getArguments().getBoolean("hosting");
         }
     }
 
@@ -59,17 +72,85 @@ public class FeedFrag extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        final RecyclerView currEvents = ((RecyclerView)view.findViewById(R.id.currEventList));
+        final RecyclerView pastEvents = ((RecyclerView)view.findViewById(R.id.pastEventList));
+        TextView cPageTitle = (TextView)view.findViewById(R.id.currPageTitle);
+        TextView pPageTitle = (TextView)view.findViewById(R.id.pastPageTitle);
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String node = "";
+        cPageTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currVisible){
+                    currVisible = false;
+                    currEvents.setVisibility(View.GONE);
+                }else{
+                    currVisible = true;
+                    currEvents.setVisibility(View.VISIBLE);
+                }
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+        });
+        pPageTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pastVisible){
+                    pastVisible = false;
+                    pastEvents.setVisibility(View.GONE);
+                }else{
+                    pastVisible = true;
+                    pastEvents.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        if(isHostView){
+            node = "eventsHosted";
+            cPageTitle.setText("Hosting");
+            pPageTitle.setText("Hosted");
+
+        }else{
+            node = "eventsAttended";
+            cPageTitle.setText("Attending");
+            pPageTitle.setText("Attended");
         }
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child(node);
+
+        try {
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot!=null&&dataSnapshot.getValue()!=null) {
+                                Log.i("eventsHosted", dataSnapshot.toString());
+//                                RelativeLayout layout = new RelativeLayout(getContext());
+                                LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
+                                currEvents.setLayoutManager(layoutManager);
+                                HashMap<String, String> events = (HashMap<String, String>) dataSnapshot.getValue();
+                                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                                String[] currEventsArr = events.keySet().toArray(new String[events.size()]);
+
+                                EventListAdapter e = new EventListAdapter(currEventsArr, new CustomItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View v, int position) {
+                                        EventDB event = (EventDB)v.getTag();
+                                        EventPageFrag eventPageFragment = EventPageFrag.newInstance(event);
+                                        setActiveFragment(getFragmentManager(), eventPageFragment);
+                                    }
+                                });
+                                currEvents.setAdapter(e);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
         return view;
     }
 

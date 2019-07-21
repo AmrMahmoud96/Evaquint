@@ -179,9 +179,10 @@ public class HomeActivity extends AppCompatActivity
             currentID = id;
             if (id == R.id.nav_event_locator) {
                 setActiveFragment(getSupportFragmentManager(), new EventLocatorFrag());
-            } else if (id == R.id.nav_gallery) {
-                setActiveFragment(getSupportFragmentManager(), new FeedFrag());
-            } else if (id == R.id.nav_slideshow) {
+            } else if (id == R.id.nav_events_hosting) {
+                setActiveFragment(getSupportFragmentManager(), FeedFrag.newInstance(true));
+            } else if (id == R.id.nav_events_attending) {
+                setActiveFragment(getSupportFragmentManager(), FeedFrag.newInstance(false));
 
             } else if (id == R.id.nav_logout) {
                 FirebaseAuth.getInstance().signOut();
