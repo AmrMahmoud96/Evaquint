@@ -190,44 +190,50 @@ public class EventPageFrag  extends Fragment{
     }
     public void addInviteBtn(){
         if(!event.eventPrivate || event.eventHost==currUserID){
-            //Invite Button
-            inviteBtn = new Button(this.getContext());
-            inviteBtn.setText("Invite");
-            inviteBtn.setId(android.R.id.button1);
-            layout.addView(inviteBtn);
+            if(!hideBtn){
+                //Invite Button
+                inviteBtn = new Button(this.getContext());
+                inviteBtn.setText("Invite");
+                inviteBtn.setId(android.R.id.button1);
+                layout.addView(inviteBtn);
+                set.clone(layout);
 
+                set.connect(inviteBtn.getId(),ConstraintSet.RIGHT,ConstraintSet.PARENT_ID,ConstraintSet.RIGHT,0);
+                set.connect(inviteBtn.getId(),ConstraintSet.LEFT,ConstraintSet.PARENT_ID,ConstraintSet.LEFT,0);
+                set.connect(inviteBtn.getId(),ConstraintSet.TOP,attLabel.getId(),ConstraintSet.BOTTOM,20);
+                set.connect(mEventPageBtn.getId(),ConstraintSet.TOP,inviteBtn.getId(),ConstraintSet.BOTTOM,15);
 
-            set.connect(inviteBtn.getId(),ConstraintSet.RIGHT,ConstraintSet.PARENT_ID,ConstraintSet.RIGHT,0);
-            set.connect(inviteBtn.getId(),ConstraintSet.LEFT,ConstraintSet.PARENT_ID,ConstraintSet.LEFT,0);
-            set.connect(inviteBtn.getId(),ConstraintSet.TOP,attLabel.getId(),ConstraintSet.BOTTOM,20);
-            set.connect(mEventPageBtn.getId(),ConstraintSet.TOP,inviteBtn.getId(),ConstraintSet.BOTTOM,15);
+                set.constrainHeight(inviteBtn.getId(), ConstraintSet.WRAP_CONTENT);
+                set.constrainWidth(inviteBtn.getId(),ConstraintSet.WRAP_CONTENT);
+                set.applyTo(layout);
 
-            set.constrainHeight(inviteBtn.getId(), ConstraintSet.WRAP_CONTENT);
-            set.constrainWidth(inviteBtn.getId(),ConstraintSet.WRAP_CONTENT);
-            set.applyTo(layout);
+                inviteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fm = getFragmentManager();
+                        EventInviteFrag editNameDialogFragment = new EventInviteFrag().newInstance(currUserID);
 
-            inviteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fm = getFragmentManager();
-                    EventInviteFrag editNameDialogFragment = new EventInviteFrag().newInstance(currUserID);
+                        editNameDialogFragment.setTargetFragment(EventPageFrag.this, EVENT_INVITES_FRAGMENT);
+                        editNameDialogFragment.show(fm, "fragment_invite_popup");
 
-                    editNameDialogFragment.setTargetFragment(EventPageFrag.this, EVENT_INVITES_FRAGMENT);
-                    editNameDialogFragment.show(fm, "fragment_invite_popup");
+                    }
+                });
+            }
 
-                }
-            });
             toggleInviteButton();
 
         }
     }
     public void toggleInviteButton(){
-
-        System.out.println("toggling invite button:" +hideBtn);
-        if(hideBtn){
-            inviteBtn.setVisibility(View.GONE);
-        }else{
-            inviteBtn.setVisibility(View.VISIBLE);
+        if(inviteBtn!=null){
+            System.out.println("toggling invite button: " +hideBtn);
+            if(hideBtn){
+                inviteBtn.setVisibility(View.GONE);
+            }else{
+                inviteBtn.setVisibility(View.VISIBLE);
+                set.connect(mEventPageBtn.getId(),ConstraintSet.TOP,inviteBtn.getId(),ConstraintSet.BOTTOM,15);
+                set.applyTo(layout);
+            }
         }
 
 
@@ -255,7 +261,7 @@ public class EventPageFrag  extends Fragment{
         }
 
 
-        if( currUserID.equals(event.eventHost)){
+        if(currUserID.equals(event.eventHost)){
             mEventPageBtn.setText("Cancel Event");
             mEventPageBtn.setBackgroundColor(Color.RED);
             hideBtn=false;
@@ -268,11 +274,12 @@ public class EventPageFrag  extends Fragment{
                 mEventPageBtn.setText("Register");
                 mEventPageBtn.setBackgroundColor(Color.GREEN);
                 hideBtn=true;
-
             }
         }
 
         addInviteBtn();
+
+        set.clone(layout);
 
         if(event.details.getAgeRestriction()==0){
             ((ViewGroup) ageRestrictionField.getParent()).removeView(ageRestrictionField);
@@ -316,17 +323,11 @@ public class EventPageFrag  extends Fragment{
                 if(buttonText.equalsIgnoreCase("Register")){
                     userDBHelper.addEventAttended(currUserID,event.eventID);
                     eventDBHelper.addAttendee(event.eventID,currUserID);
-                    mEventPageBtn.setText("Unregister");
-                    mEventPageBtn.setBackgroundColor(Color.RED);
-                    set.connect(mEventPageBtn.getId(),ConstraintSet.TOP,inviteBtn.getId(),ConstraintSet.BOTTOM,15);
-                    set.applyTo(layout);
-                    hideBtn=false;
+                    event.attendees.put(currUserID,currUserID);
                 }else if(buttonText.equalsIgnoreCase("Unregister")){
                     eventDBHelper.removeAttendee(event.eventID,currUserID);
                     userDBHelper.removeEventAttended(currUserID,event.eventID);
-                    mEventPageBtn.setText("Register");
-                    mEventPageBtn.setBackgroundColor(Color.GREEN);
-                    hideBtn=true;
+                    event.attendees.remove(currUserID);
                 }else if(buttonText.equalsIgnoreCase("Cancel Event")){
                     new AlertDialog.Builder(getContext())
                             .setTitle("Confirmation")
@@ -350,8 +351,7 @@ public class EventPageFrag  extends Fragment{
                             .setNegativeButton("No", null).show();
                     // confirm to cancel or not
                 }
-                toggleInviteButton();
-
+                init_page();
 
             }
         });
