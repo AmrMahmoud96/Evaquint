@@ -282,8 +282,10 @@ public class EventPageFrag  extends Fragment{
         set.clone(layout);
 
         if(event.details.getAgeRestriction()==0){
-            ((ViewGroup) ageRestrictionField.getParent()).removeView(ageRestrictionField);
-            ((ViewGroup) arlabel.getParent()).removeView(arlabel);
+            if(ageRestrictionField.getParent()!=null){
+                ((ViewGroup) ageRestrictionField.getParent()).removeView(ageRestrictionField);
+                ((ViewGroup) arlabel.getParent()).removeView(arlabel);
+            }
             set.connect(desclabel.getId(),ConstraintSet.TOP,attLabel.getId(),ConstraintSet.BOTTOM,20);
             set.applyTo(layout);
         }else{
@@ -300,8 +302,10 @@ public class EventPageFrag  extends Fragment{
         }
 
         if(event.details.getDescription().trim().isEmpty()){
-            ((ViewGroup) descriptionField.getParent()).removeView(descriptionField);
-            ((ViewGroup) desclabel.getParent()).removeView(desclabel);
+            if(descriptionField.getParent()!=null) {
+                ((ViewGroup) descriptionField.getParent()).removeView(descriptionField);
+                ((ViewGroup) desclabel.getParent()).removeView(desclabel);
+            }
         }else{
             descriptionField.setText(event.details.getDescription());
             if(inviteBtn !=null){
