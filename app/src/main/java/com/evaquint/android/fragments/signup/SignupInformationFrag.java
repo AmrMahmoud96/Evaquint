@@ -116,8 +116,16 @@ public class SignupInformationFrag extends Fragment {
     }
 
     private void grabValues(){
-        firstName = mFirstNameField.getText().toString().trim();
+        firstName =  mFirstNameField.getText().toString().trim();
+        if(firstName.length()>1){
+            firstName=firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+        }
+
         lastName = mLastNameField.getText().toString().trim();
+        if(lastName.length()>1){
+            lastName=lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+        }
+
       /*  if(!mAgeField.getText().toString().trim().isEmpty()){
             age = Integer.parseInt(mAgeField.getText().toString().trim());
         }*/
