@@ -11,7 +11,7 @@
         android:id="@+id/eventRecyclerImg"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+        app:srcCompat="@drawable/logo" />
 
     <TextView
         android:id="@+id/eventRecyclerTitle"
