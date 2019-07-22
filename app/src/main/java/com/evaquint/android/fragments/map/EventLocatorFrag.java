@@ -49,7 +49,6 @@ import com.evaquint.android.utils.database.EventDBHelper;
 import com.evaquint.android.utils.database.GeofireDBHelper;
 import com.evaquint.android.utils.database.UserDBHelper;
 import com.evaquint.android.utils.listeners.ShakeDetector;
-import com.evaquint.android.utils.places.NearbyPlacesData;
 import com.evaquint.android.utils.storage.PhotoUploadHelper;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -75,7 +74,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -172,7 +170,8 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 title = (String) array.get("name");
                 Marker marker = mMap.addMarker(new MarkerOptions()
                                 .position(location)
-                                .title(title));
+                                .title(title)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 marker.setTag("PlaceMarker");
                 currentMapMarkers.add(marker);
             } catch (JSONException e) {
