@@ -190,13 +190,6 @@ public class EventPageFrag  extends Fragment{
     }
     public void addInviteBtn(){
         if(!event.eventPrivate || event.eventHost==currUserID){
-            if(hideBtn){
-                if(inviteBtn!=null){
-                    inviteBtn.setVisibility(View.INVISIBLE);
-                }
-                return;
-            }
-
             //Invite Button
             inviteBtn = new Button(this.getContext());
             inviteBtn.setText("Invite");
@@ -224,8 +217,20 @@ public class EventPageFrag  extends Fragment{
 
                 }
             });
+            toggleInviteButton();
+
+        }
+    }
+    public void toggleInviteButton(){
+
+        System.out.println("toggling invite button:" +hideBtn);
+        if(hideBtn){
+            inviteBtn.setVisibility(View.GONE);
+        }else{
             inviteBtn.setVisibility(View.VISIBLE);
         }
+
+
     }
     public void init_page(){
         // note capacity will be attendees/cap and not there if it is 0
@@ -301,6 +306,7 @@ public class EventPageFrag  extends Fragment{
                 set.applyTo(layout);
             }
         }
+        toggleInviteButton();
 
 
         mEventPageBtn.setOnClickListener(new View.OnClickListener() {
@@ -312,6 +318,8 @@ public class EventPageFrag  extends Fragment{
                     eventDBHelper.addAttendee(event.eventID,currUserID);
                     mEventPageBtn.setText("Unregister");
                     mEventPageBtn.setBackgroundColor(Color.RED);
+                    set.connect(mEventPageBtn.getId(),ConstraintSet.TOP,inviteBtn.getId(),ConstraintSet.BOTTOM,15);
+                    set.applyTo(layout);
                     hideBtn=false;
                 }else if(buttonText.equalsIgnoreCase("Unregister")){
                     eventDBHelper.removeAttendee(event.eventID,currUserID);
@@ -342,8 +350,9 @@ public class EventPageFrag  extends Fragment{
                             .setNegativeButton("No", null).show();
                     // confirm to cancel or not
                 }
+                toggleInviteButton();
 
-                addInviteBtn();
+
             }
         });
 
