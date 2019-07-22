@@ -134,12 +134,12 @@ public class SignupInformationFrag extends Fragment {
     private boolean validateValues(){
         boolean cancel = false;
         View focusView = null;
-        if(firstName.isEmpty() || firstName==null || firstName.length()<3){
+        if(firstName.isEmpty() || firstName==null || firstName.length()<2){
             mFirstNameField.setError("Please enter your first name.");
             focusView = mFirstNameField;
             cancel = true;
         }
-        if(lastName.isEmpty()||lastName==null||lastName.length()<3){
+        if(lastName.isEmpty()||lastName==null||lastName.length()<2){
             mLastNameField.setError("Please enter your last name.");
             focusView = mLastNameField;
             cancel = true;
