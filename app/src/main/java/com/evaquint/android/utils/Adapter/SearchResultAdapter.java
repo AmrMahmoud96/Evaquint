@@ -26,8 +26,7 @@ import java.text.SimpleDateFormat;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder>{
         private SimpleDateFormat df = new SimpleDateFormat("EEEE, MMM d, yyyy hh:mm aa");
-        private JSONArray mPlaceDataset;
-        private String[] mEventDataset;
+        private JSONArray mDataset;
 
         private static String pictureRequestURL = "https://maps.googleapis.com/maps/api/place/photo";
         private static String urlFormat = "%s?maxwidth=%03d&maxheight=%03d&photoreference=%s&key=%s";
@@ -52,9 +51,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public SearchResultAdapter(JSONArray myPlaceDataset, String[]myEventDataset, CustomItemClickListener listener) {
-            mPlaceDataset = myPlaceDataset;
-            mEventDataset = myEventDataset;
+        public SearchResultAdapter(JSONArray myResultDataset, CustomItemClickListener listener) {
+            mDataset = myResultDataset;
             this.listener = listener;
         }
 
@@ -83,43 +81,54 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             // - replace the contents of the view with that element
 
             //JSON array loop and populate
-            JSONObject array = null;
+            JSONObject obj = null;
             LatLng location;
             String title="Place";
-            String address="Location";
+            String addressOrDate="Location";
             String pictureURL="";
             String photoRef = "";
             try {
-                array = (JSONObject) mPlaceDataset.get(position);
-                JSONObject coords = (JSONObject) ((JSONObject)array.get("geometry")).get("location");
-                location = new LatLng((double) coords.get("lat"),
-                        (double) coords.get("lng"));
-                address = (String) ((JSONObject)  array.get("plus_code")).get("compound_code");
-                title = (String) array.get("name");
-                photoRef =((JSONObject)((JSONArray)array.get("photos")).get(0)).getString("photo_reference");
+                obj = (JSONObject) mDataset.get(position);
+                System.out.println("obj: "+obj.toString());
+                if(obj.get("place_id")!="Evaquint"){
+                    holder.mHostTextView.setText("Place");
+                    holder.mTitleTextView.setTag("Place");
+                    JSONObject coords = (JSONObject) ((JSONObject)obj.get("geometry")).get("location");
+                    location = new LatLng((double) coords.get("lat"),
+                            (double) coords.get("lng"));
+                    addressOrDate = (String) ((JSONObject)  obj.get("plus_code")).get("compound_code");
+                    title = (String) obj.get("name");
+                    photoRef =((JSONObject)((JSONArray)obj.get("photos")).get(0)).getString("photo_reference");
+                }else {
+                    holder.mHostTextView.setText("Event");
+                    holder.mTitleTextView.setTag(obj);
+                    title = (String) obj.get("eventTitle");
+                    addressOrDate = df.format((long)obj.get("timeInMillis"));
+                    pictureURL = (String) ((JSONArray)((JSONObject)obj.get("details")).get("pictures")).get(0);
+                }
             } catch (JSONException e) {
                 Log.e("JSON Err", "Problem parsing JSON response: " + e.getMessage());
             }
 
             holder.mTitleTextView.setText(title);
-            holder.mDateTextView.setText(address);
-            holder.mHostTextView.setText("Places");
+            holder.mDateTextView.setText(addressOrDate);
             try{
                 if(!photoRef.isEmpty()){
                     //TODO: get context only works until phone is turned since the fragment will no longer be attached.
                     pictureURL = String.format(urlFormat, pictureRequestURL,600,600,photoRef,holder.mTitleTextView.getContext().getString(R.string.google_places_key));
-//                    System.out.println(pictureURL);
                     if(!pictureURL.isEmpty()){
-                        String downloadUrl = pictureURL;
-//                        Log.i("downloadurl", downloadUrl);
-                        Picasso.with(holder.itemView.getContext()).load(Uri.parse(downloadUrl)).fit().into(holder.mEventImageView);
+                        Picasso.with(holder.itemView.getContext()).load(Uri.parse(pictureURL)).fit().into(holder.mEventImageView);
                     }
+                }else if(!pictureURL.isEmpty()&&!pictureURL.equalsIgnoreCase("default")){
+                    Picasso.with(holder.itemView.getContext()).load(Uri.parse(pictureURL)).fit().into(holder.mEventImageView);
+                }else{
+                    Picasso.with(holder.itemView.getContext()).load(R.drawable.logo).fit().into(holder.mEventImageView);
                 }
             }catch (Exception e){
                 Log.e("Image Load Err","problem retrieving places picture: "+e.getMessage());
             }
 //
-            holder.mTitleTextView.setTag("Place");
+
 
 
 
@@ -172,7 +181,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
-            return mPlaceDataset.length();//// needs to be changed
+            return mDataset.length();
         }
     
 }

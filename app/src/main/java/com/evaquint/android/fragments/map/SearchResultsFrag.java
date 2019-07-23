@@ -11,12 +11,28 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.evaquint.android.R;
+import com.evaquint.android.fragments.EventPageFrag;
 import com.evaquint.android.fragments.dummy.DummyContent.DummyItem;
 import com.evaquint.android.utils.Adapter.SearchResultAdapter;
+import com.evaquint.android.utils.dataStructures.EventDB;
+import com.evaquint.android.utils.database.EventDBHelper;
 import com.evaquint.android.utils.listeners.CustomItemClickListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
+import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 /**
  * A fragment representing activity list of Items.
@@ -67,51 +83,85 @@ public class SearchResultsFrag extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search_results,container,false);
         populatePage(view);
 
-//        view.findViewById(R.id.event_host_desc).setVisibility(View.VISIBLE);
+        return view;
+//        return null;
+    }
 
-//        View view = inflater.inflate(R.layout.fragment_feed, container, false);
-//
-//        final RecyclerView currEvents = ((RecyclerView)view.findViewById(R.id.currEventList));
-//        final RecyclerView pastEvents = ((RecyclerView)view.findViewById(R.id.pastEventList));
-//        TextView cPageTitle = (TextView)view.findViewById(R.id.currPageTitle);
-//        TextView pPageTitle = (TextView)view.findViewById(R.id.pastPageTitle);
-//        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        String node = "";
-//        cPageTitle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(currVisible){
-//                    currVisible = false;
-//                    currEvents.setVisibility(View.GONE);
-//                }else{
-//                    currVisible = true;
-//                    currEvents.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//        pPageTitle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(pastVisible){
-//                    pastVisible = false;
-//                    pastEvents.setVisibility(View.GONE);
-//                }else{
-//                    pastVisible = true;
-//                    pastEvents.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//        if(isHostView){
-//            node = "eventsHosted";
-//            cPageTitle.setText("Hosting");
-//            pPageTitle.setText("Hosted");
-//
-//        }else{
-//            node = "eventsAttended";
-//            cPageTitle.setText("Attending");
-//            pPageTitle.setText("Attended");
-//        }
-//        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USER_TABLE.getName()).child(userID).child(node);
+    public void populatePage(View v){
+//        System.out.println(sResults.toString());
+//        System.out.println(keyword);
+        final RecyclerView qRes = ((RecyclerView)v.findViewById(R.id.query_result_list));
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName());
+        try{
+
+            ref.orderByChild("eventTitle").startAt(keyword).endAt(keyword+"\uf8ff").limitToFirst(20).addListenerForSingleValueEvent(new ValueEventListener() {
+//            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    try{
+                        HashMap<String,Object> data =(HashMap<String,Object>) dataSnapshot.getValue();
+                        ArrayList<String> l = new ArrayList<>();
+                        Gson gson = new Gson();
+                        if(data!=null){
+                            for (Object o:data.values()){
+                                l.add(gson.toJson(o));
+                            }
+                        }
+                        JSONArray temp = new JSONArray();
+                        for (int i = 0; i < l.size(); i++) {
+                            temp.put(new JSONObject(l.get(i)).put("place_id","Evaquint"));
+                        }
+                        for (int j=0; j<sResults.length();j++){
+                            temp.put(sResults.get(j));
+                        }
+                        RelativeLayout layout = new RelativeLayout(getContext());
+                        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
+                        qRes.setLayoutManager(layoutManager);
+                        SearchResultAdapter s = new SearchResultAdapter(temp, new CustomItemClickListener() {
+                            @Override
+                            public void onItemClick(View v, int position) {
+                                if(!v.getTag().toString().equalsIgnoreCase("place")){
+                                    EventDB event = new EventDBHelper().structureEventDataFromString(v.getTag().toString());
+                                    if(event !=null){
+                                        EventPageFrag eventPageFragment = EventPageFrag.newInstance(event);
+                                        setActiveFragment(getFragmentManager(), eventPageFragment);
+                                    }
+                                }
+                            }
+                        });
+                        qRes.setAdapter(s);
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+//                    dataSnapshot.getValue();
+
+//                    RelativeLayout layout = new RelativeLayout(getContext());
+//                    LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
+//                    qRes.setLayoutManager(layoutManager);
+//                    SearchResultAdapter s = new SearchResultAdapter(sResults,null, new CustomItemClickListener() {
+//                        @Override
+//                        public void onItemClick(View v, int position) {
+////                                        EventDB event = (EventDB)v.getTag();
+////                                        EventPageFrag eventPageFragment = EventPageFrag.newInstance(event);
+////                                        setActiveFragment(getFragmentManager(), eventPageFragment);
+//                        }
+//                    });
+//                    qRes.setAdapter(s);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }catch(Exception e){
+            e.printStackTrace();
+            Log.e("Query Err","Unable to query Firebase for events: " + e.getMessage());
+        }
 //
 //        try {
 //                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -149,27 +199,7 @@ public class SearchResultsFrag extends Fragment {
 //                } catch (Exception e) {
 //                    e.printStackTrace();
 //                }
-//
-        return view;
-//        return null;
-    }
 
-    public void populatePage(View v){
-//        System.out.println(sResults.toString());
-//        System.out.println(keyword);
-        RecyclerView qRes = ((RecyclerView)v.findViewById(R.id.query_result_list));
-        RelativeLayout layout = new RelativeLayout(getContext());
-        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
-        qRes.setLayoutManager(layoutManager);
-        SearchResultAdapter s = new SearchResultAdapter(sResults,null, new CustomItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-//                                        EventDB event = (EventDB)v.getTag();
-//                                        EventPageFrag eventPageFragment = EventPageFrag.newInstance(event);
-//                                        setActiveFragment(getFragmentManager(), eventPageFragment);
-            }
-        });
-        qRes.setAdapter(s);
 
     }
 

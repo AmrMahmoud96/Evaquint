@@ -874,7 +874,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                     imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
                     GooglePlacesQueue googlePlacesQueue = GooglePlacesQueue.getInstance(getActivity());
                     googlePlacesQueue.sendPlacesRequest(EventLocatorFrag.this, start, null, 1500, v.getText().toString());
-
                     return true;
                 }
                 return false;
