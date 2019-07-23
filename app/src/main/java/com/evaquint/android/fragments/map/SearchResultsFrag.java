@@ -8,7 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.evaquint.android.R;
 import com.evaquint.android.fragments.EventPageFrag;
@@ -81,10 +82,13 @@ public class SearchResultsFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_results,container,false);
+
+        EditText searchText = view.findViewById(R.id.map_searchbar_input);
+        searchText.setText(keyword);
+
         populatePage(view);
 
         return view;
-//        return null;
     }
 
     public void populatePage(View v){
@@ -92,6 +96,8 @@ public class SearchResultsFrag extends Fragment {
 //        System.out.println(keyword);
         final RecyclerView qRes = ((RecyclerView)v.findViewById(R.id.query_result_list));
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference(EVENTS_TABLE.getName());
+        final TextView t = v.findViewById(R.id.no_res_text);
+
         try{
 
             ref.orderByChild("eventTitle").startAt(keyword).endAt(keyword+"\uf8ff").limitToFirst(20).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -115,22 +121,26 @@ public class SearchResultsFrag extends Fragment {
                         for (int j=0; j<sResults.length();j++){
                             temp.put(sResults.get(j));
                         }
-                        RelativeLayout layout = new RelativeLayout(getContext());
-                        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
-                        qRes.setLayoutManager(layoutManager);
-                        SearchResultAdapter s = new SearchResultAdapter(temp, new CustomItemClickListener() {
-                            @Override
-                            public void onItemClick(View v, int position) {
-                                if(!v.getTag().toString().equalsIgnoreCase("place")){
-                                    EventDB event = new EventDBHelper().structureEventDataFromString(v.getTag().toString());
-                                    if(event !=null){
-                                        EventPageFrag eventPageFragment = EventPageFrag.newInstance(event);
-                                        setActiveFragment(getFragmentManager(), eventPageFragment);
+                        if(temp.length()==0){
+                            qRes.setVisibility(View.GONE);
+                            t.setVisibility(View.VISIBLE);
+                        }else{
+                            LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
+                            qRes.setLayoutManager(layoutManager);
+                            SearchResultAdapter s = new SearchResultAdapter(temp, new CustomItemClickListener() {
+                                @Override
+                                public void onItemClick(View v, int position) {
+                                    if(!v.getTag().toString().equalsIgnoreCase("place")){
+                                        EventDB event = new EventDBHelper().structureEventDataFromString(v.getTag().toString());
+                                        if(event !=null){
+                                            EventPageFrag eventPageFragment = EventPageFrag.newInstance(event);
+                                            setActiveFragment(getFragmentManager(), eventPageFragment);
+                                        }
                                     }
                                 }
-                            }
-                        });
-                        qRes.setAdapter(s);
+                            });
+                            qRes.setAdapter(s);
+                        }
 
                     }catch (Exception e){
                         e.printStackTrace();

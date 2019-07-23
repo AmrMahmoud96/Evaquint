@@ -966,6 +966,13 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 popupFragment.onActivityResult(requestCode,  resultCode, data);
                 break;
             case EVENT_SUGGESTION_FRAGMENT:
+                if (resultCode == Activity.RESULT_OK) {
+                    String suggestion = data.getExtras().getString("suggestion");
+                    GooglePlacesQueue googlePlacesQueue = GooglePlacesQueue.getInstance(getActivity());
+                    googlePlacesQueue.sendPlacesRequest(EventLocatorFrag.this, start, null, 1500,suggestion);
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    //do nothing
+                }
                 isPopupOpen = false;
                 break;
             case EVENT_PAGE_FRAGMENT:

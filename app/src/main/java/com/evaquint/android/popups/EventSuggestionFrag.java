@@ -1,5 +1,6 @@
 package com.evaquint.android.popups;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
 import static com.evaquint.android.utils.code.DatabaseValues.USER_TABLE;
 import static com.evaquint.android.utils.dataStructures.EventCategories.getEventCategories;
 
@@ -91,8 +93,10 @@ public class EventSuggestionFrag extends DialogFragment {
             @Override
             public void onClick(View v) {
                 // go to venue recommendation then to popup quick event
-
-                Log.i("place","");
+                Intent i = new Intent();
+                i.putExtra("suggestion", lastSuggestion);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, i);
+                dismiss();
             }
         });
 
