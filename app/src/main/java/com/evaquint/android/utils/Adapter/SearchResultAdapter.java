@@ -106,7 +106,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             holder.mHostTextView.setText("Places");
             try{
                 if(!photoRef.isEmpty()){
-                    pictureURL = String.format(urlFormat, pictureRequestURL,600,600,photoRef,"AIzaSyDbW7Mh_CKD0FHcGswtg0ZddTICwu2mbiw");
+                    //TODO: get context only works until phone is turned since the fragment will no longer be attached.
+                    pictureURL = String.format(urlFormat, pictureRequestURL,600,600,photoRef,holder.mTitleTextView.getContext().getString(R.string.google_places_key));
 //                    System.out.println(pictureURL);
                     if(!pictureURL.isEmpty()){
                         String downloadUrl = pictureURL;

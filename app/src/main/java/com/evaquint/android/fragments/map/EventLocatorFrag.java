@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -864,11 +865,13 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 //                Log.i(TAG, "An error occurred: " + status);
 //            }
 //        });
-        EditText searchText = view.findViewById(R.id.map_searchbar_input);
+        final EditText searchText = view.findViewById(R.id.map_searchbar_input);
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
                     GooglePlacesQueue googlePlacesQueue = GooglePlacesQueue.getInstance(getActivity());
                     googlePlacesQueue.sendPlacesRequest(EventLocatorFrag.this, start, null, 1500, v.getText().toString());
 
