@@ -48,7 +48,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             public ViewHolder(View v) {
                 super(v);
                 mTitleTextView = (TextView) v.findViewById(R.id.eventRecyclerTitle);
-                mDateTextView = (TextView) v.findViewById(R.id.eventRecylerDate);
+                mDateTextView = (TextView) v.findViewById(R.id.eventRecyclerDate);
                 mEventImageView = (ImageView) v.findViewById(R.id.eventRecyclerImg);
             }
         }
@@ -74,19 +74,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                     listener.onItemClick(v.findViewById(R.id.eventRecyclerTitle), vh.getAdapterPosition());
                 }
             });
-//            v.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    boolean selected = (boolean)v.getTag();
-//                    v.setTag(!selected);
-//                    if(selected){
-//                        v.setBackgroundColor(Color.GREEN);
-//                    }else{
-//                        v.setBackgroundColor(Color.TRANSPARENT);
-//                    }
-//                    listener.onItemClick(v, vh.getAdapterPosition());
-//                }
-//            });
             return vh;
         }
 

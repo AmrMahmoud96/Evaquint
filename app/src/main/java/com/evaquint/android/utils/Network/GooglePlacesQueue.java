@@ -3,21 +3,14 @@ package com.evaquint.android.utils.Network;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.evaquint.android.R;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -65,7 +58,7 @@ public class GooglePlacesQueue {
         return mInstance;
     }
 
-    public void sendPlacesRequest(final JSONPopulate callback_instance, LatLng location, String type, int radius, String keyword) {
+    public void sendPlacesRequest(final JSONPopulate callback_instance, LatLng location, String type, int radius, final String keyword) {
         String url = String.format(urlFormat, placesNearbyUrl, location.latitude, location.longitude,
                 radius, type==null?"":type, keyword, mCtx.getString(R.string.google_places_key));
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -79,7 +72,7 @@ public class GooglePlacesQueue {
                         } catch (JSONException e) {
                             Log.e(tag, "Invalid JSON response");
                         }
-                        callback_instance.populateJSON(res_array);
+                        callback_instance.populateJSON(res_array,keyword);
                     }
                 },
                 new Response.ErrorListener() {

@@ -77,8 +77,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -150,7 +148,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public synchronized void populateJSON(JSONArray async_results) {
+    public synchronized void populateJSON(JSONArray async_results,String keyword) {
         if(mMap == null) {
             Log.e(tag, "Map is not loaded, cannot load markers");
         } else if(async_results == null){
@@ -158,26 +156,32 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         } else if (async_results.length()==0){
             Log.e(tag, "Results do not exist");
         }
-        for(int i=0; i<async_results.length(); i++){
-            JSONObject array = null;
-            LatLng location;
-            String title;
-            try {
-                array = (JSONObject) async_results.get(i);
-                JSONObject coords = (JSONObject) ((JSONObject)array.get("geometry")).get("location");
-                location = new LatLng((double) coords.get("lat"),
-                        (double) coords.get("lng"));
-                title = (String) array.get("name");
-                Marker marker = mMap.addMarker(new MarkerOptions()
-                                .position(location)
-                                .title(title)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                marker.setTag("PlaceMarker");
-                currentMapMarkers.add(marker);
-            } catch (JSONException e) {
-                Log.e(tag, "Problem parsing JSON response");
-            }
-        }
+
+        FragmentManager fm = getFragmentManager();
+        SearchResultsFrag searchResultsFrag = SearchResultsFrag.newInstance(async_results,keyword);
+        popupFragment = searchResultsFrag;
+        setActiveFragment(fm, searchResultsFrag);
+
+//        for(int i=0; i<async_results.length(); i++){
+//            JSONObject array = null;
+//            LatLng location;
+//            String title;
+//            try {
+//                array = (JSONObject) async_results.get(i);
+//                JSONObject coords = (JSONObject) ((JSONObject)array.get("geometry")).get("location");
+//                location = new LatLng((double) coords.get("lat"),
+//                        (double) coords.get("lng"));
+//                title = (String) array.get("name");
+//                Marker marker = mMap.addMarker(new MarkerOptions()
+//                                .position(location)
+//                                .title(title)
+//                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+//                marker.setTag("PlaceMarker");
+//                currentMapMarkers.add(marker);
+//            } catch (JSONException e) {
+//                Log.e(tag, "Problem parsing JSON response");
+//            }
+//        }
     }
 
     //    private GeoDataClient mGeoDataClient;
@@ -867,6 +871,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     GooglePlacesQueue googlePlacesQueue = GooglePlacesQueue.getInstance(getActivity());
                     googlePlacesQueue.sendPlacesRequest(EventLocatorFrag.this, start, null, 1500, v.getText().toString());
+
                     return true;
                 }
                 return false;

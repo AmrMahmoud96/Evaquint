@@ -4,5 +4,5 @@ import org.json.JSONArray;
 
 public interface JSONPopulate {
 
-    public void populateJSON(JSONArray async_results);
+    public void populateJSON(JSONArray async_results, String keyword);
 }

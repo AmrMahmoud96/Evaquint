@@ -1,0 +1,42 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_frag_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/overlay_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/query_searchbar"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            app:layout_marginLeftPercent="8%"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            app:layout_heightPercent="7%"
+            app:layout_marginRightPercent="5%"
+            app:layout_marginTopPercent="5%"
+            app:cardElevation="7dp"
+            app:cardPreventCornerOverlap="false"
+            app:contentPadding="0dp">
+            <include layout="@layout/component_map_searchbar"></include>
+
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/query_result_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:gravity="start"
+            android:layout_below="@+id/query_searchbar">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.percent.PercentRelativeLayout>
+</FrameLayout>
