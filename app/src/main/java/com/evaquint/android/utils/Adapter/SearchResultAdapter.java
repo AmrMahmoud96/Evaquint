@@ -1,5 +1,6 @@
 package com.evaquint.android.utils.Adapter;
 
+import android.location.Location;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -68,7 +69,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(v.findViewById(R.id.eventRecyclerTitle), vh.getAdapterPosition());
+                    listener.onItemClick(v.findViewById(R.id.event_host_desc), vh.getAdapterPosition());
                 }
             });
             return vh;
@@ -90,18 +91,23 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             try {
                 obj = (JSONObject) mDataset.get(position);
                 System.out.println("obj: "+obj.toString());
-                if(obj.get("place_id")!="Evaquint"){
+                if(obj.get("place_id")!="Evaquint"&&!obj.has("permanently_closed")){
                     holder.mHostTextView.setText("Place");
-                    holder.mTitleTextView.setTag("Place");
                     JSONObject coords = (JSONObject) ((JSONObject)obj.get("geometry")).get("location");
-                    location = new LatLng((double) coords.get("lat"),
-                            (double) coords.get("lng"));
-                    addressOrDate = (String) ((JSONObject)  obj.get("plus_code")).get("compound_code");
+                    if(obj.has("vicinity")){
+                        addressOrDate = obj.getString("vicinity");
+                    }else if(obj.has("formatted_address")){
+                        addressOrDate = obj.getString("formatted_address");
+                    }
+                    Location l = new Location(addressOrDate);
+                    l.setLatitude(coords.getDouble("lat"));
+                    l.setLongitude(coords.getDouble("lng"));
+                    holder.mHostTextView.setTag(l);
                     title = (String) obj.get("name");
                     photoRef =((JSONObject)((JSONArray)obj.get("photos")).get(0)).getString("photo_reference");
                 }else {
                     holder.mHostTextView.setText("Event");
-                    holder.mTitleTextView.setTag(obj);
+                    holder.mHostTextView.setTag(obj);
                     title = (String) obj.get("eventTitle");
                     addressOrDate = df.format((long)obj.get("timeInMillis"));
                     pictureURL = (String) ((JSONArray)((JSONObject)obj.get("details")).get("pictures")).get(0);

@@ -100,6 +100,8 @@ import static com.evaquint.android.utils.code.IntentValues.EVENT_PAGE_FRAGMENT;
 import static com.evaquint.android.utils.code.IntentValues.EVENT_SUGGESTION_FRAGMENT;
 import static com.evaquint.android.utils.code.IntentValues.PICK_IMAGE_REQUEST;
 import static com.evaquint.android.utils.code.IntentValues.QUICK_EVENT_FRAGMENT;
+import static com.evaquint.android.utils.code.IntentValues.RESULT_REDO;
+import static com.evaquint.android.utils.code.IntentValues.SEARCH_RESULT_FRAGMENT;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
@@ -161,28 +163,9 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
         FragmentManager fm = getFragmentManager();
         SearchResultsFrag searchResultsFrag = SearchResultsFrag.newInstance(async_results,keyword);
         popupFragment = searchResultsFrag;
+        searchResultsFrag.setTargetFragment(this,SEARCH_RESULT_FRAGMENT);
         setActiveFragment(fm, searchResultsFrag);
 
-//        for(int i=0; i<async_results.length(); i++){
-//            JSONObject array = null;
-//            LatLng location;
-//            String title;
-//            try {
-//                array = (JSONObject) async_results.get(i);
-//                JSONObject coords = (JSONObject) ((JSONObject)array.get("geometry")).get("location");
-//                location = new LatLng((double) coords.get("lat"),
-//                        (double) coords.get("lng"));
-//                title = (String) array.get("name");
-//                Marker marker = mMap.addMarker(new MarkerOptions()
-//                                .position(location)
-//                                .title(title)
-//                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-//                marker.setTag("PlaceMarker");
-//                currentMapMarkers.add(marker);
-//            } catch (JSONException e) {
-//                Log.e(tag, "Problem parsing JSON response");
-//            }
-//        }
     }
 
     //    private GeoDataClient mGeoDataClient;
@@ -306,7 +289,7 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
             popupFragment = editNameDialogFragment;
 
             editNameDialogFragment.setTargetFragment(this, EVENT_SUGGESTION_FRAGMENT);
-            editNameDialogFragment.show(fm, "fragment_popup_quick_event");
+            editNameDialogFragment.show(fm, "fragment_event_suggestion");
         }
     }
 
@@ -355,7 +338,6 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
 
                 editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
                 editNameDialogFragment.show(fm, "fragment_popup_quick_event");
-
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -976,6 +958,25 @@ public class EventLocatorFrag extends Fragment implements OnMapReadyCallback,
                 isPopupOpen = false;
                 break;
             case EVENT_PAGE_FRAGMENT:
+                break;
+            case SEARCH_RESULT_FRAGMENT:
+                if(resultCode==Activity.RESULT_OK){
+                    // start quick event frag
+                    Bundle bundle = data.getExtras();
+                    String address = bundle.getString("address");
+                    LatLng location = new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
+//                    onMapLongClick(location);
+                    FragmentManager fm = getFragmentManager();
+                    QuickEventFrag editNameDialogFragment = QuickEventFrag.newInstance(address, location, UUID.randomUUID().toString());
+                    popupFragment = editNameDialogFragment;
+
+                    editNameDialogFragment.setTargetFragment(this, QUICK_EVENT_FRAGMENT);
+                    editNameDialogFragment.show(fm, "fragment_popup_quick_event");
+                }else if(resultCode==RESULT_REDO){
+                    String query = data.getExtras().getString("query");
+                    GooglePlacesQueue googlePlacesQueue = GooglePlacesQueue.getInstance(getActivity());
+                    googlePlacesQueue.sendPlacesRequest(EventLocatorFrag.this, start, null, 1500, query);
+                }
                 break;
         }
     }

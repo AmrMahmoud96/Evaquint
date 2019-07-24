@@ -1,13 +1,20 @@
 package com.evaquint.android.fragments.map;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -33,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.evaquint.android.utils.code.DatabaseValues.EVENTS_TABLE;
+import static com.evaquint.android.utils.code.IntentValues.RESULT_REDO;
 import static com.evaquint.android.utils.view.FragmentHelper.setActiveFragment;
 
 /**
@@ -83,8 +91,24 @@ public class SearchResultsFrag extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_results,container,false);
 
-        EditText searchText = view.findViewById(R.id.map_searchbar_input);
+        final EditText searchText = view.findViewById(R.id.map_searchbar_input);
         searchText.setText(keyword);
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
+                    String q = v.getText().toString();
+                    Intent i = new Intent();
+                    i.putExtra("query",q);
+                    getTargetFragment().getFragmentManager().popBackStack();
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_REDO, i);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         populatePage(view);
 
@@ -130,12 +154,22 @@ public class SearchResultsFrag extends Fragment {
                             SearchResultAdapter s = new SearchResultAdapter(temp, new CustomItemClickListener() {
                                 @Override
                                 public void onItemClick(View v, int position) {
-                                    if(!v.getTag().toString().equalsIgnoreCase("place")){
+                                    TextView t = (TextView)v;
+                                    if(!t.getText().toString().equalsIgnoreCase("place")){
                                         EventDB event = new EventDBHelper().structureEventDataFromString(v.getTag().toString());
                                         if(event !=null){
                                             EventPageFrag eventPageFragment = EventPageFrag.newInstance(event);
                                             setActiveFragment(getFragmentManager(), eventPageFragment);
                                         }
+                                    }else{
+                                        Location l = (Location)v.getTag();
+//                                        LatLng l = (LatLng) v.getTag();
+                                        Intent i = new Intent();
+                                        i.putExtra("latitude",l.getLatitude());
+                                        i.putExtra("longitude",l.getLongitude());
+                                        i.putExtra("address",l.getProvider());
+                                        getTargetFragment().getFragmentManager().popBackStack();
+                                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
                                     }
                                 }
                             });
